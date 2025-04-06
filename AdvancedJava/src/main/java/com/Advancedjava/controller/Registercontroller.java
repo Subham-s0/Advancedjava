@@ -113,9 +113,7 @@ public class Registercontroller extends HttpServlet {
 	        errors.add("Password is required.");
 	    } else if (password.length() < 8) {
 	        errors.add("Password must be at least 8 characters.");
-	    } else if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-	        errors.add("Password must contain at least one uppercase, one lowercase, one number, and one special character.");
-	    }
+	    } 
 
 	    // Validate Password Match (if you have confirm_password field)
 	    if (password.equals(confirmpwd)==false) {
@@ -124,7 +122,6 @@ public class Registercontroller extends HttpServlet {
 	 // If errors exist, return to form with messages
         if (!errors.isEmpty()) {
             request.setAttribute("error", String.join(" ", errors));
-            // Repopulate form fields
             request.setAttribute("user_firstname", firstName);
             request.setAttribute("user_lastname", lastName);
             request.setAttribute("user_name", username);
@@ -137,9 +134,8 @@ public class Registercontroller extends HttpServlet {
         try {
             // Create UserModule object with your variables
             usermodel user = new usermodel(firstName, 
-                lastName, 
-                username, 
-                dob, 
+                lastName,email, 
+                username,
                 email, 
                 phone, 
                 password
@@ -152,7 +148,7 @@ public class Registercontroller extends HttpServlet {
                 conn = DBconnection.getDbConnection(); // Use your DB connection class
                 
                 String sql = "INSERT INTO users (user_firstname, user_lastname, user_email ,user_name, user_dob,user_phnno, user_password) "
-                           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                           + "VALUES (?, ?, ?, ?, ?, ?, ?)";
                 
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, user.getUserFirstName());
@@ -189,7 +185,8 @@ public class Registercontroller extends HttpServlet {
                 "user_dob", dob,
                 "user_phnno", phone
             ));
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+
         }
         
 	     
