@@ -1,0 +1,13 @@
+package com.Advancedjava.dao;
+
+import com.Advancedjava.exception.DataAccessException;
+import com.Advancedjava.model.usermodel;
+
+public interface UserDao {
+
+	
+	  usermodel findByUsernameOrEmail(String identifier) throws DataAccessException;
+	    boolean existsByEmail(String email) throws DataAccessException;
+	    boolean existsByUsername(String username) throws DataAccessException;
+	    boolean existsByPhone(String phone) throws DataAccessException;
+	}
