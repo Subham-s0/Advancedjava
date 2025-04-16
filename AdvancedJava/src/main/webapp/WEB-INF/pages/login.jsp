@@ -12,10 +12,34 @@
 	
 	<div class="login">
 		<h1>Login</h1>
+		 <!-- Success Message from Registration -->
+        <div class="success-message">
+            <%
+                String success = (String) session.getAttribute("success");
+                if (success != null && !success.isEmpty()) {
+                    session.removeAttribute("success"); // Remove after showing
+            %>
+                <p style="color: green; font-weight: bold;"><%= success %></p>
+            <%
+                }
+            %>
+        </div>
+		<%String error = (String) request.getAttribute("error"); %>
+         <div class="error-message <%= (error != null && !error.isEmpty()) ? "visible" : "" %>">
+		    <%
+		        if (error != null && !error.isEmpty()) {
+		    %>
+		        <p style="color: red;"><%= error %></p>
+		    <%
+        }
+
+		        %>
+		        </div>
+		        
 	<form action="login" method="POST">
 		<div class="textfield">
-			<label for="user_email">Email or Username:</label> <input type="text"
-				id="user_name" placeholder="" name="user_email">
+			<label for="user_email">Email or Username:</label>
+			 <input type="text"	id="user_name" placeholder="" name="user_name">
 		</div>
 
 		<div class= "textfield">
@@ -32,22 +56,13 @@
 	
 
 	<div class="register-link">
-		Don't have an account? <a href="register">Create account</a>
+		Don't have an account? <a href="register">Create account<br></a>
 	
 		<a href="#">Forgot Password?</a>
 	</div>
 	</form>
 	</div>
-	<div class="error-message">
-    <%
-        String error = (String) request.getAttribute("error");
-        if (error != null && !error.isEmpty()) {
-    %>
-        <p style="color: red;"><%= error %></p>
-    <%
-        }
-    %>
-    </div>
+	
 
 </body>
 </html>

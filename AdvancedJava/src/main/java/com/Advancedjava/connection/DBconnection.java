@@ -14,10 +14,12 @@ public class DBconnection {
 			}
 			catch(ClassNotFoundException e){
 				e.printStackTrace();
-				
+			
 			}
 		}
 		public static Connection getDbConnection() throws SQLException {
-			return DriverManager.getConnection(URL, USERNAME, PASSWORD);
-		}
+			Connection Conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			 return Conn;
+			 
+			}
 }

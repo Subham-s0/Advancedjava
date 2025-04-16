@@ -1,0 +1,170 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.registration_form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+.registration_form h1 {
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.form_row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.textfield {
+  flex: 1;
+}
+
+.textfield label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.textfield input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.textfield input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+}
+
+button[type="submit"]:hover {
+  background-color: #4338ca;
+}
+
+button[type="submit"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
+}
+
+.error-message {
+display: none;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+}
+.error-message.visible {
+  display: block;
+}
+
+.error-message p {
+  color: #991b1b;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 0.5rem;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.login-link a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Custom styles for date input */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 0.75rem;
+}
+
+/* Custom styles for password fields */
+input[type="password"] {
+  letter-spacing: 0.25em;
+}
+
+/* Error state for input fields */
+.textfield.error input {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.textfield.error label {
+  color: #991b1b;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .registration_form {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .textfield {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Focus visible outline for accessibility */
+:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}

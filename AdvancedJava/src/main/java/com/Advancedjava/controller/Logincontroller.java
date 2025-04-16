@@ -47,12 +47,12 @@ public class Logincontroller extends HttpServlet {
 	            throws ServletException, IOException {
 	        
 	        List<String> errors = new ArrayList<>();
-	        String usernameOrEmail = request.getParameter("username");
-	        String password = request.getParameter("password");
-
+	        String usernameOrEmail = request.getParameter("user_name");
+	        String password = request.getParameter("user_password");
+ 
 	        // Validate credentials
 	        if (ValidationUtil.isNullOrEmpty(usernameOrEmail)) {
-	            errors.add("Username/Email is required.");
+	            errors.add("Username/Email is required. \n");
 	        }
 	        
 	        if (ValidationUtil.isNullOrEmpty(password)) {
@@ -83,10 +83,12 @@ public class Logincontroller extends HttpServlet {
 	                request.setAttribute("preservedUsername", usernameOrEmail);
 	                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	            } else {
+	            	
 	                HttpSession session = request.getSession();
 	                session.setAttribute("username", user.getUserName());
 	                session.setAttribute("email", user.getUserEmail());
-	                response.sendRedirect(request.getContextPath() + "/dashboard");
+	                System.out.print("logged in");
+	                response.sendRedirect(request.getContextPath() + "/home");
 	            }
 	            
 	        } catch (DataAccessException e) {
@@ -95,4 +97,4 @@ public class Logincontroller extends HttpServlet {
 	            request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	        }
 	    }
-	}
+	}  

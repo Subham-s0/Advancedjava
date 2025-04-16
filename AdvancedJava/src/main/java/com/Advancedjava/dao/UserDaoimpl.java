@@ -10,31 +10,35 @@ public class UserDaoimpl implements UserDao {
 
     @Override
     public usermodel findByUsernameOrEmail(String identifier) throws DataAccessException {
-        String sql = "SELECT * FROM users WHERE user_name = ? OR user_email = ?";
+        String sql = "SELECT * FROM users WHERE user_name = ? OR user_email = ? OR user_phnno= ?" ;
+        usermodel user = null;
         
         try (Connection conn = DBconnection.getDbConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, identifier);
             pstmt.setString(2, identifier);
+            pstmt.setString(3, identifier);
             
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new usermodel(
-                        rs.getString("user_firstname"),rs.getString("last_name"),
+                	user = new usermodel(
+                        rs.getString("user_firstname"),
+                        rs.getString("user_lastname"),
                         rs.getString("user_email"),
                         rs.getString("user_name"),
                         rs.getDate("user_dob").toString(),
                         rs.getString("user_phnno"),
                         rs.getString("user_password")
                     );
+                    
                 }
+                return user;
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Database error while fetching user", e);
+            throw new DataAccessException("Database error while fetching user", e);}
         }
-        return null;
-    }
+        
 
     @Override
     public boolean existsByEmail(String email) throws DataAccessException {

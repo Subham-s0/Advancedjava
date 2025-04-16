@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d);
+  background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -117,14 +117,29 @@ button[type="submit"]:hover {
 }
 
 /* Error box */
-.error-box {
+
+.error-message{
+	 background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
     margin-top: 20px;
-    background-color: #f8d7da;
-    color: #842029;
-    border: 1px solid #f5c2c7;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 16px;
     font-size: 15px;
+	display: none;
+}
+.error-message.visible{
+	display:block;
+}
+.error-message p {
+  color: #991b1b;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 0.5rem;
+}
+.success-message{
+	color: Green; 
+	
 }
 
 .error-box ul {

@@ -55,28 +55,29 @@ public class Registercontroller extends HttpServlet {
 	    
 	    if (ValidationUtil.isNullOrEmpty(firstName)) {
 	        errors.add("First name is required.");
-	    } else if (!firstName.matches("^[a-zA-Zà-žÀ-Ž' -]{2,50}$")) {
-	        errors.add("First name can only contain letters, apostrophes, hyphens, and spaces (2-50 characters).");
+	    } 
+	    else if (!ValidationUtil.isAlphabeticupto20char(firstName)) {
+	        errors.add("First name can only contain letters, apostrophes, hyphens, and spaces (2-20 characters).");
 	    }
 
 	    // Validate Last Name  
 	    if (ValidationUtil.isNullOrEmpty(lastName)) {
 	        errors.add("Last name is required.");
-	    } else if (!lastName.matches("^[a-zA-Zà-žÀ-Ž' -]{2,50}$")) {
-	        errors.add("Last name can only contain letters, apostrophes, hyphens, and spaces (2-50 characters).");
+	    } else if (!ValidationUtil.isAlphabeticupto20char(lastName)) {
+	        errors.add("Last name can only contain letters, apostrophes, hyphens, and spaces (2-20 characters).");
 	    }
 
 	    // Validate Email
 	    if (ValidationUtil.isNullOrEmpty(email)) {
 	        errors.add("Email is required.");
-	    } else if (!email.matches("^[\\w.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+	    } else if (!ValidationUtil.isValidEmail(email)) {
 	        errors.add("Invalid email format.");
 	    }
 
 	    // Validate Username
 	    if (ValidationUtil.isNullOrEmpty(username)) {
 	        errors.add("Username is required.");
-	    } else if (!username.matches("^[a-zA-Z0-9._-]{5,20}$")) {
+	    } else if (!ValidationUtil.isAlphanumericStartingWithLetter(username)) {
 	        errors.add("Username must be 5-20 characters and can only contain letters, numbers, . _ -");
 	    }
 
@@ -88,10 +89,10 @@ public class Registercontroller extends HttpServlet {
 	        	
 	            LocalDate dob2 = LocalDate.parse(dob);
 	            LocalDate minDate = LocalDate.now().minusYears(120);
-	            LocalDate maxDate = LocalDate.now().minusYears(13);
+	            LocalDate maxDate = LocalDate.now().minusYears(16);
 	            
 	            if (dob2.isBefore(minDate) || dob2.isAfter(maxDate)) {
-	                errors.add("You must be between 13-120 years old.");
+	                errors.add("You must be between 16-120 years old.");
 	            }
 	        } catch (DateTimeParseException e) {
 	            errors.add("Invalid date format (YYYY-MM-DD required).");
@@ -101,18 +102,16 @@ public class Registercontroller extends HttpServlet {
 	    // Validate Phone Number
 	    if (ValidationUtil.isNullOrEmpty(phone)) {
 	        errors.add("Phone number is required.");
-	    } else {
-	        String cleanPhone = phone.replaceAll("[^0-9]", "");
-	        if (cleanPhone.length() != 10) {
-	            errors.add("Phone number must be 10 digits.");
-	        }
+	    }
+	    else if (!ValidationUtil.isValidPhoneNumber(phone)) {
+	        errors.add("Phone number must be 10 digits.");
 	    }
 
 	    // Validate Password
 	    if (ValidationUtil.isNullOrEmpty(password)) {
 	        errors.add("Password is required.");
-	    } else if (password.length() < 8) {
-	        errors.add("Password must be at least 8 characters.");
+	    } else if (!ValidationUtil.isValidPassword(password)) {
+	        errors.add("Password Format Mismatch.");
 	    } 
 
 	    // Validate Password Match (if you have confirm_password field)
@@ -120,7 +119,7 @@ public class Registercontroller extends HttpServlet {
 	        errors.add("Passwords do not match.");
 	    }
 	 // If errors exist, return to form with messages
-        if (!errors.isEmpty()) {
+        if (!errors.isEmpty()==true) {
             request.setAttribute("error", String.join(" ", errors));
             request.setAttribute("user_firstname", firstName);
             request.setAttribute("user_lastname", lastName);
@@ -134,18 +133,20 @@ public class Registercontroller extends HttpServlet {
         try {
             // Create UserModule object with your variables
             usermodel user = new usermodel(firstName, 
-                lastName,email, 
-                username,
+                lastName,
                 email, 
+                username,
+                dob,
                 phone, 
                 password
             );
-
+            
             // Database connection and insertion
             Connection conn = null;
             PreparedStatement pstmt = null;
             try {
                 conn = DBconnection.getDbConnection(); // Use your DB connection class
+            	System.out.println("DAtabase connected Sucessfully");
                 
                 String sql = "INSERT INTO users (user_firstname, user_lastname, user_email ,user_name, user_dob,user_phnno, user_password) "
                            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -155,12 +156,12 @@ public class Registercontroller extends HttpServlet {
                 pstmt.setString(2, user.getUserLastName());
                 pstmt.setString(3, user.getUserEmail());
                 pstmt.setString(4, user.getUserName());
-                pstmt.setDate(5, Date.valueOf(LocalDate.parse(dob))); // Convert String to SQL Date
-                pstmt.setString(6, user.getUserPassword());
+                pstmt.setDate(5, Date.valueOf(LocalDate.parse(user.getUserDob()))); // Convert String to SQL Date
+                pstmt.setString(6, user.getUserPhnNo());
                 pstmt.setString(7, PasswordHasher.hash(user.getUserPassword()));
                 
                 int rowsAffected = pstmt.executeUpdate();
-                
+                 
                 if (rowsAffected > 0) {
                     HttpSession session = request.getSession();
                     session.setAttribute("success", "Registration successful!");
@@ -184,7 +185,7 @@ public class Registercontroller extends HttpServlet {
                 "user_name", username,
                 "user_dob", dob,
                 "user_phnno", phone
-            ));
+            ));  
             request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
 
         }
