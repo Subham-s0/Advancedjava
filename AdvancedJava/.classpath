@@ -16,5 +16,12 @@
 	<classpathentry kind="lib" path="C:/tomcat/apache-tomcat-10.1.28/lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="C:/tomcat/apache-tomcat-10.1.28/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mysql-connector-j-9.2.0.jar"/>
+	<classpathentry kind="lib" path="build/jakarta.activation-2.0.0.jar"/>
+	<classpathentry kind="lib" path="build/jakarta.el-api-4.0.0.jar"/>
+	<classpathentry kind="lib" path="build/jakarta.servlet.jsp.jstl-2.0.0.jar"/>
+	<classpathentry kind="lib" path="build/jakarta.servlet.jsp.jstl-api-2.0.0.jar"/>
+	<classpathentry kind="lib" path="build/jakarta.servlet-api-5.0.0.jar"/>
+	<classpathentry kind="lib" path="build/jakarta.xml.bind-api-3.0.0.jar"/>
+	<classpathentry kind="lib" path="build/jstl-1.2-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

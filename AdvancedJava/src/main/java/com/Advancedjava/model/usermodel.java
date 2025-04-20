@@ -8,10 +8,11 @@ public class usermodel {
 	    private String userDob;
 	    private String userPhnNo;
 	    private String userPassword;
+	    private String userRole;
+	    
 	    
 	    public usermodel(String userFirstName, String userLastName, String userEmail, 
-                String userName, String userDob, String userPhnNo, 
-                String userPassword) {
+                String userName, String userDob, String userPhnNo,String userPassword ) {
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
         this.userEmail = userEmail;
@@ -19,6 +20,18 @@ public class usermodel {
         this.userDob = userDob;
         this.userPhnNo = userPhnNo;
         this.userPassword = userPassword;
+    }
+	    
+	    public usermodel(String userFirstName, String userLastName, String userEmail, 
+                String userName, String userDob, String userPhnNo,String userPassword,String userRole ) {
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userEmail = userEmail;
+        this.userName = userName;
+        this.userDob = userDob;
+        this.userPhnNo = userPhnNo;
+        this.userPassword = userPassword;
+        this.userRole = userRole;
     }
 	    
 	    
@@ -63,5 +76,11 @@ public class usermodel {
 		}
 		public void setUserPassword(String userPassword) {
 			this.userPassword = userPassword;
+		}
+		public String getuserRole() {
+			return this.userRole;
+		}
+		public void setuserRole(String userRole) {
+			this.userRole = userRole;
 		}
 }

@@ -17,7 +17,9 @@ import com.Advancedjava.dao.UserDao;
 import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.usermodel;
+import com.Advancedjava.util.Cookiesutil;
 import com.Advancedjava.util.PasswordHasher;
+import com.Advancedjava.util.Sessionutil;
 import com.Advancedjava.util.ValidationUtil;
 
 /**
@@ -69,7 +71,7 @@ public class Logincontroller extends HttpServlet {
 	        try {
 	            UserDao userDao = new UserDaoimpl();
 	            usermodel user = userDao.findByUsernameOrEmail(usernameOrEmail);
-
+	            
 	            if (user == null) {
 	                errors.add("Invalid credentials");
 	            } else {
@@ -80,20 +82,23 @@ public class Logincontroller extends HttpServlet {
 
 	            if (!errors.isEmpty()) {
 	                request.setAttribute("error", String.join(" ", errors));
-	                request.setAttribute("preservedUsername", usernameOrEmail);
+	                
 	                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	            } else {
-	            	
-	                HttpSession session = request.getSession();
-	                session.setAttribute("username", user.getUserName());
-	                session.setAttribute("email", user.getUserEmail());
-	                System.out.print("logged in");
-	                response.sendRedirect(request.getContextPath() + "/home");
+	         
+	              Sessionutil.setAttribute(request, "username",user.getUserName());
+	              Cookiesutil.setcookies(response, "userrole",user.getuserRole(),-1);
+	                System.out.print("logged in" + user.getuserRole());
+	                if (user.getuserRole().equals("admin")){
+	                response.sendRedirect(request.getContextPath() + "/admindashboard");}
+	                else {
+	                	response.sendRedirect(request.getContextPath() + "/home");
+	                }
 	            }
 	            
 	        } catch (DataAccessException e) {
 	            request.setAttribute("error", "System error. Please try again later.");
-	            request.setAttribute("preservedUsername", usernameOrEmail);
+	            request.setAttribute("preservedUsername",usernameOrEmail);
 	            request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	        }
 	    }

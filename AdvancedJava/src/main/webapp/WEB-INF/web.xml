@@ -9,5 +9,6 @@
     <servlet-name>default</servlet-name>
     <url-pattern>/css/*</url-pattern>
     <url-pattern>/resources/*</url-pattern>
+    <url-pattern>/javascript/*</url-pattern>
 </servlet-mapping>
 </web-app>

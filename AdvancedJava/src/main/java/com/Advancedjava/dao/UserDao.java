@@ -10,4 +10,5 @@ public interface UserDao {
 	    boolean existsByEmail(String email) throws DataAccessException;
 	    boolean existsByUsername(String username) throws DataAccessException;
 	    boolean existsByPhone(String phone) throws DataAccessException;
+	  
 	}

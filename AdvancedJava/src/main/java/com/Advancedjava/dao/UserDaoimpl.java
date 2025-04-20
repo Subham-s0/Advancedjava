@@ -29,7 +29,8 @@ public class UserDaoimpl implements UserDao {
                         rs.getString("user_name"),
                         rs.getDate("user_dob").toString(),
                         rs.getString("user_phnno"),
-                        rs.getString("user_password")
+                        rs.getString("user_password"),
+                        rs.getString("role_type")
                     );
                     
                 }
@@ -54,7 +55,7 @@ public class UserDaoimpl implements UserDao {
     public boolean existsByPhone(String phone) throws DataAccessException {
         return checkExists("user_phnno", phone);
     }
-
+   
     private boolean checkExists(String column, String value) throws DataAccessException {
         String query = "SELECT COUNT(*) FROM users WHERE " + column + " = ?";
         

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,14 +11,10 @@
         <h1>Create Account</h1>
          <%String error = (String) request.getAttribute("error"); %>
          <div class="error-message <%= (error != null && !error.isEmpty()) ? "visible" : "" %>">
-		    <%
-		       
-		        if (error != null && !error.isEmpty()) {
-		    %>
-		        <p style="color: red;"><%= error %></p>
-		    <%
-		        }
-		    %>
+		   <c:if test="${not empty error}">
+        <p style="color: red;"><c:out value="${error}"/></p>
+    </c:if>
+
     </div>
         <form action="register" method="POST">
         	<div class="form_row">

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	<%@ page import="java.util.List" %>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,20 +27,15 @@
         </div>
 		<%String error = (String) request.getAttribute("error"); %>
          <div class="error-message <%= (error != null && !error.isEmpty()) ? "visible" : "" %>">
-		    <%
-		        if (error != null && !error.isEmpty()) {
-		    %>
-		        <p style="color: red;"><%= error %></p>
-		    <%
-        }
-
-		        %>
+		   <c:if test="${not empty error}">
+       				 <p style="color: red;"><c:out value="${error}"/></p>
+   					 </c:if>
 		        </div>
 		        
 	<form action="login" method="POST">
 		<div class="textfield">
 			<label for="user_email">Email or Username:</label>
-			 <input type="text"	id="user_name" placeholder="" name="user_name">
+			 <input type="text"	id="user_name" value= "<c:out value='${preservedUsername}' />"placeholder="" name="user_name">
 		</div>
 
 		<div class= "textfield">
