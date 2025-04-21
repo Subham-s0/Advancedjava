@@ -1,4 +1,5 @@
 // Dummy data structure that mimics database data
+
 const categoryData = [
     {
         id: 1,
@@ -157,9 +158,11 @@ function renderHotels(category = 'All') {
                     <div class="price">
                         <span class="amount">$${hotel.price}</span>
                         <span class="per-night">/night</span>
-                    </div>
-                    <button class="book-button">Book Now</button>
-                </div>
+						<form action="${window.contextPath}/BookingController" method="post">
+						                    <input type="hidden" name="hotelId" value="${hotel.id}">
+						                    <button type="submit" class="book-button">Book Now</button>
+						                </form>
+						            </div>
             </div>
         `;
         hotelGrid.appendChild(card);

@@ -17,7 +17,7 @@
     </div>
     
         <li><a href="home" class="nav-link">HOME</a></li>
-        <li><a href="#" class="nav-link">PROPERTIES</a></li>
+        <li><a href="Property" class="nav-link">PROPERTIES</a></li>
         
         <li><a href="#" class="nav-link">ABOUT US</a></li>
         
