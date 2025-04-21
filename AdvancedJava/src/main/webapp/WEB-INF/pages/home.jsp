@@ -128,6 +128,6 @@ if(Sessionutil.getAttribute(request,"username")==null)
   });
   
 </script>
-
+<jsp:include page="footer.jsp" />
 </body>
 </html>

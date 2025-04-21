@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title><link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/Search.css" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/Searchbar.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/searchbar.css" />
 </head>
 <body>
 <header>
@@ -91,6 +91,6 @@
         </div>
     </div>
     <script src="${pageContext.request.contextPath}/javascript/Searchbar.js"></script>
-    
+    <jsp:include page="footer.jsp" />
 </body>
 </html>

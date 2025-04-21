@@ -1,0 +1,227 @@
+@charset "UTF-8";*{
+        margin: 0%;
+        box-sizing: border-box;
+        padding: 0%;
+    }
+    .footer-logo {
+      display: flex;
+      align-items:center;
+      margin-left:25px;
+    }
+    .footer-logo img{
+        background-color: #565656;
+    }
+    
+    .footer-logo h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #ffffff;
+      transition: transform 0.5s ease;
+      font-family: "Dancing Script", cursive;
+      margin-left:40px;
+    }
+    .footer-logo:hover {
+      transform: scale(1.2) translateY(-4px);
+    }
+    .socialmedia .fa-brands{
+      width: 40px;
+      font-size: 20px;
+      height: 40px;
+      border-radius: 50%;
+      color:#ffffff;
+      background: #565656;
+      text-align: center;
+      line-height: 40px;
+      margin-right: 15px;   
+    }
+    .fa-facebook-f {
+      background: #3b5998 !important;
+    }
+    .fa-instagram {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+    }
+    .fa-twitter {
+      background: #1DA1F2 !important;
+    }
+    .fa-brands:hover{
+      background-color: #ffffff !important;
+      color: #333333;
+      transition: 0.4s;
+      opacity: 0.8;
+    }
+    form.emailbox {
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #ffffff;
+      justify-content: space-between;
+      margin-bottom: 50px;
+      padding: 15px 20px 15px;
+      margin-right: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      gap:4px;
+    }
+    form.emailbox input {
+      width: 80%;
+      background: transparent;
+      border: none;
+      outline: 0;
+      cursor: pointer;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    form.emailbox input::placeholder {
+      color: #e2e8f0;
+      opacity: 0.7;
+    }
+    form.emailbox button {
+      width: 15%;
+      background: transparent;
+      border: none;
+      outline: 0;
+      cursor: pointer;
+      text-align: right;
+      padding: 0;
+    }
+    form.emailbox i {
+      color: #f0f5f7;
+    }
+    .fa-arrow-right {
+      color: #f0f5f7;
+    }
+    form.emailbox button:hover {
+      opacity: 0.7;
+    }
+    .column-2 h2,.column-3 h2,.column-4 h2,.column-5 h2{
+      text-align: center;
+      padding-bottom: 10px;
+      color: #ffffff;
+    }
+    .column-2 .fa-solid{
+      padding: 10px 25px 0px 30px;
+      color: #ffffff;
+    }
+    .fa-location-dot {
+      color: #B794F4;
+    }
+    .fa-phone {
+      color: #ffffff;
+    }
+    .fa-envelope {
+      color: #ffffff;
+    }
+    column-2 .contact-item {
+  display: flex;
+  align-items: center;  
+  gap: 2px;           
+}
+    .column-2 p {
+    	
+      color: #ffffff;
+    }
+    .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    }
+    .column-2 p a,.footer-bottom p a {
+      color: #dbe4f1;
+      text-decoration: none;
+      text-align:center;
+    }
+    .column-2 p a:hover,.footer-bottom p a:hover{ 
+      color: #D6BCFA;
+      opacity: 0.8;
+    }
+    .column-3 a:hover{
+      border-bottom: 3px solid #FF5A5F;
+      opacity: 0.8;
+      transition: 0.2s;
+      color: #f0ebfc;
+    }
+    .column-5{
+      justify-content: flex-start;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .column-3 ul li a {
+      font-size: 16px;
+      line-height: 25px;
+      font-weight: 550;
+      text-decoration: none;
+      padding: 0px 0px 0px;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    .tagline{
+      margin-left: 10px;
+      font-weight: 700;
+      text-align: center;
+      font-size: medium;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin-top:40px;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 0px;
+      padding: 15px 0px;
+      
+      
+    }
+    footer {
+      width: 100%;
+      background-color: #607c8e;
+      padding: 30px 0px 0px;
+      margin: 20px 0px 0;
+      line-height: 24px;
+      bottom: 0;
+    }
+    
+    .column-1, .column-2, .column-3, .column-4 {
+      flex: 1;
+    }
+    .logo {
+      width: 150px;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .column-3 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .column-3 ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .column-4 ul li {
+      list-style: none;
+      text-align: center;
+      margin-right: 10px;
+    }
+    .column-4 p {
+      text-align: left;
+      color: #ffffff;
+    }
+    .column-5 p {
+      margin: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    .footer-bottom p {
+    background-color:#444444;
+    color:white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      
+    }

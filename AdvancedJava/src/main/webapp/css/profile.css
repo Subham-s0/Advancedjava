@@ -21,7 +21,7 @@
 
         /* Main Content Styles */
         .main-container {
-            padding: 90px 70px 60px;
+            padding: 90px 70px 0px;
             margin: 50px 0px ;
             display: grid;
             grid-template-columns: 280px 1fr;

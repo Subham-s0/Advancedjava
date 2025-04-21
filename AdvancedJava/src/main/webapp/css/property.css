@@ -1,4 +1,9 @@
 @charset "UTF-8";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 :root {
     --primary-color: #1e40af;
     --primary-hover: #1e4eec;
@@ -25,16 +30,13 @@
   top: 75px;  
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+
 
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-color);
     line-height: 1.5;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
 }
 
 .container {
@@ -104,9 +106,9 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
-    padding: 0 16px;
+    padding: 0 30px;
     background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
-        margin: 0px 10px;
+        
 }
 
 .hotel-card {
