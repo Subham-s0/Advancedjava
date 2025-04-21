@@ -247,9 +247,9 @@ body {
 
 /* Add these to your searchbar.css */
 /* Base sticky state (applied when scrolled) */
-.search-container.sticky {
+.search-container.sticky.search-box {
     position: fixed;
-    top: 72;
+    top: 75;
     left: 0;
     right: 0;
     z-index: 1000;
@@ -293,6 +293,9 @@ body {
     margin-right: 0;
     transform: scale(1.2);
     transition: all 0.3s ease;
+}
+search-container.sticky.expanded{
+	background-color: white;
 }
 
 /* Expanded mode (when clicked) */

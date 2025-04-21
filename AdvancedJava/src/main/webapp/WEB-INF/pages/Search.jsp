@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title><link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/Search.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/Searchbar.css" />
 </head>
 <body>
 <header>

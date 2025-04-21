@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css" />
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -13,7 +16,7 @@
 <div class="nav-container">
 		 	
     <ul class="nav-list">
-    <li><div class="nav-logo"><h1>NestAway</h1>
+    <li><div class="nav-logo"><img src="${pageContext.request.contextPath}/resources/images/Logo.png" /><h1>NestAway</h1>
     </div>
     
         <li><a href="home" class="nav-link">HOME</a></li>

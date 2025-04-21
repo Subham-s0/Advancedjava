@@ -11,6 +11,20 @@
     --transition: all 0.3s ease;
 }
 
+.search-container {
+  position: fixed;
+  top: 130px;
+  z-index: 1100;
+  transition: top 0.6s ease;
+  margin:0 auto;
+ width: 100%;
+
+}
+.sticky {
+  position: sticky;
+  top: 75px;  
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -69,7 +83,7 @@ body {
 /* Hotels Section */
 .hotels {
     padding: 2rem 0;
-    margin-top: 145px;
+    margin-top: 150px;
 }
 
 .hotels h2 {
@@ -197,20 +211,4 @@ body {
     color:#222;
     transform: scale(1.05);
 }
-.search-container {
-  position: fixed;
-  top: 110px;
-  z-index: 1002;
-  transition: top 0.6s ease;
-  margin:0 auto;
- width: 100%;
 
- 
-
-}
-.sticky {
-  position: sticky;
-  top:71px;
-
-  
-}
