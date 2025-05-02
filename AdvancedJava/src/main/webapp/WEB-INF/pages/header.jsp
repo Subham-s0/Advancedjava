@@ -27,7 +27,7 @@
          <li>
                     <div class="profile-section nav-link"> 
                     <%= Sessionutil.getAttribute(request,"username") %>
-                    <div class="profile-picture"><img src="${pageContext.request.contextPath}/resources/images/profile/default.png" alt="Profile"></div>
+                    <div class="profile-picture"><img src="${pageContext.request.contextPath}/Profile_pictureservlet" alt="Profile"></div>
                         <div class="profile-dropdown">
                             <ul>
                                 <li><a href="${pageContext.request.contextPath}/Profile" class="drop-down-list">Edit Profile</a>

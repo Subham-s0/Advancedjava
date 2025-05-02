@@ -16,6 +16,7 @@
       <div class="column-1">
         <div class="footer-logo">
           <!-- Replace with actual logo -->
+          <div class="footer-logo"><img src="${pageContext.request.contextPath}/resources/images/logoReverse.png" /></div>
           <h1>NestAway</h1>
         </div>
         <p class="tagline">Find Your Perfect Stay</p>
@@ -36,7 +37,7 @@
           <li><a href="home">Home</a></li>
           <li><a href="Property">Properties</a></li>
           <li><a href="#">Bookings</a></li>
-          <li><a href="#">Special Offers</a></li>
+          <li><a href="Profile"> My Profile</a></li>
           <li><a href="#">About Us</a></li>
         </ul>
       </div>

@@ -2,10 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@ page import="com.Advancedjava.util.Sessionutil" %>
     
-<%
-if(Sessionutil.getAttribute(request,"username")==null)
-    response.sendRedirect(request.getContextPath() + "/login");
-%>
+
 
 <!DOCTYPE html>
 <html>
@@ -31,6 +28,40 @@ if(Sessionutil.getAttribute(request,"username")==null)
 	     <div class="hero-banner">
 			 
 	    </div>
+	    
+	    <% 
+String error = (String) Sessionutil.getAttribute(request, "error");
+if (error != null && !error.isEmpty()) { 
+%>
+    <div class="error-message" id="errorMessage">
+        <%= error %>
+        <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
+    </div>
+    <script>
+        // Auto-hide error message after 5 seconds
+        setTimeout(function() {
+            document.getElementById('errorMessage').style.display = 'none';
+            // Clear the error from session
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }, 5000);
+        
+        function closeErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'none';
+            // Clear the error from session
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    </script>
+<%
+    // Clear the error message from session immediately after displaying
+    Sessionutil.removeAttribute(request, "error");
+}
+%>
 	    <div class="category-bar">
 	        <!-- Categories will be dynamically inserted here -->
 	    </div>

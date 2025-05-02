@@ -11,4 +11,7 @@
     <url-pattern>/resources/*</url-pattern>
     <url-pattern>/javascript/*</url-pattern>
 </servlet-mapping>
+<session-config>
+    <session-timeout>1</session-timeout> <!-- Minutes -->
+</session-config>
 </web-app>

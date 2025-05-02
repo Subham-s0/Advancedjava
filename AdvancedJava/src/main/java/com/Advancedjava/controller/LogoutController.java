@@ -25,7 +25,7 @@ public class LogoutController extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	Cookiesutil.deletecookie(response, "role");
+    	
 		Sessionutil.invalidateSession(request);
 		response.sendRedirect(request.getContextPath() + "/login");
     }

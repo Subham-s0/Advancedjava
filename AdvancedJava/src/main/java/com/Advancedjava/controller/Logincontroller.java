@@ -17,7 +17,7 @@ import com.Advancedjava.dao.UserDao;
 import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.usermodel;
-import com.Advancedjava.util.Cookiesutil;
+
 import com.Advancedjava.util.PasswordHasher;
 import com.Advancedjava.util.Sessionutil;
 import com.Advancedjava.util.ValidationUtil;
@@ -87,8 +87,8 @@ public class Logincontroller extends HttpServlet {
 	            } else {
 	         
 	              Sessionutil.setAttribute(request, "username",user.getUserName());
-	              Cookiesutil.setcookies(response, "userrole",user.getuserRole(),-1);
-	                System.out.print("logged in" + user.getuserRole());
+	              Sessionutil.setAttribute(request, "userrole",user.getuserRole());
+	                System.out.print("logged in" + (String) Sessionutil.getAttribute(request, "userrole"));
 	                if (user.getuserRole().equals("admin")){
 	                response.sendRedirect(request.getContextPath() + "/admindashboard");}
 	                else {

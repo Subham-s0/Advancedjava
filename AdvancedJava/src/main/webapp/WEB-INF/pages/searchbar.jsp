@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
-    <form class="search-form" action="search" method="GET">
+    <form class="search-form" action="Result" method="GET">
         
             <div class="search-box">
                 <!-- Location Search with Dropdown -->

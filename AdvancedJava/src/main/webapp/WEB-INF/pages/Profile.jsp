@@ -14,9 +14,8 @@
         <aside class="sidebar">
             <div class="user-info">
                 <div class="user-avatar">
-                    <img id="profileImage" src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=600" alt="User avatar">
-                    <input type="file" id="photoInput" accept="image/*" style="display: none">
-                    <button class="photo-edit-btn" id="editPhotoBtn" aria-label="Edit profile photo">
+                    <img id="profileImage" src="${pageContext.request.contextPath}/Profile_pictureservlet" alt="User avatar">
+                    <button class="photo-edit-btn" id="editPhotoBtn" aria-label="Edit profile photo" type = "submit">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                             <circle cx="12" cy="13" r="4"/>

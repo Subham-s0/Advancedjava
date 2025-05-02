@@ -29,7 +29,7 @@ const categoryData = [
 	{
 	       id: 6,
 	       name: "LAkes",
-	       icon: "building-2",
+	       icon: "apple",
 	   }
 ];
 

@@ -65,7 +65,7 @@ transform: scale(1.4) translateY(-4px);
         background-color: #D5FFFF; /* Button background color */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
         transform: translateY(-4px); /* Slight lift effect */
-        border-radius: 8px;
+        border-radius: 2rem;
 }
 .profile-section{
         height: 100%;

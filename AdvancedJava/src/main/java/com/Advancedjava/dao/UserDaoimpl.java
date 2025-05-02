@@ -4,7 +4,6 @@ import java.sql.*;
 import com.Advancedjava.model.usermodel;
 import com.Advancedjava.connection.DBconnection;
 import com.Advancedjava.exception.DataAccessException;
-import com.Advancedjava.util.PasswordHasher;
 
 public class UserDaoimpl implements UserDao {
 
