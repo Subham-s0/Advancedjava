@@ -2,6 +2,7 @@ package com.Advancedjava.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ import com.Advancedjava.dao.UserDao;
 import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.usermodel;
-
+import com.Advancedjava.util.Cookiesutil;
 import com.Advancedjava.util.PasswordHasher;
 import com.Advancedjava.util.Sessionutil;
 import com.Advancedjava.util.ValidationUtil;
@@ -42,8 +43,27 @@ public class Logincontroller extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
-	}
+	
+		 Cookie rememberedUsernameCookie = Cookiesutil.getCookie(request, "rememberedUsername");
+	      Cookie rememberedUserRoleCookie = Cookiesutil.getCookie(request, "rememberedUserRole");
+
+	        if (rememberedUsernameCookie != null && rememberedUserRoleCookie != null) {
+	            String rememberedUsername = rememberedUsernameCookie.getValue();
+	            String rememberedUserRole = rememberedUserRoleCookie.getValue();
+	            // Restore session
+	            Sessionutil.setAttribute(request, "username", rememberedUsername);
+	            Sessionutil.setAttribute(request, "userrole", rememberedUserRole);
+	            // Redirect to the appropriate page
+	            if ("admin".equals(rememberedUserRole)) {
+	                response.sendRedirect(request.getContextPath() + "/admindashboard");
+	            } else {
+	                response.sendRedirect(request.getContextPath() + "/home");
+	            }
+	            return; // IMPORTANT:  Exit the doGet method!
+	        }
+	        // If not remembered, proceed to show the login page
+	        request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
+	    }
 
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	            throws ServletException, IOException {
@@ -51,6 +71,7 @@ public class Logincontroller extends HttpServlet {
 	        List<String> errors = new ArrayList<>();
 	        String usernameOrEmail = request.getParameter("user_name");
 	        String password = request.getParameter("user_password");
+	        String rememberMe = request.getParameter("remember_me");
  
 	        // Validate credentials
 	        if (ValidationUtil.isNullOrEmpty(usernameOrEmail)) {
@@ -88,6 +109,15 @@ public class Logincontroller extends HttpServlet {
 	         
 	              Sessionutil.setAttribute(request, "username",user.getUserName());
 	              Sessionutil.setAttribute(request, "userrole",user.getuserRole());
+	              if ("on".equals(rememberMe)) { // Check if the checkbox was checked
+	                    // Use Cookiesutil to set the cookies
+	                    Cookiesutil.setcookies(response, "rememberedUsername", user.getUserName(), 7 * 24 * 60 * 60);
+	                    Cookiesutil.setcookies(response, "rememberedUserRole", user.getuserRole(), 7 * 24 * 60 * 60);
+	                } else {
+	                    // Use Cookiesutil to delete cookies
+	                    Cookiesutil.deletecookie(response, "rememberedUsername");
+	                    Cookiesutil.deletecookie(response, "rememberedUserRole");
+	                }
 	                System.out.print("logged in" + (String) Sessionutil.getAttribute(request, "userrole"));
 	                if (user.getuserRole().equals("admin")){
 	                response.sendRedirect(request.getContextPath() + "/admindashboard");}

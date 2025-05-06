@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+import com.Advancedjava.util.Cookiesutil;
 import com.Advancedjava.util.Sessionutil;
 
 /**
@@ -27,7 +27,10 @@ public class LogoutController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
 		Sessionutil.invalidateSession(request);
+		Cookiesutil.deletecookie(response, "rememberedUsername");
+        Cookiesutil.deletecookie(response, "rememberedUserRole");
 		response.sendRedirect(request.getContextPath() + "/login");
+		
     }
 	
 	
