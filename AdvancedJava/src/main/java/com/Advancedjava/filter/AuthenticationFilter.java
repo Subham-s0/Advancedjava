@@ -27,7 +27,9 @@ public class AuthenticationFilter implements Filter {
     private static final String RESULT = "/Result";
     private static final String PROFILE = "/Profile";
     private static final String PROPERTY = "/Property";
+    private static final String filterProperties = "/filter-hotels";
     private static final String PROPERTY_DESCRIPTION = "/propertydescription";
+  ;
     
     private static final String BOOKING  = "/BookingController";
     
@@ -155,6 +157,7 @@ public class AuthenticationFilter implements Filter {
                uri.equals(PROPERTY) ||
                uri.equals(BOOKING)||
                uri.equals(PROPERTY_DESCRIPTION)||
+               uri.equals(filterProperties)||
                uri.equals(PROFILE_IMAGE)||
                uri.equals(LOGOUT);
     }

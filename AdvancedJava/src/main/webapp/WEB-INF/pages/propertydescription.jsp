@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,8 +30,8 @@
 
     <div class="container">
         <div class="hotel-info">
-            <h2>Landmark Hotel</h2>
-            <p class="location">Kamal Pokhari, Kathmandu, Nepal</p>
+            <h2>${selectedProperty.propertyName}</h2>
+            <p class="location">,${selectedProperty.propertyCity},${property.propertyCountry}</p>
             <h3>About hotel</h3>
             <p class="about">
                 <strong>Landmark Hotel:</strong> exceptional value for two travelers.

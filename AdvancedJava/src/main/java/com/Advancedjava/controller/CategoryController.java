@@ -1,48 +1,41 @@
 package com.Advancedjava.controller;
 
 import jakarta.servlet.ServletException;
-
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
-import com.Adavanedjava.service.RegisterService;
-
-
-
 /**
- * Servlet implementation class registerservlet
+ * Servlet implementation class CategoryController
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/register" })
-public class Registercontroller extends HttpServlet {
+@WebServlet("/CategoryController")
+public class CategoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public CategoryController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		RegisterService registerService = new RegisterService();
-		boolean isRegistered = registerService.registerUser(request, response);
-
-		if (isRegistered) {
-		    HttpSession session = request.getSession();
-		    session.setAttribute("success", "Registered successfully!");
-		    response.sendRedirect(request.getContextPath() + "/login");
-		}
-
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
-	
+
 }

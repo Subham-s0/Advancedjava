@@ -6,6 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+
+import com.Advancedjava.dao.CategoryDao;
+import com.Advancedjava.dao.CategoryDaoImpl;
+import com.Advancedjava.dao.PropertyDao;
+import com.Advancedjava.dao.PropertyDaoImpl;
+import com.Advancedjava.model.Categorymodel;
+import com.Advancedjava.model.Propertymodel;
 
 /**
  * Servlet implementation class HomeController
@@ -13,15 +21,37 @@ import java.io.IOException;
 @WebServlet(asyncSupported = true, urlPatterns = { "/home" })
 public class HomeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	 private CategoryDao categoryDao;
+	    private PropertyDao propertyDao;
+	    @Override
+	public void init() throws ServletException {
+        super.init();
+        categoryDao = new CategoryDaoImpl();
+        propertyDao = new PropertyDaoImpl();
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		 request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
-	}
+		 try {
+			 
+	            List<Categorymodel> categories = categoryDao.findAllcategories();
+	            request.setAttribute("categories", categories);
+	            
+	            // Fetch all properties (for "All" category)
+	            List<Propertymodel> properties = propertyDao.findallproperties();
+	            request.setAttribute("properties", properties);
+	            
+	            // Forward to JSP
+	            request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
+	            
+	        } catch (Exception e) {
+	            throw new ServletException("Error loading homepage data", e);
+	        }
+	    }
+		 
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

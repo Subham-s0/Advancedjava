@@ -22,6 +22,5 @@
 	<classpathentry kind="lib" path="build/jakarta.servlet.jsp.jstl-api-2.0.0.jar"/>
 	<classpathentry kind="lib" path="build/jakarta.servlet-api-5.0.0.jar"/>
 	<classpathentry kind="lib" path="build/jakarta.xml.bind-api-3.0.0.jar"/>
-	<classpathentry kind="lib" path="build/jstl-1.2-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

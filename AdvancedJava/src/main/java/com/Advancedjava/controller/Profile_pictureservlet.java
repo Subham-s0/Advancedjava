@@ -9,11 +9,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
-import com.Advancedjava.connection.DBconnection;
+
+
+import com.Advancedjava.dao.UserDao;
+import com.Advancedjava.dao.UserDaoimpl;
+import com.Advancedjava.model.usermodel;
 
 /**
  * Servlet implementation class Profile_pictureservlet
@@ -42,35 +43,25 @@ public class Profile_pictureservlet extends HttpServlet {
         
         
         try {
-        	 Connection conn = DBconnection.getDbConnection();
-        	 String sql = "SELECT user_profile FROM users WHERE user_name = ?";
-             PreparedStatement pst = conn.prepareStatement(sql);
-            
-            pst.setString(1, username);
-            		ResultSet rs = pst.executeQuery();
-
-                    if (rs.next()) {
-                        imagePath = rs.getString("user_profile");
-                    } else {
-                        imagePath = defaultImage;
-                    }
-        }
+        	 UserDao userDao = new UserDaoimpl();
+	         usermodel user = userDao.findByUsernameOrEmail(username);
+	         imagePath =user.getUserProfilePicture();
+	         }
         catch(Exception e) {
         	System.out.println("the image didnot load");
         	 imagePath = defaultImage;
         }
-        
         String fullPath ="C:/Users/Acer/git/Advancedjava/AdvancedJava/src/main/webapp/resources/images/profile/" + imagePath;
         File imageFile = new File(fullPath);
-        System.out.println("the full path is :"+fullPath);
+       
         if (!imageFile.exists()) {
             imageFile = new File(getServletContext().getRealPath("/resources/images/profile/" + defaultImage));
-            System.out.println("this aprt was hit is :"+fullPath);
+          
         }
 
         response.setContentType(getServletContext().getMimeType(fullPath));
         Files.copy(imageFile.toPath(), response.getOutputStream());
-        System.out.println("the full path is :"+fullPath);
+        
 	}
 
 	/**

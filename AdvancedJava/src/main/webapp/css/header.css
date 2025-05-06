@@ -100,7 +100,7 @@ transform: scale(1.4) translateY(-4px);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  z-index: 1300;
+  z-index: 2000;
 }
 .profile-dropdown.show {
   opacity: 1;
@@ -118,6 +118,7 @@ transform: scale(1.4) translateY(-4px);
         transition: all 0.2s ease;
         text-align: left;
         margin: 0 1px;
+         z-index: 9999;
     }
 .drop-down-list:hover{
   background-color: #f3f4f6;
