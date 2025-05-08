@@ -85,6 +85,9 @@ public class WishListController extends HttpServlet {
                 wishlistDao.addToWishlist(Current_user.getUserId(), productId);
             }
             
+			 
+	         request.setAttribute("Current_user", Current_user);
+            
             // Redirect back to the same page or a specific one
             response.sendRedirect(referer != null ? referer : request.getContextPath());
         } catch (DataAccessException | NumberFormatException | NullPointerException e) {
