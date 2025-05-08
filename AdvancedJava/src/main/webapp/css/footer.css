@@ -10,17 +10,16 @@
     }
     .footer-logo img{
   
-  width: 45px; /* width in pixels */
-  height: 60px; /* maintains 3:4 aspect ratio */
+  width: 38px; /* width in pixels */
+  height: 50px; /* maintains 3:4 aspect ratio */
   object-fit: contain;
     }
-    
     .footer-logo h1 {
-      font-size: 3rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: #ffffff;
       transition: transform 0.5s ease;
-      font-family: "Dancing Script", cursive;
+      
  
     }
     .footer-logo:hover {

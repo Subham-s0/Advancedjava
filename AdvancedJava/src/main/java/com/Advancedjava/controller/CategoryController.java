@@ -6,6 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+
+import com.Advancedjava.dao.WishlistImpl;
+import com.Advancedjava.exception.DataAccessException;
+import com.Advancedjava.util.Sessionutil;
 
 /**
  * Servlet implementation class CategoryController
@@ -26,6 +31,20 @@ public class CategoryController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 String userId = (String) Sessionutil.getAttribute(request, "userId");
+		 
+        WishlistImpl wishlistDao =new WishlistImpl();
+        List<Integer> wishlist;
+		try {
+			wishlist = wishlistDao.getWishlistByUserId(userId);
+			 System.out.println(wishlist);
+		        request.setAttribute("wishlistIds", wishlist);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+        
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}

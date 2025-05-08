@@ -44,24 +44,6 @@ public class Logincontroller extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		 Cookie rememberedUsernameCookie = Cookiesutil.getCookie(request, "rememberedUsername");
-	      Cookie rememberedUserRoleCookie = Cookiesutil.getCookie(request, "rememberedUserRole");
-
-	        if (rememberedUsernameCookie != null && rememberedUserRoleCookie != null) {
-	            String rememberedUsername = rememberedUsernameCookie.getValue();
-	            String rememberedUserRole = rememberedUserRoleCookie.getValue();
-	            // Restore session
-	            Sessionutil.setAttribute(request, "username", rememberedUsername);
-	            Sessionutil.setAttribute(request, "userrole", rememberedUserRole);
-	            // Redirect to the appropriate page
-	            if ("admin".equals(rememberedUserRole)) {
-	                response.sendRedirect(request.getContextPath() + "/admindashboard");
-	            } else {
-	                response.sendRedirect(request.getContextPath() + "/home");
-	            }
-	            return; // IMPORTANT:  Exit the doGet method!
-	        }
-	        // If not remembered, proceed to show the login page
 	        request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	    }
 
@@ -106,16 +88,17 @@ public class Logincontroller extends HttpServlet {
 	                
 	                request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	            } else {
-	         
 	              Sessionutil.setAttribute(request, "username",user.getUserName());
+	              Sessionutil.setAttribute(request, "userId",user.getUserId());
 	              Sessionutil.setAttribute(request, "userrole",user.getuserRole());
 	              if ("on".equals(rememberMe)) { // Check if the checkbox was checked
 	                    // Use Cookiesutil to set the cookies
-	                    Cookiesutil.setcookies(response, "rememberedUsername", user.getUserName(), 7 * 24 * 60 * 60);
-	                    Cookiesutil.setcookies(response, "rememberedUserRole", user.getuserRole(), 7 * 24 * 60 * 60);
+	            	    Cookiesutil.setcookies(response, "rememberedUserName", user.getUserName(),24 * 60 * 60);
+	                    Cookiesutil.setcookies(response, "rememberedUserId", user.getUserId(),24 * 60 * 60);
+	                    Cookiesutil.setcookies(response, "rememberedUserRole", user.getuserRole(),24 * 60 * 60);
 	                } else {
 	                    // Use Cookiesutil to delete cookies
-	                    Cookiesutil.deletecookie(response, "rememberedUsername");
+	                    Cookiesutil.deletecookie(response, "rememberedUserId");
 	                    Cookiesutil.deletecookie(response, "rememberedUserRole");
 	                }
 	                System.out.print("logged in" + (String) Sessionutil.getAttribute(request, "userrole"));

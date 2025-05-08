@@ -12,8 +12,12 @@ import com.Advancedjava.dao.CategoryDao;
 import com.Advancedjava.dao.CategoryDaoImpl;
 import com.Advancedjava.dao.PropertyDao;
 import com.Advancedjava.dao.PropertyDaoImpl;
+import com.Advancedjava.dao.UserDaoimpl;
+import com.Advancedjava.dao.WishlistImpl;
 import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.Propertymodel;
+import com.Advancedjava.model.usermodel;
+import com.Advancedjava.util.Sessionutil;
 
 /**
  * Servlet implementation class HomeController
@@ -43,6 +47,15 @@ public class HomeController extends HttpServlet {
 	            // Fetch all properties (for "All" category)
 	            List<Propertymodel> properties = propertyDao.findallproperties();
 	            request.setAttribute("properties", properties);
+	 
+	            
+	            String userId = (String) Sessionutil.getAttribute(request, "userId");
+
+	            
+	            WishlistImpl wishlistDao =new WishlistImpl();
+	            List<Integer> wishlist = wishlistDao.getWishlistByUserId(userId);
+	            System.out.println(wishlist);
+	            request.setAttribute("wishlistIds", wishlist);
 	            
 	            // Forward to JSP
 	            request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);

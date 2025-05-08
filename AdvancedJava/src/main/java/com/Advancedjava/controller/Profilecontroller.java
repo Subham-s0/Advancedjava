@@ -7,10 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import com.Adavanedjava.service.UpdateProfileService;
 import com.Advancedjava.dao.UserDao;
 import com.Advancedjava.dao.UserDaoimpl;
+import com.Advancedjava.dao.WishlistImpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.usermodel;
 import com.Advancedjava.util.Sessionutil;
@@ -37,10 +39,12 @@ public class Profilecontroller extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try { 
-			String username = (String) Sessionutil.getAttribute(request, "username");
-			UserDao userDao = new UserDaoimpl();
+			
+			 String username = (String) Sessionutil.getAttribute(request, "username");
+			 UserDao userDao = new UserDaoimpl();
 	         usermodel Current_user = userDao.findByUsernameOrEmail(username);
 	         request.setAttribute("Current_user", Current_user);
+	         
 			 } catch (DataAccessException e) {
 				 e.printStackTrace();
 		        }

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
 </head>
 <body>
-  <footer>
+  <footer >
     <div class="row">          
       <div class="column-1">
         <div class="footer-logo">

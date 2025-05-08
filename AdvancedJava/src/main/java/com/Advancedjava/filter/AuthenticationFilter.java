@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -29,6 +30,8 @@ public class AuthenticationFilter implements Filter {
     private static final String PROPERTY = "/Property";
     private static final String filterProperties = "/filter-hotels";
     private static final String PROPERTY_DESCRIPTION = "/propertydescription";
+    private static final String WishList = "/WishListController";
+    
   ;
     
     private static final String BOOKING  = "/BookingController";
@@ -69,21 +72,33 @@ public class AuthenticationFilter implements Filter {
         }
 
         // Get authentication info from SESSION (more secure than cookies)
-        String username = (String) Sessionutil.getAttribute(req, "username");
+        String userId = (String) Sessionutil.getAttribute(req, "userId");
         String userRole = (String) Sessionutil.getAttribute(req, "userrole");
+        
+        if (userId == null || userRole == null) {
+            Cookie userIdCookie = Cookiesutil.getCookie(req, "rememberedUserId");
+            Cookie roleCookie = Cookiesutil.getCookie(req, "rememberedUserRole");
+            Cookie userNameCookie = Cookiesutil.getCookie(req, "rememberedUserName");
+            if (userIdCookie != null && roleCookie != null) {
+            	String username =userNameCookie.getValue();
+            	userId = userIdCookie.getValue();
+                userRole = roleCookie.getValue();
+                Sessionutil.setAttribute(req, "userId", userId);
+                Sessionutil.setAttribute(req, "userrole", userRole);
+                Sessionutil.setAttribute(req, "username", username);
+            }
+        }
+
 
         // Not logged in - only allow public pages
-        if (username == null) {
+        if (userId == null) {
             if (isPublicPage(uri)) {
                 chain.doFilter(request, response);
             } else {
                 res.sendRedirect(contextPath + LOGIN);
             }
             return;
-        }
-        
-        
-       
+        }    
 
         // Admin access control
         if ("admin".equals(userRole)) {
@@ -159,6 +174,7 @@ public class AuthenticationFilter implements Filter {
                uri.equals(PROPERTY_DESCRIPTION)||
                uri.equals(filterProperties)||
                uri.equals(PROFILE_IMAGE)||
+               uri.equals(WishList)||
                uri.equals(LOGOUT);
     }
 

@@ -29,7 +29,7 @@
             <nav class="sidebar-nav">
                 <a href="#personal-info" class="nav-item active">Personal Information</a>
                 <a href="#bookings" class="nav-item">My Bookings</a>
-                <a href="#wishlist" class="nav-item">My Wishlist</a>
+                <a href="${pageContext.request.contextPath}/WishListController" class="nav-item">My Wishlist</a>
                 <a href="#change-password" class="nav-item">Change Password</a>
                 <a href="${pageContext.request.contextPath}/logout" class="nav-item logout">Logout<i data-lucide="log-out"></i></a>
             </nav>
@@ -154,28 +154,9 @@
             </section>
 
             <section id="wishlist" class="content-section">
-                <h2>My Wishlist</h2>
-                <div class="wishlist-grid">
-                    <div class="property-card">
-                        <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Property">
-                        <div class="property-details">
-                            <h3>Seaside Resort</h3>
-                            <p class="location">Malibu, California</p>
-                            <p class="price">$350/night</p>
-                            <button class="btn-secondary">View Property</button>
-                        </div>
-                    </div>
-
-                    <div class="property-card">
-                        <img src="https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Property">
-                        <div class="property-details">
-                            <h3>Downtown Loft</h3>
-                            <p class="location">New York City</p>
-                            <p class="price">$250/night</p>
-                            <button class="btn-secondary">View Property</button>
-                        </div>
-                    </div>
-                </div>
+				<div class="hotel-grid">
+				   <jsp:include page="/WEB-INF/pages/Property-grid.jsp" />
+				    </div>
             </section>
 
             <section id="change-password" class="content-section ">
@@ -277,7 +258,7 @@
     // Wire up clicks
     navItems.forEach(item => {
       item.addEventListener('click', function(e) {
-        e.preventDefault();
+   
         const targetId = this.getAttribute('href').slice(1);
         goToSection(targetId);
       });

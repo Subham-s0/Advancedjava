@@ -14,71 +14,6 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/searchbar.css" />
  <script src="https://unpkg.com/lucide@latest"></script>
-<style>
-    /* Hotel Image Gallery Styles */
-    .hotel-image-gallery {
-        position: relative;
-        height: 250px;
-        overflow: hidden;
-    }
-    
-    .main-image-container {
-        position: relative;
-        height: 100%;
-    }
-    
-    .main-image-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-    
-    .thumbnail-scrollbar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 50px;
-        background: rgba(0,0,0,0.5);
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: none; /* Hidden by default */
-        transition: all 0.3s ease;
-    }
-    
-    .thumbnails-container {
-        display: flex;
-        height: 100%;
-        padding: 5px;
-        gap: 5px;
-    }
-    
-    .thumbnail {
-        height: 100%;
-        width: auto;
-        cursor: pointer;
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
-    }
-    
-    .thumbnail:hover {
-        opacity: 1;
-    }
-    
-    /* Show thumbnails on hover */
-    .hotel-image-gallery:hover .thumbnail-scrollbar {
-        display: block;
-    }
-    
-    .thumbnail-scrollbar::-webkit-scrollbar {
-        height: 5px;
-    }
-    
-    .thumbnail-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(255,255,255,0.5);
-    }
-</style>
 </head>
 <body>
 <header>
@@ -130,13 +65,14 @@ if (error != null && !error.isEmpty()) {
 	   <!-- Category Filter Bar -->
     <div class="category-bar">
         <!-- Add "All" category first -->
-        <button class="category-button active" data-category-id="0">
+        <button class="category-button" data-category-id="0">
             <i data-lucide="grid"></i>
             <span>All</span>
         </button>
         
         <c:choose>
             <c:when test="${not empty categories}">
+             <input type="hidden" name="activeCategoryId" value="${param.categoryId}" />
                 <c:forEach items="${categories}" var="category">
                     <button class="category-button" 
                             data-category-id="${category.categoryId}">
@@ -164,63 +100,34 @@ if (error != null && !error.isEmpty()) {
     <script>
  // Add this script to your home.jsp file, replacing the existing category filtering code
 
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log("DOM fully loaded - initializing category filtering");
-        
-        // Initialize Lucide icons
-        lucide.createIcons();
-        
-        // Set up event listeners for category buttons
-        const categoryButtons = document.querySelectorAll('.category-button');
-        const hotelGrid = document.querySelector('.hotel-grid');
-        
-        console.log("Found " + categoryButtons.length + " category buttons");
-        
-        // Set the "All" button (index 0) as active initially
-        if(categoryButtons.length > 0) {
-            categoryButtons[0].classList.add('active');
+    document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM fully loaded - initializing category filtering");
+
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Set up event listeners for category buttons
+    const categoryButtons = document.querySelectorAll('.category-button');
+    console.log("Found " + categoryButtons.length + " category buttons");
+
+    // Highlight the currently active button from the server-rendered state
+    const activeCategoryId = document.querySelector('input[name="activeCategoryId"]')?.value;
+
+    categoryButtons.forEach(button => {
+        const categoryId = button.getAttribute('data-category-id');
+        if (categoryId === activeCategoryId) {
+            button.classList.add('active');
         }
-        
-        // Add click event listeners to all category buttons
-        categoryButtons.forEach(button => {
-            const categoryId = button.getAttribute('data-category-id');
-            console.log("Button with category ID: " + categoryId);
-            
-            button.addEventListener('click', function() {
-                console.log("Category button clicked: " + categoryId);
-                
-                // Update active button styling
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Load properties via AJAX
-                loadProperties(categoryId);
-            });
+
+        // On click, redirect to the servlet with selected categoryId
+        button.addEventListener('click', function () {
+            console.log("Category button clicked: " + categoryId);
+            window.location.href = window.contextPath + "/filter-hotels?categoryId=" + categoryId;
         });
-        
-        // Function to load properties by category using AJAX
-        function loadProperties(categoryId) {
-        hotelGrid.innerHTML = '<div class="loading">Loading properties...</div>';     
-            fetch(window.contextPath + "/filter-hotels?categoryId=" + categoryId)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.status);
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    hotelGrid.innerHTML = html;
-                    lucide.createIcons();
-                    console.log("Properties loaded successfully");
-                })
-                .catch(error => {
-                    console.error('Error loading properties:', error);
-                    hotelGrid.innerHTML = '<div class="error">Error loading properties. Please try again.</div>';
-                });
-        }
-        
-        initializeSearchContainer();
     });
+
+    initializeSearchContainer();
+});
 
     function initializeSearchContainer() {
         const searchContainer = document.querySelector('.search-container');
@@ -228,7 +135,7 @@ if (error != null && !error.isEmpty()) {
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             
-            if (scrollY > 150) {
+            if (scrollY > 110) {
                 searchContainer.classList.add('sticky');
                 // Add compact class when scrolling down (unless already expanded)
                 if (!searchContainer.classList.contains('expanded')) {

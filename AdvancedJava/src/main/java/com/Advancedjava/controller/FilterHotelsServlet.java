@@ -9,10 +9,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Advancedjava.dao.CategoryDaoImpl;
 import com.Advancedjava.dao.PropertyDao;
 import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.dao.UserDaoimpl;
+import com.Advancedjava.dao.WishlistImpl;
+import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.Propertymodel;
+import com.Advancedjava.util.Sessionutil;
 
 /**
  * Servlet implementation class FilterHotelsServlet
@@ -20,50 +24,62 @@ import com.Advancedjava.model.Propertymodel;
 @WebServlet(asyncSupported = true, urlPatterns = { "/filter-hotels" })
 public class FilterHotelsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FilterHotelsServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public FilterHotelsServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		 
-        String categoryId = request.getParameter("categoryId");
-        
-        try {
-        	 PropertyDao propertydao = new PropertyDaoImpl();
-            List<Propertymodel> filteredProperties=new ArrayList<>();;
-            
-            if (categoryId == null || categoryId.isEmpty() ||  "0".equals(categoryId)) {
-                filteredProperties = propertydao.findallproperties();
-            } else {
-                filteredProperties = propertydao.listAllPropertiesByCategory(Integer.parseInt(categoryId));
-            }
-            
-            request.setAttribute("properties", filteredProperties);
-            
-            // Only include the property grid (not the full page)
-            request.getRequestDispatcher("/WEB-INF/pages/Property-grid.jsp").include(request, response);;
-           
-            
-        } catch (Exception e) {
-        	e.printStackTrace(); 
-            response.getWriter().write("<p>Error in servlet loading properties. Please try again.</p>");
-        }
-    }
 
+		String categoryId = request.getParameter("categoryId");
+
+		try {
+			PropertyDao propertydao = new PropertyDaoImpl();
+			List<Propertymodel> filteredProperties = new ArrayList<>();
+			;
+
+			if (categoryId == null || categoryId.isEmpty() || "0".equals(categoryId)) {
+				filteredProperties = propertydao.findallproperties();
+			} else {
+				filteredProperties = propertydao.listAllPropertiesByCategory(Integer.parseInt(categoryId));
+			}
+			CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+			String userId = (String) Sessionutil.getAttribute(request, "userId");
+
+			List<Categorymodel> categories = categoryDao.findAllcategories();
+			request.setAttribute("categories", categories);
+
+			request.setAttribute("properties", filteredProperties);
+
+			// Only include the property grid (not the full page)
+			WishlistImpl wishlistDao = new WishlistImpl();
+			List<Integer> wishlist = wishlistDao.getWishlistByUserId(userId);
+			System.out.println(wishlist);
+			request.setAttribute("wishlistIds", wishlist);
+			request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.getWriter().write("<p>Error in servlet loading properties. Please try again.</p>");
+		}
+	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
