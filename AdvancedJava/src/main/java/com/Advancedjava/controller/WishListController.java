@@ -49,9 +49,14 @@ public class WishListController extends HttpServlet {
 	        	Propertymodel property= propertydao.findById(wishlistId);
 	            properties.add(property);
 	        }
+	        String username = (String) Sessionutil.getAttribute(request, "username");
+			 UserDao userDao = new UserDaoimpl();
+	         usermodel Current_user = userDao.findByUsernameOrEmail(username);
+	         request.setAttribute("Current_user", Current_user);
 
 	        // Set attributes to be accessed in the JSP
 	        request.setAttribute("wishlistIds", wishlistIds);
+	        request.setAttribute("Current_user", Current_user);
 	        request.setAttribute("properties", properties);
 	        request.setAttribute("openSection", "wishlist");
 		} catch (DataAccessException e) {
@@ -84,9 +89,7 @@ public class WishListController extends HttpServlet {
             } else {
                 wishlistDao.addToWishlist(Current_user.getUserId(), productId);
             }
-            
-			 
-	         request.setAttribute("Current_user", Current_user);
+                 
             
             // Redirect back to the same page or a specific one
             response.sendRedirect(referer != null ? referer : request.getContextPath());
