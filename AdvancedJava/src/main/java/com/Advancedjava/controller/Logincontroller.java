@@ -110,7 +110,8 @@ public class Logincontroller extends HttpServlet {
 	            }
 	            
 	        } catch (DataAccessException e) {
-	            request.setAttribute("error", "System error. Please try again later.");
+	            request.setAttribute("error", "System error. Please  try try again later.");
+	            e.printStackTrace();
 	            request.setAttribute("preservedUsername",usernameOrEmail);
 	            request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
 	        }

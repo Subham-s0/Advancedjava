@@ -51,7 +51,7 @@ public class Profile_pictureservlet extends HttpServlet {
         	System.out.println("the image didnot load");
         	 imagePath = defaultImage;
         }
-        String fullPath ="C:/Users/Acer/git/Advancedjava/AdvancedJava/src/main/webapp/resources/images/profile/" + imagePath;
+        String fullPath ="C:/Users/Acer Nitro/eclipse-workspace/Advancedjava/AdvancedJava/src/main/webapp/resources/images/profile/" + imagePath;
         File imageFile = new File(fullPath);
        
         if (!imageFile.exists()) {

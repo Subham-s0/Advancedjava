@@ -109,7 +109,7 @@ public class ImageUtil {
 
 	
 	public String getSavePath(String saveFolder) {
-		return "C:/Users/Acer/git/Advancedjava/AdvancedJava/src/main/webapp/resources/images/"+saveFolder+"/";
+		return "C:/Users/Acer Nitro/eclipse-workspace/Advancedjava/AdvancedJava/src/main/webapp/resources/images/"+saveFolder+"/";
 	}
 	public void validateImage(Part imagePart) throws ServletException {
         if (imagePart == null || imagePart.getSize() == 0) {
