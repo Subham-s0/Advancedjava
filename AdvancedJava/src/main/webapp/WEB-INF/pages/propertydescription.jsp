@@ -12,6 +12,7 @@
 <header>
 <jsp:include page="header.jsp" />
 </header>
+<!--images-->
 <div class="gallery">
         <div class="item big"><img src="${pageContext.request.contextPath}/resources/images/hotel/img.avif" alt="Big Image"></div>
         <div class="item"><img src="${pageContext.request.contextPath}/resources/images/hotel/img2.jpg" alt="Small Image"></div>
