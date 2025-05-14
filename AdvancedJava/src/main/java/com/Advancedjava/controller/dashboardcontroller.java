@@ -26,7 +26,8 @@ public class dashboardcontroller extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/pages/admindashboard.jsp").forward(request, response);
+		 request.setAttribute("activeSection", "dashboard");
+		request.getRequestDispatcher("/WEB-INF/pages/admin/admindashboard.jsp").forward(request, response);
 	}
 
 	/**

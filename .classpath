@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="AdvancedJava/src/main/java"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jakarta.activation-2.0.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jakarta.el-api-4.0.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jakarta.servlet.jsp.jstl-2.0.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jakarta.servlet.jsp.jstl-api-2.0.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jakarta.servlet-api-5.0.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jakarta.xml.bind-api-3.0.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/build/jstl-1.2-sources.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/src/main/webapp/WEB-INF/lib/jbcrypt-0.4.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/src/main/webapp/WEB-INF/lib/mysql-connector-j-9.2.0.jar"/>
+	<classpathentry kind="lib" path="AdvancedJava/src/main/webapp/WEB-INF/lib/taglibs-standard-impl-1.2.5.jar"/>
+	<classpathentry kind="output" path="AdvancedJava/build/classes"/>
+</classpath>

@@ -38,7 +38,7 @@ public class AuthenticationFilter implements Filter {
     
     // Admin pages (accessible only to admin)
     private static final String DASHBOARD = "/admindashboard";
-    
+    private static final String PROPERTY_DASHBOARD = "/propertydashboard";
     private static final String PROFILE_IMAGE = "/Profile_pictureservlet";
    
     // Error pages
@@ -181,6 +181,7 @@ public class AuthenticationFilter implements Filter {
     private boolean isAdminAllowedPage(String uri) {
         return uri.equals(DASHBOARD)||
         		  uri.equals(PROFILE_IMAGE)||
+        		  uri.equals(PROPERTY_DASHBOARD)||
         		uri.equals(LOGOUT);
         // Add other admin-specific pages here if needed
     }

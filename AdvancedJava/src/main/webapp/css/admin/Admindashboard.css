@@ -1,0 +1,20 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: none;
+  
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+   overflow-x: hidden;
+   background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+  
+}
+.main-content {
+  margin-left: 240px;
+  margin-top:80px;
+  padding-top: 60px;
+  
+   background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+}

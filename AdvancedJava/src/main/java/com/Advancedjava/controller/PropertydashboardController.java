@@ -1,0 +1,69 @@
+package com.Advancedjava.controller;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+import com.Advancedjava.dao.CategoryDaoImpl;
+import com.Advancedjava.dao.PropertyDaoImpl;
+import com.Advancedjava.exception.DataAccessException;
+import com.Advancedjava.model.Categorymodel;
+import com.Advancedjava.model.Propertymodel;
+
+/**
+ * Servlet implementation class Propertydashboard
+ */
+@WebServlet("/propertydashboard")
+public class PropertydashboardController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public PropertydashboardController() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+		PropertyDaoImpl propertyDao = new PropertyDaoImpl();
+		List<Categorymodel> categories;
+		try {
+			categories = categoryDao.findAllcategories();
+			List<Propertymodel> properties = propertyDao.findallproperties();
+			request.setAttribute("categories", categories);
+
+			// Fetch all properties (for "All" category)
+
+			request.setAttribute("properties", properties);
+			request.setAttribute("activeSection", "property");
+			request.getRequestDispatcher("WEB-INF/pages/admin/propertydashboard.jsp").forward(request, response);
+
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
