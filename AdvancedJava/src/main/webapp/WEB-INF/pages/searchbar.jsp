@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
+<!-- body -->
     <form class="search-form" action="Result" method="GET">
         
             <div class="search-box">
