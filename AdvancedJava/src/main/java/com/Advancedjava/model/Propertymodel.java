@@ -19,6 +19,53 @@ public class Propertymodel {
     private int categoryId;
     private String hostName;
     private List<PropertyImagemodel> images = new ArrayList<>();
+    private double cleaningFee;
+    private double taxRate;
+    private double serviceFee;
+
+
+	public Propertymodel(int propertyId, String propertyName, String propertyAddress, String propertyCity,
+			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, double pricePerNight,
+			int maximumGuests, int totalBedrooms, int totalBath, int totalRooms, int categoryId, String hostName,
+			List<PropertyImagemodel> images, double cleaningFee, double taxRate, double serviceFee) {
+		this.propertyId = propertyId;
+		this.propertyName = propertyName;
+		this.propertyAddress = propertyAddress;
+		this.propertyCity = propertyCity;
+		this.propertyCountry = propertyCountry;
+		this.propertyDescription = propertyDescription;
+		this.propertyStatus = propertyStatus;
+		this.pricePerNight = pricePerNight;
+		this.maximumGuests = maximumGuests;
+		this.totalBedrooms = totalBedrooms;
+		this.totalBath = totalBath;
+		this.totalRooms = totalRooms;
+		this.categoryId = categoryId;
+		this.hostName = hostName;
+		this.images = images;
+		this.cleaningFee = cleaningFee;
+		this.taxRate = taxRate;
+		this.serviceFee = serviceFee;
+	}
+
+
+
+	public void setTaxRate(double taxRate) {
+		this.taxRate = taxRate;
+	}
+
+
+
+	public double getServiceFee() {
+		return serviceFee;
+	}
+
+
+
+	public void setServiceFee(double serviceFee) {
+		this.serviceFee = serviceFee;
+	}
+	
     
     
     
@@ -219,6 +266,22 @@ public class Propertymodel {
 	    public void removeImage(PropertyImagemodel image) {
 	        this.images.remove(image);
 	    }
+	    public double getCleaningFee() {
+			return cleaningFee;
+		}
+
+
+
+		public void setCleaningFee(double cleaningFee) {
+			this.cleaningFee = cleaningFee;
+		}
+
+
+
+		public double getTaxRate() {
+			return taxRate;
+		}
+
 
 
 	public enum PropertyStatus {
@@ -227,21 +290,24 @@ public class Propertymodel {
     }
 	@Override
 	public String toString() {
-	    return "Property ID: " + propertyId +
-	           "\nName: " + propertyName +
-	           "\nAddress: " + propertyAddress +
-	           "\nCity: " + propertyCity +
-	           "\nCountry: " + propertyCountry +
-	           "\nDescription: " + propertyDescription +
-	           "\nStatus: " + propertyStatus +
-	           "\nPrice per Night: $" + pricePerNight +
-	           "\nMax Guests: " + maximumGuests +
-	           "\nBedrooms: " + totalBedrooms +
-	           "\nBathrooms: " + totalBath +
-	           "\nTotal Rooms: " + totalRooms +
-	           "\nCategory ID: " + categoryId +
-	           "\nHost Name: " + hostName +
-	           "\nImages Count: " + (images != null ? images.size() : 0);
-	}
+        return "Property ID: " + propertyId +
+                "\nName: " + propertyName +
+                "\nAddress: " + propertyAddress +
+                "\nCity: " + propertyCity +
+                "\nCountry: " + propertyCountry +
+                "\nDescription: " + propertyDescription +
+                "\nStatus: " + propertyStatus +
+                "\nPrice per Night: $" + pricePerNight +
+                "\nMax Guests: " + maximumGuests +
+                "\nBedrooms: " + totalBedrooms +
+                "\nBathrooms: " + totalBath +
+                "\nTotal Rooms: " + totalRooms +
+                "\nCategory ID: " + categoryId +
+                "\nHost Name: " + hostName +
+                "\nCleaning Fee: $" + cleaningFee +
+                "\nTax Rate: " + taxRate + "%" +
+                "\nService Fee: $" + serviceFee +
+                "\nImages Count: " + (images != null ? images.size() : 0);
+    }
 
 }

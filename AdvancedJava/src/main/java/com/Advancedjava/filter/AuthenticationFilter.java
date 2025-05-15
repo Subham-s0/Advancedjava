@@ -40,7 +40,9 @@ public class AuthenticationFilter implements Filter {
     private static final String DASHBOARD = "/admindashboard";
     private static final String PROPERTY_DASHBOARD = "/propertydashboard";
     private static final String PROFILE_IMAGE = "/Profile_pictureservlet";
-   
+    private static final String ADD_PROPERTY = "/AddPropertyController";
+    private static final String ADD_IMAGES = "/addpropertyimages";
+    private static final String ADD_PROPERTY_AMENITIES = "/addamenities";
     // Error pages
     private static final String ACCESS_DENIED = "/accessDenied";
     
@@ -53,9 +55,10 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+    	
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
+        
 
         String uri = req.getRequestURI();
         String contextPath = req.getContextPath();
@@ -182,7 +185,11 @@ public class AuthenticationFilter implements Filter {
         return uri.equals(DASHBOARD)||
         		  uri.equals(PROFILE_IMAGE)||
         		  uri.equals(PROPERTY_DASHBOARD)||
+        		  uri.equals(ADD_PROPERTY)||
+        		  uri.equals(ADD_IMAGES)||
+        		  uri.equals(ADD_PROPERTY_AMENITIES)||
         		uri.equals(LOGOUT);
+        
         // Add other admin-specific pages here if needed
     }
 }

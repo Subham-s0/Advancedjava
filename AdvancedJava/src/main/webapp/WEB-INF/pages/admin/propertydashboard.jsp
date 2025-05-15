@@ -34,8 +34,9 @@
 							<option value="${status}"
 								${param.status == status ? 'selected' : ''}>${status}</option>
 						</c:forEach>
-					</select> <select class="filter-control" name="category">
-						<option value="">All Categories</option>
+					</select>
+					 <select class="filter-control" name="category">
+						
 						<c:forEach items="${categories}" var="category">
 							<option value="${category.categoryId}"
 								${param.category == category.categoryId ? 'selected' : ''}>

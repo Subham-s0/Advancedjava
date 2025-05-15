@@ -45,7 +45,10 @@ public class PropertyDaoImpl implements PropertyDao {
                         rs.getInt("total_rooms"),
                         rs.getInt("category_id"),
                         rs.getString("host_name"),
-                        propertyImageDao.findByPropertyId(propertyId)
+                        propertyImageDao.findByPropertyId(propertyId),
+                        rs.getDouble("cleaning_fee"),
+                        rs.getDouble("tax_rate"),
+                        rs.getDouble("service_fee")
                     );
                 }
                 return property;

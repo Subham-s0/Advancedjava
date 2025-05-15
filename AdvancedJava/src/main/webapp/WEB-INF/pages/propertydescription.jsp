@@ -31,7 +31,7 @@
     <div class="container">
         <div class="hotel-info">
             <h2>${selectedProperty.propertyName}</h2>
-            <p class="location">,${selectedProperty.propertyCity},${property.propertyCountry}</p>
+            <p class="location">,${selectedProperty.propertyCity},${selectedProperty.propertyCountry}</p>
             <h3>About hotel</h3>
             <p class="about">
                 <strong>Landmark Hotel:</strong> exceptional value for two travelers.
@@ -101,7 +101,7 @@
                     <span>$48</span>
                 </div>
                 <div class="charge-line">
-                    <span>Tax (10%)</span>
+                    <span>Tax (${selectedProperty.taxRate})</span>
                     <span>$4.80</span>
                 </div>
                 <div class="charge-line total">
