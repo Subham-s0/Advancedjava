@@ -1,5 +1,8 @@
 package com.Advancedjava.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import jakarta.servlet.http.Part;
 
 public class ValidationUtil {
@@ -39,6 +42,27 @@ public class ValidationUtil {
         return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png") || fileName.endsWith(".gif");
     }
 
+	
 
-	    
+	    public static boolean isValidInt(String value) {
+	        if (isNullOrEmpty(value)) return false;
+	        try {
+	            int num = Integer.parseInt(value);
+	            return num >= 0;
+	        } catch (NumberFormatException e) {
+	            return false;
+	        }
+	    }
+	    public static boolean isValidDecimal(String value) throws NumberFormatException {
+	        if (isNullOrEmpty(value)) return false;
+	        try {
+	            new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
+	            return true;
+	        } catch (NumberFormatException e) {
+	           
+	        	return false;
+	        }
+	    }
+
+	   
 }

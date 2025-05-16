@@ -11,11 +11,13 @@
 	<jsp:include page="/WEB-INF/pages/admin/Adminheader.jsp" />
 
 	<div class="main-content">
+	<div class="container">
+	 <%String error = (String) request.getAttribute("error"); %>
 		<div class="heading">Add Property</div>
 		<div class="step-indicator">
 			<div class="step-indicator">
 				<div class="steps">
-					<div class="step active">
+					<div class="step <%= (error != null && !error.isEmpty()) ? "not-completed" : "active" %>">
 						<div class="step-circle">1</div>
 						<p class="step-label">Property Details</p>
 					</div>
@@ -35,6 +37,24 @@
 
 
 			<div class="add-property">
+			  
+                <div class="error-message <%= (error != null && !error.isEmpty()) ? "visible" : "" %>">
+					   <c:if test="${not empty error}">
+			        <p style="color: red;"><c:out value="${error}"/></p>
+			    </c:if>
+			
+			    </div>
+			    <div class="success-message">
+				    <%
+				String success = (String) request.getAttribute("success");
+				if (success != null && !success.isEmpty()) {
+				%>
+				<p style="color: green;"><%= success %></p>
+				<%
+				}
+				%>
+				</div>
+				
 				<form action="AddPropertyController" method="POST"
 					class="property-form">
 					<div class="form-grid">
@@ -67,7 +87,7 @@
 							<label for="category">Category</label> <select id="category"
 								name="category">
 
-								<option value="choose any"></option>
+								<option value="0">choose any</option>
 								<c:choose>
 									<c:when test="${not empty categories}">
 										<c:forEach items="${categories}" var="category">
@@ -80,41 +100,64 @@
 								</c:choose>
 							</select>
 						</div>
-
+						<div class="form-group full-width four-cols">
+						  <div>
+						    <label for="maximumGuests">Maximum Guests</label>
+						    <input type="number" id="maximumGuests" name="maximumGuests" min="1" step="1">
+						  </div>
+						  <div>
+						    <label for="totalBedrooms">Total Bedrooms</label>
+						    <input type="number" id="totalBedrooms" name="totalBedrooms" min="0" step="1">
+						  </div>
+						  <div>
+						    <label for="totalBath">Total Bathrooms</label>
+						    <input type="number" id="totalBath" name="totalBath" min="0" step="1">
+						  </div>
+						  <div>
+						    <label for="totalRooms">Total Rooms</label>
+						    <input type="number" id="totalRooms" name="totalRooms" min="0" step="1">
+						  </div>
+						</div>
 
 						<div class="form-group ">
 							<label for="pricePerNight">Price Per Night ($)*</label> <input
 								type="number" id="pricePerNight" name="pricePerNight" min="1"
-								step="1">
+								step="0.01" max="99999999.99">
+						</div>
+						<div class="form-group">
+							<label for="taxRate">Tax Rate (%)</label> <input type="number"
+								id="taxRate" name="taxRate" min="0" max="30" step="1"
+								>
 						</div>
 
 						<div class="form-group ">
-							<label for="ServiceCharge">Service Charge </label> <input
-								type="number" id="pricePerNight" name="pricePerNight" min="1"
+							<label for="ServiceCharge">Service Charge </label>
+							 <input
+								type="number" id="ServiceCharge" name="ServiceCharge" min="1"
 								step="1">
 						</div>
 
 						<div class="form-group">
 							<label for="cleaningFee">Cleaning Fee ($)</label> <input
 								type="number" id="cleaningFee" name="cleaningFee" min="0"
-								step="0.01" value="0">
+								step="1" >
 						</div>
-						<div class="form-group">
-							<label for="taxRate">Tax Rate (%)</label> <input type="number"
-								id="taxRate" name="taxRate" min="0" max="30" step="0.1"
-								value="0">
-						</div>
+						
 
 						<div class="form-group full-width">
-							<label for="description">Description*</label>
+							<label for="description">Description</label>
 							<textarea id="description" name="description" rows="4"></textarea>
 						</div>
 
 						<div class="form-buttons">
-							<button type="submit" class="btn-next">Next →</button>
+							<button type="submit" class="btn-next">Submit →</button>
+						</div>
 						</div>
 				</form>
 			</div>
+			</div>
+			<jsp:include page="/WEB-INF/pages/admin/Adminfooter.jsp" />
 		</div>
+		
 </body>
 </html>

@@ -13,7 +13,8 @@ public interface PropertyDao {
     boolean delete(int propertyId) throws DataAccessException;
     List<Propertymodel> findByStatus(PropertyStatus status) throws DataAccessException;
     List<Propertymodel> findByCity(String city) throws DataAccessException;
-   
+    boolean Propertyexists(String name, String address, String city, String country) 
+            throws DataAccessException;
         List<Propertymodel> listAllPropertiesByCategory(int categoryId) throws DataAccessException;
 
 }

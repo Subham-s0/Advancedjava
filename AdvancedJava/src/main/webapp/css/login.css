@@ -137,9 +137,23 @@ button[type="submit"]:hover {
   margin: 0;
   padding-left: 0.5rem;
 }
-.success-message{
-	color: Green; 
-	
+.success-message {
+  display: none;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #e6f9ed;      
+  border-left: 4px solid #43a047; 
+}
+.success-message.visible {
+  display: block;
+}
+.success-message p {
+  color: #256029;                 
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 0.5rem;
 }
 
 .error-box ul {

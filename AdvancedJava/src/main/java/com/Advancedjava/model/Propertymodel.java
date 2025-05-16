@@ -1,5 +1,6 @@
 package com.Advancedjava.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Propertymodel {
     private String propertyCountry;
     private String propertyDescription;
     private PropertyStatus propertyStatus;
-    private double pricePerNight;
+    private BigDecimal pricePerNight;
     private int maximumGuests;
     private int totalBedrooms;
     private int totalBath;
@@ -19,15 +20,15 @@ public class Propertymodel {
     private int categoryId;
     private String hostName;
     private List<PropertyImagemodel> images = new ArrayList<>();
-    private double cleaningFee;
-    private double taxRate;
-    private double serviceFee;
+    private int cleaningFee;
+    private int taxRate;
+    private int serviceFee;
 
 
 	public Propertymodel(int propertyId, String propertyName, String propertyAddress, String propertyCity,
-			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, double pricePerNight,
+			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, BigDecimal pricePerNight,
 			int maximumGuests, int totalBedrooms, int totalBath, int totalRooms, int categoryId, String hostName,
-			List<PropertyImagemodel> images, double cleaningFee, double taxRate, double serviceFee) {
+			List<PropertyImagemodel> images, int cleaningFee, int taxRate, int serviceFee) {
 		this.propertyId = propertyId;
 		this.propertyName = propertyName;
 		this.propertyAddress = propertyAddress;
@@ -50,19 +51,43 @@ public class Propertymodel {
 
 
 
-	public void setTaxRate(double taxRate) {
+	public Propertymodel(String propertyName, String propertyAddress, String propertyCity, String propertyCountry,
+			String propertyDescription, PropertyStatus propertyStatus, BigDecimal pricePerNight, int maximumGuests,
+			int totalBedrooms, int totalBath, int totalRooms, int categoryId, String hostName, int cleaningFee,
+			int taxRate, int serviceFee) {
+		this.propertyName = propertyName;
+		this.propertyAddress = propertyAddress;
+		this.propertyCity = propertyCity;
+		this.propertyCountry = propertyCountry;
+		this.propertyDescription = propertyDescription;
+		this.propertyStatus = propertyStatus;
+		this.pricePerNight = pricePerNight;
+		this.maximumGuests = maximumGuests;
+		this.totalBedrooms = totalBedrooms;
+		this.totalBath = totalBath;
+		this.totalRooms = totalRooms;
+		this.categoryId = categoryId;
+		this.hostName = hostName;
+		this.cleaningFee = cleaningFee;
+		this.taxRate = taxRate;
+		this.serviceFee = serviceFee;
+	}
+
+
+
+	public void setTaxRate(int taxRate) {
 		this.taxRate = taxRate;
 	}
 
 
 
-	public double getServiceFee() {
+	public int getServiceFee() {
 		return serviceFee;
 	}
 
 
 
-	public void setServiceFee(double serviceFee) {
+	public void setServiceFee(int serviceFee) {
 		this.serviceFee = serviceFee;
 	}
 	
@@ -71,7 +96,7 @@ public class Propertymodel {
     
     
     public Propertymodel(int propertyId, String propertyName, String propertyAddress, String propertyCity,
-			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, double pricePerNight,
+			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, BigDecimal pricePerNight,
 			int maximumGuests, int totalBedrooms, int totalBath, int totalRooms, int categoryId, String hostName,
 			List<PropertyImagemodel> images) {
 		this.propertyId = propertyId;
@@ -94,7 +119,7 @@ public class Propertymodel {
 
 
 	public Propertymodel(int propertyId, String propertyName, String propertyAddress, String propertyCity,
-			String propertyCountry, PropertyStatus propertyStatus, double pricePerNight, int categoryId,
+			String propertyCountry, PropertyStatus propertyStatus, BigDecimal pricePerNight, int categoryId,
 			List<PropertyImagemodel> images) {
 		super();
 		this.propertyId = propertyId;
@@ -180,12 +205,12 @@ public class Propertymodel {
 	}
 
 
-	public double getPricePerNight() {
+	public BigDecimal getPricePerNight() {
 		return pricePerNight;
 	}
 
 
-	public void setPricePerNight(double pricePerNight) {
+	public void setPricePerNight(BigDecimal pricePerNight) {
 		this.pricePerNight = pricePerNight;
 	}
 
@@ -266,19 +291,19 @@ public class Propertymodel {
 	    public void removeImage(PropertyImagemodel image) {
 	        this.images.remove(image);
 	    }
-	    public double getCleaningFee() {
+	    public int getCleaningFee() {
 			return cleaningFee;
 		}
 
 
 
-		public void setCleaningFee(double cleaningFee) {
+		public void setCleaningFee(int cleaningFee) {
 			this.cleaningFee = cleaningFee;
 		}
 
 
 
-		public double getTaxRate() {
+		public int getTaxRate() {
 			return taxRate;
 		}
 

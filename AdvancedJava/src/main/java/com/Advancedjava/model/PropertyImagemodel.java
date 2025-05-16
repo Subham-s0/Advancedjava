@@ -3,14 +3,15 @@ package com.Advancedjava.model;
 public class PropertyImagemodel {
 	private int imageId;
 	private int propertyId;
+	private String fileName;
+	private String imageName;
 	public int getPropertyId() {
 		return propertyId;
 	}
 	public void setPropertyId(int propertyId) {
 		this.propertyId = propertyId;
 	}
-	private String fileName;
-	private String imageName;
+	
 	public int getImageId() {
 		return this.imageId;
 	}
@@ -30,14 +31,14 @@ public class PropertyImagemodel {
 		this.imageName = imageName;
 	}
 	public PropertyImagemodel(int imageId, int propertyId, String fileName, String imageName) {
-		super();
+	
 		this.imageId = imageId;
 		this.propertyId = propertyId;
 		this.fileName = fileName;
 		this.imageName = imageName;
 	}
 	public PropertyImagemodel(int propertyId, String fileName, String imageName) {
-		super();
+		
 		this.propertyId = propertyId;
 		this.fileName = fileName;
 		this.imageName = imageName;

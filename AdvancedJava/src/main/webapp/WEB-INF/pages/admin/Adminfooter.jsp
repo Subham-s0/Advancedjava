@@ -16,7 +16,7 @@
         footer {
             background: #1c2834;
             padding: 10px 0 0;
-            margin: 5px -20px -20px;
+            margin: 10px -20px -20px;
             padding-bottom: 10px;
         }
 
