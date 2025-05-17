@@ -71,25 +71,25 @@
 										<c:choose>
 											<c:when test="${not empty property.images}">
 												<img
-													src="${pageContext.request.contextPath}/resources/images/hotel/${property.images[0].fileName}"
+													src="${pageContext.request.contextPath}/resources/images/property/${property.images[0].fileName}"
 													alt="${property.propertyName}"
-													onerror="this.src='${pageContext.request.contextPath}/resources/images/hotel/default-img.jpg'"
+													onerror="this.src='${pageContext.request.contextPath}/resources/images/property/default-img.jpg'"
 													class="main-image">
 
 												<div class="thumbnail-scrollbar">
 													<div class="thumbnails-container">
 														<c:forEach items="${property.images}" var="image">
 															<img class="thumbnail"
-																src="${pageContext.request.contextPath}/resources/images/hotel/${image.fileName}"
-																data-full-image="${pageContext.request.contextPath}/resources/images/hotel/${image.fileName}"
-																onerror="this.src='${pageContext.request.contextPath}/resources/images/hotel/default-img.jpg'">
+																src="${pageContext.request.contextPath}/resources/images/property/${image.fileName}"
+																data-full-image="${pageContext.request.contextPath}/resources/images/property/${image.fileName}"
+																onerror="this.src='${pageContext.request.contextPath}/resources/images/property/default-img.jpg'">
 														</c:forEach>
 													</div>
 												</div>
 											</c:when>
 											<c:otherwise>
 												<img
-													src="${pageContext.request.contextPath}/resources/images/hotel/default-img.jpg"
+													src="${pageContext.request.contextPath}/resources/images/property/default-img.jpg"
 													alt="Default property image" class="main-image">
 											</c:otherwise>
 										</c:choose>

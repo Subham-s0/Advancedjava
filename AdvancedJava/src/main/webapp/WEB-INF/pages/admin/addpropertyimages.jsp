@@ -11,12 +11,19 @@
     
     <div class="main-content">
     <div class="container">
-     <%String error = (String) request.getAttribute("error"); %>
-    <div class="heading">Add Property Images</div>
+     <%String error = (String) request.getParameter("error"); %>
+     
+   <%
+    String propertyId = (String) request.getParameter("propertyId");
+%>
+<!--<c:set var="propertyId" value="${param.PropertyId != null ? param.PropertyId : param.propertyId}" /> 
+ ${propertyId }-->
+   
+    <div class="heading">Add Property Images ${propertyId }</div>
     <div class="step-indicator">
 			<div class="step-indicator">
-				<div class="steps">
-					<div class="step completed">
+				<div class="steps ">
+					<div class="step <%= (propertyId != null && !propertyId.isEmpty()) ? "completed" : "not-completed" %>">
 						<div class="step-circle">1</div>
 						<p class="step-label">Property Details</p>
 					</div>
@@ -53,6 +60,7 @@
 				  <% session.removeAttribute("success"); %>
 				</div>
           <form class="property-form" action="addpropertyimages" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="propertyId" value="<%= propertyId %>" />
     <div class="upload-section" id="image-upload-container">
         <div class="image-upload-block">
             <input type="file" name="images" accept="image/*" required>
