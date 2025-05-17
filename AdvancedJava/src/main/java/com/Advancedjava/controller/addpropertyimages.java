@@ -69,8 +69,11 @@ public class addpropertyimages extends HttpServlet {
 		// TODO Auto-generated method stub
 		List<String> errors = new ArrayList<>();
 		 String propertyIdStr = request.getParameter("propertyId");
-		
-		    if (propertyIdStr != null) {
+		 if (propertyIdStr == null || propertyIdStr.trim().isEmpty() ||"null".equalsIgnoreCase(propertyIdStr)) {
+		     		
+		    	request.setAttribute("error", "The property id is missing");
+				request.getRequestDispatcher("WEB-INF/pages/admin/addpropertyimages.jsp").forward(request, response);
+		    } else {
 		        int propertyId = Integer.parseInt(propertyIdStr);
 		        List<Part> imageParts = new ArrayList<>();
 		        System.out.print("after parsing"+propertyId);
@@ -115,14 +118,7 @@ public class addpropertyimages extends HttpServlet {
                             errors.add("Image #" + (i+1) + " needs a valid name");
                             continue;
                         }
-                        boolean duplicateName = existingImages.stream()
-                                .anyMatch(img -> img.getImageName().equalsIgnoreCase(imageName));
-
-                        // 6. Check for duplicate names
-                        if (duplicateName) {
-                            errors.add("Name already exists: " + sanitizedName);
-                            continue;
-                        }
+                        
 
                         try {
                         	 ImageUtil imageUtil = new ImageUtil();
@@ -130,6 +126,13 @@ public class addpropertyimages extends HttpServlet {
                         	imageUtil.validateImage(imagePart);
                             String saveFolder = "property";
                             String customFileName = propertyId + "_" + originalFileName;
+                            boolean duplicateFileName = existingImages.stream()
+                                    .anyMatch(img -> img.getFileName().equalsIgnoreCase(customFileName)); // ✅ Compare against custom filename
+
+                            if (duplicateFileName) {
+                                errors.add("File already exists: " + originalFileName); // 🚨 Show original name, not sanitized
+                                continue;
+                            }
                           
                             boolean uploaded = imageUtil.uploadImage(imagePart,
                                "",
@@ -159,18 +162,12 @@ public class addpropertyimages extends HttpServlet {
 		
                 if (!errors.isEmpty()) {
                 	request.setAttribute("error", String.join(" ", errors));
-                   
                     request.setAttribute("propertyId", propertyId);
                     request.getRequestDispatcher("WEB-INF/pages/admin/addpropertyimages.jsp").forward(request, response);
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/addamenities?=" + propertyId);
+                    response.sendRedirect(request.getContextPath() + "/addamenities?propertyId=" + propertyId);
                 }
 	}
-		    else {
-		request.setAttribute("error", "The property id is missing");
-		request.getRequestDispatcher("WEB-INF/pages/admin/addpropertyimages.jsp").forward(request, response);
-		
-		}
 	}
 
 }

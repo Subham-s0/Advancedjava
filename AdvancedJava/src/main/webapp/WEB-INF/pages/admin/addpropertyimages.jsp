@@ -11,15 +11,18 @@
     
     <div class="main-content">
     <div class="container">
-     <%String error = (String) request.getParameter("error"); %>
+     <%String error = (String) request.getAttribute("error"); %>
      
    <%
     String propertyId = (String) request.getParameter("propertyId");
+   if ("null".equalsIgnoreCase(propertyId)) {
+       propertyId = null;
+   }
 %>
 <!--<c:set var="propertyId" value="${param.PropertyId != null ? param.PropertyId : param.propertyId}" /> 
  ${propertyId }-->
    
-    <div class="heading">Add Property Images ${propertyId }</div>
+    <div class="heading">Add Property Images </div>
     <div class="step-indicator">
 			<div class="step-indicator">
 				<div class="steps ">
@@ -64,7 +67,7 @@
     <div class="upload-section" id="image-upload-container">
         <div class="image-upload-block">
             <input type="file" name="images" accept="image/*" required>
-            <input type="text" name="imageNames" placeholder="Enter image name" required>
+            <input type="text" name="imageNames" placeholder="Enter image name" >
             <!-- No remove button for the first block -->
         </div>
     </div>
