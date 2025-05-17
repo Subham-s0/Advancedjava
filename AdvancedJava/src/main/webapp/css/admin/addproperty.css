@@ -421,26 +421,46 @@ textarea:focus {
 }
 
 .amenity-item {
-  padding: 1rem;
-  border: 1px solid var(--gray-300);
-  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 2px solid #d1d5db;
+  border-radius: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  transition: all 0.2s;
-}
-
-.amenity-item:hover {
-  border-color: var(--primary-color);
-  background: #f8f9ff;
+  gap: 1rem;
+  transition: all 0.2s ease;
+  background: #fff;
 }
 
 .amenity-item.selected {
   background: #e0e7ff;
-  border-color: var(--primary-color);
+  border-color: #6366f1;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+  animation: item-select 0.2s ease
 }
 
+.amenity-item:hover:not(.selected) {
+  border-color: #6366f1;
+  background: #f8f9ff;
+}
+
+
+
+.amenity-icon {
+  width: 2.2em;
+  height: 2.2em;
+  stroke-width: 2.2;
+  color: #374151;
+}
+
+
+.amenity-item.selected .amenity-icon {
+  color: #6366f1;
+}
+
+.amenity-item input[type="checkbox"] {
+  display: none;
+}
 /* Success Message */
 .success-page-message {
   text-align: center;

@@ -8,7 +8,10 @@
 <body>
     <jsp:include page="/WEB-INF/pages/admin/Adminheader.jsp" />
     
-    <div class="main-container">
+    
+    <div class="main-content">
+	<div class="container ">
+	<div class="add-property"  style="margin-top:50px;">
         <div class="success-wrapper">
             <div class="success-content">
                 <div class="success-icon">✓</div>
@@ -20,6 +23,8 @@
                 </div>
             </div>
         </div>
+        </div>
+    </div>
     </div>
 </body>
 </html>
