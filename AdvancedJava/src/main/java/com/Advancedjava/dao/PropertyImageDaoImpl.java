@@ -80,6 +80,41 @@ public class PropertyImageDaoImpl implements PropertyImageDao {
 	@Override
 	public boolean deleteByPropertyId(int propertyId) throws DataAccessException {
 		// TODO Auto-generated method stub
-		return false;
+		String sql = "DELETE FROM property_images WHERE propertyId = ?";
+		 try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	            
+	            pstmt.setInt(1, propertyId);
+	            return pstmt.executeUpdate() > 0;
+	            
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Database error while deleting property image", e);
+	        }
+	    }
+
+	public PropertyImagemodel findByImageId(int imageId) throws DataAccessException {
+	    String sql = "SELECT * FROM property_images WHERE image_id = ?";
+	    
+	    try (Connection conn = DBconnection.getDbConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setInt(1, imageId);
+	        
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            if (rs.next()) {  // Use if instead of while since we expect at most 1 result
+	                return new PropertyImagemodel(
+	                    rs.getInt("image_id"),
+	                    rs.getInt("property_id"),
+	                    rs.getString("file_name"),
+	                    rs.getString("image_name")
+	                );
+	            }
+	            return null;  // Explicit return if no results found
+	        }
+	    } catch (SQLException e) {
+	        throw new DataAccessException("Error fetching image by ID: " + imageId, e);
+	    }
 	}
+		
+	
 }

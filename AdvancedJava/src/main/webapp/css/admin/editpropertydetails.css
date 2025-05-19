@@ -301,4 +301,24 @@ textarea:focus {
 .amenity-remove-btn:hover{
 	color:#610000;
 }
+.success-message {
+  display: none;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background-color: #b7d6c2;      
+  border-left: 4px solid #43a047; 
+}
+.success-message.visible {
+  display: block;
+}
+.success-message p {
+  color: #234236;                 
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 auto;
+  text-align:center;
+  padding-left: 0.5rem;
+  
+}
 

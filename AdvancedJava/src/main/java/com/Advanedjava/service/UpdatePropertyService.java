@@ -1,4 +1,4 @@
-package com.Adavanedjava.service;
+package com.Advanedjava.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -6,12 +6,16 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Advancedjava.dao.AmenityDaoImpl;
 import com.Advancedjava.dao.CategoryDao;
 import com.Advancedjava.dao.CategoryDaoImpl;
 import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.exception.DataAccessException;
+import com.Advancedjava.model.AmenityModel;
+import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.Propertymodel;
 import com.Advancedjava.model.Propertymodel.PropertyStatus;
+import com.Advancedjava.util.Sessionutil;
 import com.Advancedjava.util.ValidationUtil;
 
 import jakarta.servlet.ServletException;
@@ -61,7 +65,7 @@ public class UpdatePropertyService {
 	        int categoryId = 0;
 	        try {
 	            categoryId = Integer.parseInt(categoryIdStr);
-	            System.out.println("it was here");
+	            
 	            if (categoryDao.findById(categoryId) == null) {
 	                errors.add("Invalid category selected");
 	            }
@@ -133,7 +137,7 @@ public class UpdatePropertyService {
 	                  }
 	            
 	    	 } catch (NumberFormatException e) {
-	             errors.add("Invalid number format format");
+	             errors.add("Invalid number  format");
 	         } catch (Exception e) {
 	             errors.add("Error validating service charge : " + e.getMessage());
 	         }
@@ -207,7 +211,7 @@ public class UpdatePropertyService {
 	        	    !ValidationUtil.isNullOrEmpty(country)) {
 	        	    
 	        	    try {
-	        	        if (propertyDao.Propertyexists(name, address, city, country)) {
+	        	        if (propertyDao.propertyExistsExcludingId(name, address, city, country,PropertyId)) {
 	        	            errors.add("Property already exists");
 	        	        }
 	        	    } catch (DataAccessException e) {
@@ -217,24 +221,28 @@ public class UpdatePropertyService {
 	        	}
 	        if (!errors.isEmpty()) {
 	            try {
-	            	 request.setAttribute("error", String.join(" ", errors));
-	                request.setAttribute("categories", categoryDao.findAllcategories());
-	                request.setAttribute("name", name);
-	                request.setAttribute("address", address);
-	                request.setAttribute("city", city);
-	                request.setAttribute("country", country);
-	                request.setAttribute("hostName", hostName);
-	                request.setAttribute("description", description);
-	                request.setAttribute("pricePerNight", pricePerNightStr);
-	                request.setAttribute("ServiceCharge", serviceChargeStr);
-	                request.setAttribute("cleaningFee", cleaningFeeStr);
-	                request.setAttribute("taxRate", taxRateStr);
-	                request.getRequestDispatcher("/WEB-INF/pages/admin/addproperty.jsp").forward(request, response);
+	            	Propertymodel property = propertyDao. findById(PropertyId);
+      				request.setAttribute("property", property);
+      				List<Integer> amenityIds= propertyDao. findAmenityIdsByPropertyId(PropertyId);
+      				List<AmenityModel> property_amenities = new ArrayList<>();
+      				AmenityDaoImpl amenityDao = new AmenityDaoImpl();
+
+      				for (Integer amenityId : amenityIds) {
+      				    AmenityModel amenity = amenityDao.findById(amenityId); // assuming amenityDao is available
+      				    if (amenity != null) {
+      				    	property_amenities.add(amenity);
+      				    }
+      				}
+      				request.setAttribute("propertyAmenities", property_amenities);
+      				Sessionutil.setAttribute(request, "error", String.join(" ", errors));
+      			    List<Categorymodel> categories = categoryDao.findAllcategories();
+                    request.setAttribute("categories", categories);
+	                request.setAttribute("propertyId",PropertyId);
+	            	request.getRequestDispatcher("WEB-INF/pages/admin/editpropertydashboard.jsp").forward(request, response);;
 	            } catch (Exception e) {
 	            	request.setAttribute("error", "System error: " + e.getMessage());
 	            	e.printStackTrace();
-	            	 request.getRequestDispatcher("/WEB-INF/pages/admin/addproperty.jsp").forward(request, response);
-	            	 return false;
+	            	            	 return false;
 	            }
 	            return false;
 	        }
@@ -260,7 +268,8 @@ public class UpdatePropertyService {
 	        	    );
 	        		
 	        	boolean update = propertyDao.update(property);
-	        	return update;	            }
+	        	return update;	           
+	        	}
 	        catch(Exception e){
 	        	
 	        	request.setAttribute("error", "System error: " + e.getMessage());
@@ -270,5 +279,4 @@ public class UpdatePropertyService {
 	        }
 
 }
-	 
 }

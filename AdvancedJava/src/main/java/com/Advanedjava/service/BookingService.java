@@ -1,4 +1,4 @@
-package com.Adavanedjava.service;
+package com.Advanedjava.service;
 
 public class BookingService {
 

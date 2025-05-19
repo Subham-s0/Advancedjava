@@ -10,4 +10,5 @@ public interface PropertyImageDao {
     boolean delete(int imageId) throws DataAccessException;
     
     boolean deleteByPropertyId(int propertyId) throws DataAccessException;
+    
 }

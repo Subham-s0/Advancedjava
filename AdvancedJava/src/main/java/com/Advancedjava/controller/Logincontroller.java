@@ -94,6 +94,7 @@ public class Logincontroller extends HttpServlet {
 	              if ("on".equals(rememberMe)) { // Check if the checkbox was checked
 	                    // Use Cookiesutil to set the cookies
 	            	    Cookiesutil.setcookies(response, "rememberedUserName", user.getUserName(),24 * 60 * 60);
+	            	    
 	                    Cookiesutil.setcookies(response, "rememberedUserId", user.getUserId(),24 * 60 * 60);
 	                    Cookiesutil.setcookies(response, "rememberedUserRole", user.getuserRole(),24 * 60 * 60);
 	                } else {
@@ -101,9 +102,10 @@ public class Logincontroller extends HttpServlet {
 	                    Cookiesutil.deletecookie(response, "rememberedUserId");
 	                    Cookiesutil.deletecookie(response, "rememberedUserRole");
 	                }
-	                System.out.print("logged in" + (String) Sessionutil.getAttribute(request, "userrole"));
+	                System.out.println("The logged  in role of user is " + (String) Sessionutil.getAttribute(request, "userrole"));
 	                if (user.getuserRole().equals("admin")){
-	                response.sendRedirect(request.getContextPath() + "/admindashboard");}
+	                response.sendRedirect(request.getContextPath() + "/admindashboard");
+	               }
 	                else {
 	                	response.sendRedirect(request.getContextPath() + "/home");
 	                }

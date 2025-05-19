@@ -1,4 +1,4 @@
-package com.Adavanedjava.service;
+package com.Advanedjava.service;
 
 import java.io.IOException;
 import java.time.LocalDate;

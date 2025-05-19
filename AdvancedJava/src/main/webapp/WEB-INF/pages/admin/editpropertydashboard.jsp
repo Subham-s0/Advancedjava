@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+ <%@ page import="com.Advancedjava.util.Sessionutil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,13 +19,27 @@
 		<div class="heading">Property Details</div>
 		<div class="container">
 			<%
-			String error = (String) request.getAttribute("error");
+			String error = (String) session.getAttribute("error");
 			%>
 			<%
-    String current_propertyId = (String) request.getParameter("propertyId");
-   if ("null".equalsIgnoreCase(current_propertyId)) {
-	   current_propertyId = null;
-   }
+Integer propertyId = (Integer) request.getAttribute("propertyId"); // Get as Integer from attribute
+
+// If not found in attributes, check parameter
+if (propertyId == null) {
+    String paramValue = request.getParameter("propertyId");
+    try {
+        if (paramValue != null && !paramValue.equalsIgnoreCase("null")) {
+            propertyId = Integer.parseInt(paramValue);
+        }
+    } catch (NumberFormatException e) {
+        // Handle invalid parameter format
+        request.setAttribute("error", "Invalid property ID format");
+        propertyId = -1; // Default error value
+    }
+}
+
+// Now use propertyId safely as Integer
+int current_propertyId = (propertyId != null) ? propertyId : -1;
 %>
 
 
@@ -40,16 +55,20 @@
 					</c:if>
 
 				</div>
-				<div class="success-message">
-					<%
-					String success = (String) request.getAttribute("success");
-					if (success != null && !success.isEmpty()) {
-					%>
-					<p style="color: green;"><%=success%></p>
-					<%
-					}
-					%>
-				</div>
+				 <%
+        String success = (String) session.getAttribute("success");
+    %>
+    <div class="success-message <%= (success != null && !success.isEmpty()) ? "visible" : "" %>">
+        <%
+            if (success != null && !success.isEmpty()) {
+        %>
+            <p><%= success %></p>
+        <%
+            }
+            Sessionutil.removeAttribute(request, "success");
+            Sessionutil.removeAttribute(request, "error");
+        %>
+    </div>
 
 				<form action="updatepropertycontroller" method="POST"
 					class="property-form">
@@ -168,10 +187,9 @@
 							<c:when test="${not empty property.images}">
 								<div id="imageList">
 									<c:forEach var="img" items="${property.images}">
-										<form action="">
-										<input type="hidden" name="formType" value="addimages" />
-										<input type="hidden" name="amenityIds"
-										value="${img.imageId}"/>
+										<form action="updatepropertycontroller"  method="POST">
+										<input type="hidden" name="formType" value="deleteImage" />
+										 <input type="hidden" name="imageId" value="${img.imageId}"/>
 										<input type="hidden" name="propertyId" value="<%= current_propertyId %>" />
 											<div class="img-card-horizontal">
 												<div style="position: relative;">
@@ -181,7 +199,7 @@
 														onerror="this.src='${pageContext.request.contextPath}/resources/images/property/default-img.jpg'">
 
 													<div class="img-name">${img.fileName}</div>
-													<button type="button" class="remove-img-btn-horizontal"
+													<button type="submit" class="remove-img-btn-horizontal"
 														onclick="return confirm('Do you want to Delete this  Image?')">
 														<i data-lucide="x"></i>
 													</button>
@@ -219,15 +237,14 @@
 					<h3>Amenities/Facilities</h3>
 					<div class="facilities-list">
 						<c:forEach items="${propertyAmenities}" var="amenity">
-							<form action="#">
-							<input type="hidden" name="formType" value="addamenity" />
+							<form action="updatepropertycontroller"  method="POST">
+							<input type="hidden" name="formType" value="deleteAmenity" />
 								<div class="amenity-item">
 								<input type="hidden" name="propertyId" value="<%= current_propertyId %>" />
-									<input type="hidden" name="amenityIds"
-										value="${amenity.amenityId}" /> <span><i
+									<input type="hidden" name="amenityId" value="${amenity.amenityId}" /> <span><i
 										data-lucide="${amenity.amenityIcon}" class="amenity-icon"></i></span>
 									<span class="amenity-name">${amenity.amenityName}</span>
-									<button type="button" class="amenity-remove-btn"
+									<button type="submit" class="amenity-remove-btn"
 										onclick="return confirm('Do you want to Delete this  amenity?')">
 										<i data-lucide="circle-minus"></i>
 									</button>

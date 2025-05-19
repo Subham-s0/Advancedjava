@@ -306,4 +306,31 @@ public class PropertyDaoImpl implements PropertyDao {
 	        throw new DataAccessException("Error fetching amenity IDs for property ID: " + propertyId, e);
 	    }
 	}
+	public boolean propertyExistsExcludingId(String propertyName, String address, 
+            String city, String country, int excludeId) 
+            throws DataAccessException {
+
+String sql = "SELECT COUNT(*) FROM properties " +
+"WHERE property_name = ? " +
+"AND property_address = ? " +
+"AND property_city = ? " +
+"AND property_country = ? " +
+"AND property_id != ?";  // Exclusion clause
+
+try (Connection conn = DBconnection.getDbConnection();
+PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+pstmt.setString(1, propertyName);
+pstmt.setString(2, address);
+pstmt.setString(3, city);
+pstmt.setString(4, country);
+pstmt.setInt(5, excludeId);  // New parameter
+
+try (ResultSet rs = pstmt.executeQuery()) {
+return rs.next() && rs.getInt(1) > 0;
+}
+} catch (SQLException e) {
+throw new DataAccessException("Error checking property existence with exclusion", e);
+}
+}
 }

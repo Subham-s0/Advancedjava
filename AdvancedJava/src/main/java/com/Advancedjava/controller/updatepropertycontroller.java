@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,92 +15,152 @@ import com.Advancedjava.dao.AmenityDaoImpl;
 import com.Advancedjava.dao.CategoryDaoImpl;
 import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.dao.PropertyImageDaoImpl;
-import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.AmenityModel;
 import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.PropertyImagemodel;
+import com.Advancedjava.model.Property_Amenity;
 import com.Advancedjava.model.Propertymodel;
+import com.Advancedjava.util.ImageUtil;
 import com.Advancedjava.util.Sessionutil;
-import com.mysql.cj.Session;
+import com.Advanedjava.service.UpdatePropertyService;
 
-/**
- * Servlet implementation class updatepropertycontroller
- */
 @WebServlet(asyncSupported = true, urlPatterns = { "/updatepropertycontroller" })
 public class updatepropertycontroller extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public updatepropertycontroller() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-          try { 
-      		String propertyIdStr = request.getParameter("propertyId");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String propertyIdStr = request.getParameter("propertyId");
 
-    		CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-    		PropertyDaoImpl propertyDao = new PropertyDaoImpl();  
-    		AmenityDaoImpl amenityDao =new AmenityDaoImpl();
-    		List<Categorymodel> categories = categoryDao.findAllcategories();
-              request.setAttribute("categories", categories);
-      		  if (propertyIdStr != null) {
-      			  int propertyId = Integer.parseInt(propertyIdStr);
-      			Propertymodel property = propertyDao. findById(propertyId);
-      				request.setAttribute("property", property);
-      				List<Integer> amenityIds= propertyDao. findAmenityIdsByPropertyId(propertyId);
-      				List<AmenityModel> property_amenities = new ArrayList<>();
+            if (propertyIdStr == null && request.getAttribute("propertyId") == null) {
+                response.sendRedirect(request.getContextPath() + "/propertydashboard");
+                return;
+            }
 
-      				for (Integer amenityId : amenityIds) {
-      				    AmenityModel amenity = amenityDao.findById(amenityId); // assuming amenityDao is available
-      				    if (amenity != null) {
-      				    	property_amenities.add(amenity);
-      				    }
-      				}
-      				request.setAttribute("propertyAmenities", property_amenities);
-      			request.getRequestDispatcher("WEB-INF/pages/admin/editpropertydashboard.jsp").forward(request, response);
-      			} 
-      		  
-      		
-      	    }catch (Exception e) {
-      				
-      				e.printStackTrace();
-      				Sessionutil.setAttribute(request,"error", "An error occurred. Please try again."+e.getMessage());
-      		response.sendRedirect(request.getContextPath()+"/propertydashboard");
-      			}
-      			  
-         
-       	}
+            int propertyId = (request.getAttribute("propertyId") != null)
+                    ? (int) request.getAttribute("propertyId")
+                    : Integer.parseInt(propertyIdStr);
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doPut(request, response);
-	}
-	
-	
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("the form was submitted");
-		try { 
-      		String propertyIdStr = request.getParameter("propertyId");
-      		int propertyId = Integer.parseInt(propertyIdStr);
-      		
-    		response.sendRedirect(request.getContextPath()+"/updatepropertycontroller?propertyId="+propertyId);
-      		}
-		catch (Exception e) {
-			e.printStackTrace();
-				Sessionutil.setAttribute(request,"error", "An error occurred. Please try again."+e.getMessage());
-		response.sendRedirect(request.getContextPath()+"/propertydashboard");
-			}
-	}
+            CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+            PropertyDaoImpl propertyDao = new PropertyDaoImpl();
+            AmenityDaoImpl amenityDao = new AmenityDaoImpl();
 
+            List<Categorymodel> categories = categoryDao.findAllcategories();
+            request.setAttribute("categories", categories);
+
+            Propertymodel property = propertyDao.findById(propertyId);
+            request.setAttribute("property", property);
+
+            List<Integer> amenityIds = propertyDao.findAmenityIdsByPropertyId(propertyId);
+            List<AmenityModel> property_amenities = new ArrayList<>();
+
+            for (Integer amenityId : amenityIds) {
+                AmenityModel amenity = amenityDao.findById(amenityId);
+                if (amenity != null) {
+                    property_amenities.add(amenity);
+                }
+            }
+            request.setAttribute("propertyAmenities", property_amenities);
+
+            request.getRequestDispatcher("WEB-INF/pages/admin/editpropertydashboard.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Sessionutil.setAttribute(request, "error", "An error occurred. Please try again. " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/propertydashboard");
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPut(request, response);
+    }
+
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            System.out.println("The form was submitted");
+
+            String formType = request.getParameter("formType");
+            String propertyIdStr = request.getParameter("propertyId");
+            if (propertyIdStr == null || formType == null) {
+                Sessionutil.setAttribute(request, "error", "Invalid request.");
+                response.sendRedirect(request.getContextPath() + "/propertydashboard");
+                return;
+            }
+
+            int propertyId = Integer.parseInt(propertyIdStr);
+            PropertyImageDaoImpl propertyImageDao = new PropertyImageDaoImpl();
+            AmenityDaoImpl amenityDao = new AmenityDaoImpl();
+
+            switch (formType) {
+                case "propertydetails":
+                    UpdatePropertyService service = new UpdatePropertyService();
+                    boolean status = service.Updatedetails(request, response, propertyId);
+                    if (response.isCommitted()) return;
+                    if (status) {
+                        Sessionutil.setAttribute(request, "success", "Property updated successfully.");
+                    } else {
+                        Sessionutil.setAttribute(request, "error", "Failed to update property.");
+                    }
+
+                    response.sendRedirect(request.getContextPath() + "/updatepropertycontroller?propertyId=" + propertyId);
+                    return;
+
+                
+
+                case "deleteImage":
+                    String imageIdStr = request.getParameter("imageId");
+
+                    if (imageIdStr != null) {
+                        int imageId = Integer.parseInt(imageIdStr);
+
+                        try {
+                            PropertyImagemodel image = propertyImageDao.findByImageId(imageId);
+                            if (image != null) {
+                                // Construct the file path
+                                String folder = "property"; // or the appropriate folder name
+                                ImageUtil img =new ImageUtil();
+                                String imagePath = img.getSavePath(folder) + image.getFileName();
+
+                                File file = new File(imagePath);
+
+                                boolean fileDeleted = true;
+                                if (file.exists()) {
+                                    fileDeleted = file.delete();
+                                }
+
+                                boolean dbDeleted = propertyImageDao.delete(imageId);
+
+                                if (fileDeleted && dbDeleted) {
+                                    Sessionutil.setAttribute(request, "success", "Image deleted successfully.");
+                                } else {
+                                    Sessionutil.setAttribute(request, "error", "Failed to delete image file or database record.");
+                                }
+                            } else {
+                                Sessionutil.setAttribute(request, "error", "Image not found.");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Sessionutil.setAttribute(request, "error", "Error deleting image: " + e.getMessage());
+                        }
+                    } else {
+                        Sessionutil.setAttribute(request, "error", "Image ID not provided.");
+                    }
+
+                    response.sendRedirect(request.getContextPath() + "/updatepropertycontroller?propertyId=" + propertyId);
+                    return;
+
+                default:
+                    Sessionutil.setAttribute(request, "error", "Invalid form submission.");
+                    response.sendRedirect(request.getContextPath() + "/propertydashboard");
+                    return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Sessionutil.setAttribute(request, "error", "An error occurred. Please try again. " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/propertydashboard");
+        }
+    }
 }

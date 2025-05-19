@@ -46,12 +46,21 @@ public class FilterHotelsServlet extends HttpServlet {
 		try {
 			PropertyDao propertydao = new PropertyDaoImpl();
 			List<Propertymodel> filteredProperties = new ArrayList<>();
-			;
+			
 
 			if (categoryId == null || categoryId.isEmpty() || "0".equals(categoryId)) {
 				filteredProperties = propertydao.findallproperties();
+				System.out.println("Fetching ALL properties");
 			} else {
+			
 				filteredProperties = propertydao.listAllPropertiesByCategory(Integer.parseInt(categoryId));
+				 System.out.println("Category ID: " + categoryId);
+				    System.out.print("Property IDs for this category: ");
+				    for (Propertymodel property : filteredProperties) {
+				        System.out.print(property.getPropertyId() + " ");
+				    }
+				    System.out.println(); // Move to new line after listing IDs
+			
 			}
 			CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 			String userId = (String) Sessionutil.getAttribute(request, "userId");

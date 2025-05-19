@@ -10,14 +10,16 @@ public class Cookiesutil {
 	public static void setcookies(HttpServletResponse response,String name,String value,int maxage){
 		Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxage);// sets the duration of the cookie in seconds
-        cookie.setPath("/"); // Makes the cookie available to the entire application
+        cookie.setPath("/");
+        cookie.setHttpOnly(false);// Makes the cookie available to the entire application
         response.addCookie(cookie);
 	}
 
 public static void deletecookie(HttpServletResponse response, String name) {
     Cookie cookie = new Cookie(name, null);
     cookie.setMaxAge(0);
-    cookie.setPath("/"); // Make cookie available to the entire application
+    cookie.setPath("/"); 
+    // Make cookie available to the entire application
     response.addCookie(cookie);
 }
 public static Cookie getCookie(HttpServletRequest request, String name) {

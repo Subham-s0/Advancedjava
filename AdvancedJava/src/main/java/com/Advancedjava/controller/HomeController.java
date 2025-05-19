@@ -40,7 +40,7 @@ public class HomeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		 try {
-			 
+			 System.out.println("Request URL: " + request.getRequestURL());
 	            List<Categorymodel> categories = categoryDao.findAllcategories();
 	            request.setAttribute("categories", categories);
 	            
@@ -54,7 +54,7 @@ public class HomeController extends HttpServlet {
 	            
 	            WishlistImpl wishlistDao =new WishlistImpl();
 	            List<Integer> wishlist = wishlistDao.getWishlistByUserId(userId);
-	            System.out.println("The wishlist ids are "+wishlist);
+	            
 	            request.setAttribute("wishlistIds", wishlist);
 	            
 	            // Forward to JSP

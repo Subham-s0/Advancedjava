@@ -9,13 +9,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import com.Adavanedjava.service.UpdateProfileService;
 import com.Advancedjava.dao.UserDao;
 import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.dao.WishlistImpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.usermodel;
 import com.Advancedjava.util.Sessionutil;
+import com.Advanedjava.service.UpdateProfileService;
 
 /**
  * Servlet implementation class Profilecontroller
@@ -84,6 +84,7 @@ public class Profilecontroller extends HttpServlet {
 		            try {
 		                String newusername = (String) Sessionutil.getAttribute(request, "username");
 		                Current_user = userDao.findByUsernameOrEmail(newusername);
+		                
 		                request.setAttribute("Current_user", Current_user);
 		            } catch (DataAccessException e) {
 		                e.printStackTrace();
