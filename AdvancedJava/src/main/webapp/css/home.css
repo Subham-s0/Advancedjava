@@ -182,7 +182,7 @@ body {
 }
 
 .error-message {
-    display: flex;
+    display: block;
     align-items: center;  /* Vertically center items */
     justify-content: center;
     gap:20px;  /* Optional: pushes icon to the right */

@@ -56,64 +56,67 @@ public class Profilecontroller extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
-	    String formType = request.getParameter("formType");
-	    String username = (String) Sessionutil.getAttribute(request, "username");
-	    UserDao userDao = new UserDaoimpl();
-	    usermodel Current_user = null;
-
-	    // Always reload the current user into the request
-	    try {
-	        Current_user = userDao.findByUsernameOrEmail(username);
-	        request.setAttribute("Current_user", Current_user);
-	        
-	    } catch (DataAccessException e) {
-	        e.printStackTrace();
-	        // You might want to forward to an error page here
-	    }
-
-	    if ("profileUpdate".equals(formType)) {
-	        UpdateProfileService svc = new UpdateProfileService();
-	        Boolean ok = svc.UpdateProfile(request, response);
-	        if (ok) {
-	            request.setAttribute("success", "Profile updated successfully.");
-	            try {
-	                String newusername = (String) Sessionutil.getAttribute(request, "username");
-	                Current_user = userDao.findByUsernameOrEmail(newusername);
-	                request.setAttribute("Current_user", Current_user);
-	            } catch (DataAccessException e) {
-	                e.printStackTrace();
-	                request.setAttribute("error", "Error retrieving updated user data: " + e.getMessage());
-	            }
-
-	            // Forward to profile.jsp
-	            request.getRequestDispatcher("/WEB-INF/pages/Profile.jsp").forward(request, response);
-	        } else {
-	            // Handle error case
-	            request.setAttribute("error", "Failed to update profile.");
-	            
-	        }
-	        
-	    }
-	    else if ("ChangePassword".equals(formType)) {
-	        // call your new ChangePassword method
-	        UpdateProfileService svc = new UpdateProfileService();
-	        Boolean ok = svc.ChangePassword(request, response);
-	        // svc.ChangePassword already forwards back on error, so only handle success here:
-	        if (ok) {request.setAttribute("successPassword", "Password updated successfully.");
-	        	 
-	            // on success, want to show change-password tab with success message
-	            request.setAttribute("openSection", "change-password");
-	            request.getRequestDispatcher("/WEB-INF/pages/Profile.jsp").forward(request, response);
-	        }
-	        // if ok==false, svc.ChangePassword has already forwarded with errorPassword + openSection
-
-	    } else {
-	        // unknown formType; just reload
-	        doGet(request, response);
-	    }
+		doPut(request, response);
+	  
 	}
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		  String formType = request.getParameter("formType");
+		    String username = (String) Sessionutil.getAttribute(request, "username");
+		    UserDao userDao = new UserDaoimpl();
+		    usermodel Current_user = null;
 
+		    // Always reload the current user into the request
+		    try {
+		        Current_user = userDao.findByUsernameOrEmail(username);
+		        request.setAttribute("Current_user", Current_user);
+		        
+		    } catch (DataAccessException e) {
+		        e.printStackTrace();
+		        // You might want to forward to an error page here
+		    }
+
+		    if ("profileUpdate".equals(formType)) {
+		        UpdateProfileService svc = new UpdateProfileService();
+		        Boolean ok = svc.UpdateProfile(request, response);
+		        if (ok) {
+		            request.setAttribute("success", "Profile updated successfully.");
+		            try {
+		                String newusername = (String) Sessionutil.getAttribute(request, "username");
+		                Current_user = userDao.findByUsernameOrEmail(newusername);
+		                request.setAttribute("Current_user", Current_user);
+		            } catch (DataAccessException e) {
+		                e.printStackTrace();
+		                request.setAttribute("error", "Error retrieving updated user data: " + e.getMessage());
+		            }
+
+		            // Forward to profile.jsp
+		            request.getRequestDispatcher("/WEB-INF/pages/Profile.jsp").forward(request, response);
+		        } else {
+		            // Handle error case
+		            request.setAttribute("error", "Failed to update profile.");
+		            
+		        }
+		        
+		    }
+		    else if ("ChangePassword".equals(formType)) {
+		        // call your new ChangePassword method
+		        UpdateProfileService svc = new UpdateProfileService();
+		        Boolean ok = svc.ChangePassword(request, response);
+		        // svc.ChangePassword already forwards back on error, so only handle success here:
+		        if (ok) {request.setAttribute("successPassword", "Password updated successfully.");
+		        	 
+		            // on success, want to show change-password tab with success message
+		            request.setAttribute("openSection", "change-password");
+		            request.getRequestDispatcher("/WEB-INF/pages/Profile.jsp").forward(request, response);
+		        }
+		        // if ok==false, svc.ChangePassword has already forwarded with errorPassword + openSection
+
+		    } else {
+		        // unknown formType; just reload
+		        doGet(request, response);
+		    }
 		
-			 
+	}			 
 }
 	

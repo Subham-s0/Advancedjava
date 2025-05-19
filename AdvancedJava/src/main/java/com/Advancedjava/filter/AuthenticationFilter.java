@@ -45,6 +45,7 @@ public class AuthenticationFilter implements Filter {
     private static final String ADD_IMAGES = "/addpropertyimages";
     private static final String ADD_PROPERTY_AMENITIES = "/addamenities";
     private static final String ADD_PROPERTY_SUCESS = "/propertysucess";
+    private static final String UPDATE_PROPERTY = "/updatepropertycontroller";
     // Error pages
     private static final String ACCESS_DENIED = "/accessDenied";
     
@@ -191,6 +192,7 @@ public class AuthenticationFilter implements Filter {
         		  uri.equals(ADD_IMAGES)||
         		  uri.equals(ADD_PROPERTY_AMENITIES)||
         		  uri.equals(ADD_PROPERTY_SUCESS)||
+        		  uri.equals(UPDATE_PROPERTY)||
         		uri.equals(LOGOUT);
         
         // Add other admin-specific pages here if needed

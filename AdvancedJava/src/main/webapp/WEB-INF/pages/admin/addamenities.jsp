@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,22 +63,28 @@
             <h1>Select Amenities</h1>
             
             <form class="property-form" action="addamenities" method="POST">
-            <input type="hidden" name="propertyId" value="<%= propertyId %>" />
-                <div class="amenities-grid">
-                    <c:forEach items="${amenities}" var="amenity">
-                        <label class="amenity-item">
-                            <input type="checkbox" name="amenities" value="${amenity.amenityId}">
-                           <i data-lucide="${amenity.amenityIcon}" class="amenity-icon"></i>
-                            <span class="amenity-name">${amenity.amenityName}</span>
-                        </label>
-                    </c:forEach>
-                </div>
+    <input type="hidden" name="propertyId" value="<%= propertyId %>" />
+    <div class="amenities-grid">
+      <c:forEach items="${amenities}" var="amenity">
+    <c:if test="${!existingAmenityIdsSet.contains(amenity.amenityId)}">
+        <label class="amenity-item">
+            <input type="checkbox" 
+                name="amenityIds" 
+                value="${amenity.amenityId}" />
+            <i data-lucide="${amenity.amenityIcon}" class="amenity-icon"></i>
+            <span class="amenity-name">${amenity.amenityName}</span>
+        </label>
+    </c:if>
+</c:forEach>
 
-                <div class="form-buttons">
-                    <a href="property-images.jsp" class="btn-back">← Back</a>
-                    <button type="submit" onclick ="return confirm('Do you want to amenities to this property?')" class="btn-submit">Complete Listing</button>
-                </div>
-            </form>
+    </div>
+
+    <div class="form-buttons">
+        <a href="propertydashboard" class="btn-back">← Back</a>
+        <button type="submit" onclick="return confirm('Do you want to add amenities to this property?')" class="btn-submit">ADD AMENITIES</button>
+    </div>
+</form>
+
         </div>
     </div>
      </div>
@@ -108,7 +115,6 @@
      });
 
      // Initialize Lucide icons
-     lucide.createIcons();
      lucide.createIcons();
      </script>
 </body>

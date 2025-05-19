@@ -75,8 +75,8 @@
     <button type="button" class="add-image-btn" onclick="addImageUploadBlock()">+ Add More Images</button>
 
     <div class="form-buttons">
-        <a href="property-details.jsp" class="btn-back">← Back</a>
-        <button type="submit" class="btn-next" onclick="return confirm('Do you want to add this property?')">SUBMIT →</button>
+        <a href="propertydashboard" class="btn-back">← Back</a>
+        <button type="submit" class="btn-next" onclick="return confirm('Do you want to add images to this property?')">SUBMIT →</button>
     </div>
 </form>
       

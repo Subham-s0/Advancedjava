@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+ <%@ page import="com.Advancedjava.util.Sessionutil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +19,40 @@
 	<jsp:include page="/WEB-INF/pages/admin/Adminheader.jsp" />
 	<div class="main-content">
 		<div class="container">
+	  <% 
+String error = (String) Sessionutil.getAttribute(request, "error");
+if (error != null && !error.isEmpty()) { 
+%>
+    <div class="error-catch-message" id="errorMessage">
+        <%= error %>
+        <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
+    </div>
+    <script>
+        // Auto-hide error message after 5 seconds
+        setTimeout(function() {
+            document.getElementById('errorMessage').style.display = 'none';
+            // Clear the error from session
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }, 5000);
+        
+        function closeErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'none';
+            // Clear the error from session
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    </script>
+<%
+    // Clear the error message from session immediately after displaying
+    Sessionutil.removeAttribute(request, "error");
+}
+%>
+	  
 			<div class="header-section">
 				<h1>Properties</h1>
 				<a href="${pageContext.request.contextPath}/AddPropertyController"
@@ -126,7 +161,8 @@
 										</div>
 									</div>
 								</td>
-								<td class="table-cell"><c:forEach items="${categories}"
+								<td class="table-cell">
+								<c:forEach items="${categories}"
 										var="cat">
 										<c:if test="${cat.categoryId == property.categoryId}">
 											<span class="category-tag"><i class="meta-icon"
@@ -136,7 +172,7 @@
 								<td class="table-cell">${property.hostName}</td>
 								<td class="table-cell"><span
 									class="status-badge ${property.propertyStatus == 'AVAILABLE' ? 'status-available' : 
-                                'status-booked'}">
+                                'NOT AVAILABLE'}">
 										${property.propertyStatus} </span></td>
 								<td class="table-cell"><fmt:formatNumber
 										value="${property.pricePerNight}" type="currency"
@@ -144,7 +180,7 @@
 								<td class="table-cell">
 									<div class="action-buttons">
 										<a
-											href="${pageContext.request.contextPath}/PropertyDetailsController?id=${property.propertyId}"
+											href="${pageContext.request.contextPath}/updatepropertycontroller?propertyId=${property.propertyId}"
 											class="details-btn"> Details </a>
 										<form
 											action="${pageContext.request.contextPath}/DeletePropertyController"

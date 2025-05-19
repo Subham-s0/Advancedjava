@@ -13,7 +13,8 @@ public class Propertymodel {
     private String propertyDescription;
     private PropertyStatus propertyStatus;
     private BigDecimal pricePerNight;
-    private int maximumGuests;
+   
+	private int maximumGuests;
     private int totalBedrooms;
     private int totalBath;
     private int totalRooms;
@@ -23,7 +24,29 @@ public class Propertymodel {
     private int cleaningFee;
     private int taxRate;
     private int serviceFee;
-
+    public Propertymodel(int propertyId, String propertyName, String propertyAddress, String propertyCity,
+			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, BigDecimal pricePerNight,
+			int maximumGuests, int totalBedrooms, int totalBath, int totalRooms, int categoryId, String hostName,
+			int cleaningFee, int taxRate, int serviceFee) {
+		
+		this.propertyId = propertyId;
+		this.propertyName = propertyName;
+		this.propertyAddress = propertyAddress;
+		this.propertyCity = propertyCity;
+		this.propertyCountry = propertyCountry;
+		this.propertyDescription = propertyDescription;
+		this.propertyStatus = propertyStatus;
+		this.pricePerNight = pricePerNight;
+		this.maximumGuests = maximumGuests;
+		this.totalBedrooms = totalBedrooms;
+		this.totalBath = totalBath;
+		this.totalRooms = totalRooms;
+		this.categoryId = categoryId;
+		this.hostName = hostName;
+		this.cleaningFee = cleaningFee;
+		this.taxRate = taxRate;
+		this.serviceFee = serviceFee;
+	}
 
 	public Propertymodel(int propertyId, String propertyName, String propertyAddress, String propertyCity,
 			String propertyCountry, String propertyDescription, PropertyStatus propertyStatus, BigDecimal pricePerNight,

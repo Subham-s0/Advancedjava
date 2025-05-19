@@ -31,6 +31,7 @@ public class LogoutController extends HttpServlet {
         Cookiesutil.deletecookie(response, "rememberedUserRole");
         Cookiesutil.deletecookie(response, "rememberedUserName");
 		response.sendRedirect(request.getContextPath() + "/login");
+		System.out.println("The session is "+(String) Sessionutil.getAttribute(request, "username"));
 		
     }
 	

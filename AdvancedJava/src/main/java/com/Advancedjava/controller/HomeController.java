@@ -54,7 +54,7 @@ public class HomeController extends HttpServlet {
 	            
 	            WishlistImpl wishlistDao =new WishlistImpl();
 	            List<Integer> wishlist = wishlistDao.getWishlistByUserId(userId);
-	            System.out.println(wishlist);
+	            System.out.println("The wishlist ids are "+wishlist);
 	            request.setAttribute("wishlistIds", wishlist);
 	            
 	            // Forward to JSP

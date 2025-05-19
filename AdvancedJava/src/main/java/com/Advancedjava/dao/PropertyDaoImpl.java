@@ -157,7 +157,7 @@ public class PropertyDaoImpl implements PropertyDao {
 		String sql = "UPDATE properties SET property_name = ?, property_address = ?, property_city = ?, "
 				+ "property_country = ?, property_description = ?, property_status = ?, price_per_night = ?, "
 				+ "maximum_guests = ?, total_bedrooms = ?, total_bath = ?, total_rooms = ?, category_id = ?, "
-				+ "host_name = ? WHERE property_id = ?";
+				+ "host_name = ?, cleaning_fee = ?, tax_rate = ?, service_fee = ? WHERE property_id = ?";
 
 		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -174,7 +174,11 @@ public class PropertyDaoImpl implements PropertyDao {
 			pstmt.setInt(11, property.getTotalRooms());
 			pstmt.setInt(12, property.getCategoryId());
 			pstmt.setString(13, property.getHostName());
-			pstmt.setInt(14, property.getPropertyId());
+			 pstmt.setInt(14,property.getCleaningFee());
+		        pstmt.setInt(15, property.getTaxRate());
+		        pstmt.setInt(16, property.getServiceFee());
+			pstmt.setInt(17, property.getPropertyId());
+			
 
 			return pstmt.executeUpdate() > 0;
 		} catch (SQLException e) {
@@ -281,4 +285,25 @@ public class PropertyDaoImpl implements PropertyDao {
 		        throw new DataAccessException("Error checking property existence by details", e);
 		    }
 		}
+	public List<Integer> findAmenityIdsByPropertyId(int propertyId) throws DataAccessException {
+	    String sql = "SELECT amenity_id FROM property_amenity WHERE property_id = ?";
+	    List<Integer> amenityIds = new ArrayList<>();
+
+	    try (Connection conn = DBconnection.getDbConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        
+	        pstmt.setInt(1, propertyId);
+	        
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                int amenityId = rs.getInt("amenity_id");
+	                amenityIds.add(amenityId);
+	            }
+	        }
+	        return amenityIds;
+	        
+	    } catch (SQLException e) {
+	        throw new DataAccessException("Error fetching amenity IDs for property ID: " + propertyId, e);
+	    }
+	}
 }

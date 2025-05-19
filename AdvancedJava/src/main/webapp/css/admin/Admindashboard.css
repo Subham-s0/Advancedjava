@@ -18,3 +18,24 @@ body {
   
    background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
 }
+.close-icon {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.error-message {
+    display: flex;
+    align-items: center;  /* Vertically center items */
+    justify-content: center;
+    gap:20px;  /* Optional: pushes icon to the right */
+    padding: 10px 15px;
+    background-color: #ef9a9a; /* Example error background */
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    font-size: 16px;
+}

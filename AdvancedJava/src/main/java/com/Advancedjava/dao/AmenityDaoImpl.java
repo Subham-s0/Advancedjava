@@ -10,6 +10,8 @@ import java.util.List;
 import com.Advancedjava.connection.DBconnection;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.AmenityModel;
+import com.Advancedjava.model.Property_Amenity;
+
 import java.sql.Statement; 
 
 public class AmenityDaoImpl implements AmenityDao {
@@ -148,4 +150,19 @@ public class AmenityDaoImpl implements AmenityDao {
 	            throw new DataAccessException("Database error while updating amenity with ID " + amenity.getAmenityId(), e);
 	        }
 	    }
+	    public void savePropertyAmenity(Property_Amenity propertyAmenity) throws DataAccessException {
+	        String sql = "INSERT INTO property_amenity (property_id, amenity_id) VALUES (?, ?)";
+	        
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	            
+	            pstmt.setInt(1, propertyAmenity.getPropertyId());
+	            pstmt.setInt(2, propertyAmenity.getAmenityId());
+	            pstmt.executeUpdate();
+	            
+	        } catch (SQLException ex) {
+	            throw new DataAccessException("Error saving property amenity", ex);
+	        }
+	    }
+	    
 	  }
