@@ -7,6 +7,7 @@ import java.util.List;
 import com.Advancedjava.connection.DBconnection;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.BookingModel;
+import com.Advancedjava.model.BookingModel.BookingStatus;
 
 
 public class BookingDao {
@@ -76,6 +77,50 @@ public class BookingDao {
 	        // Implement if needed
 	        return null;
 	    }
+	    public BookingModel findBookingById(int bookingId) throws DataAccessException {
+	        String sql = "SELECT * FROM booking WHERE booking_id = ?";
+
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        	ps.setInt(1, bookingId);
+
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    BookingModel booking = new BookingModel(rs.getInt("booking_id"),
+	                    		rs.getInt("property_id"),rs.getInt("user_id"),BookingStatus.valueOf(rs.getString("booking_status")),
+	                    		rs.getDate("check_in_date"),rs.getDate("check_out_date"),rs.getBigDecimal("base_price"),
+	                    		rs.getBigDecimal("total_price"),rs.getInt("discount_percent"),rs.getInt("number_of_guests"),
+	                    		rs.getTimestamp("booking_created_at"));
+	                   
+	                    
+	                    return booking;
+	                } else {
+	                    return null; // Not found
+	                }
+	            }
+
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Error fetching booking by ID", e);
+	        }
+	    }
+	    public boolean updateBookingStatus(int bookingId, BookingStatus newStatus) throws DataAccessException {
+	        String sql = "UPDATE booking SET booking_status = ? WHERE booking_id = ?";
+
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	            stmt.setString(1, newStatus.toString());
+	            stmt.setInt(2, bookingId);
+
+	            int rowsAffected = stmt.executeUpdate();
+	            return rowsAffected > 0;
+
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Error updating booking status", e);
+	        }
+	    }
+
 	}
 
 

@@ -177,13 +177,13 @@ public class BookingController extends HttpServlet {
 	            0,
 	            numberOfGuests
 	        );
-	        booking.setBookingStatus(BookingModel.BookingStatus.PENDING);
+	        booking.setBookingStatus(BookingModel.BookingStatus.pending);
 	        booking.setBookingCreatedAt(new Timestamp(System.currentTimeMillis()));
 
 	        int bookingId = bookingdao.saveBooking(booking);
 	        booking.display();
 
-	        response.sendRedirect(request.getContextPath()+"/booking-success.jsp?bookingId=" + bookingId);
+	        response.sendRedirect(request.getContextPath()+"/payment?bookingId=" + bookingId);
 
 	    } catch (Exception e) {
 	        e.printStackTrace();

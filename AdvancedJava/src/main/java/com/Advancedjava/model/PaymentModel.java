@@ -8,19 +8,21 @@ public class PaymentModel {
 	    private BigDecimal paymentAmount;
 	    private PaymentMethod paymentMethod;
 	    private PaymentStatus paymentStatus;
+	    private int bookingId;
+	    private Date paymentDate;
 	    public PaymentModel(BigDecimal paymentAmount, PaymentMethod paymentMethod, PaymentStatus paymentStatus,
 				Date paymentDate, int bookingId) {
-			super();
+		
 			this.paymentAmount = paymentAmount;
 			this.paymentMethod = paymentMethod;
 			this.paymentStatus = paymentStatus;
 			this.paymentDate = paymentDate;
 			this.bookingId = bookingId;
 		}
-		private Date paymentDate;
+		
 	    public PaymentModel(int transactionId, BigDecimal paymentAmount, PaymentMethod paymentMethod,
 				PaymentStatus paymentStatus, Date paymentDate, int bookingId) {
-			super();
+		
 			this.transactionId = transactionId;
 			this.paymentAmount = paymentAmount;
 			this.paymentMethod = paymentMethod;
@@ -28,7 +30,7 @@ public class PaymentModel {
 			this.paymentDate = paymentDate;
 			this.bookingId = bookingId;
 		}
-		private int bookingId;
+		
 	    public int getTransactionId() {
 			return transactionId;
 		}
@@ -66,13 +68,13 @@ public class PaymentModel {
 			this.bookingId = bookingId;
 		}
 		public enum PaymentMethod {
-	        BANK,
-	        CARD,
-	        DIGITAL_WALLET
+	        bank,
+	        card,
+	        digital_wallet,
+	        none
 	    }
 	    public enum PaymentStatus {
-	        PAID,
-	        UNPAID
+paid,unpaid
 	    }
 	    
 	    

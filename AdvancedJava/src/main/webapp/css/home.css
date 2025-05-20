@@ -194,3 +194,16 @@ body {
     font-size: 16px;
 }
 
+.success-message {
+    display: block;
+    align-items: center;  /* Vertically center items */
+    justify-content: center;
+    gap:20px;  /* Optional: pushes icon to the right */
+    padding: 10px 15px;
+    background-color: #00bf60; /* Example error background */
+    color: #ffffff;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    font-size: 16px;
+}
+

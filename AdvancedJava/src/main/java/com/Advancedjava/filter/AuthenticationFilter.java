@@ -28,13 +28,11 @@ public class AuthenticationFilter implements Filter {
     private static final String RESULT = "/Result";
     private static final String PROFILE = "/Profile";
     private static final String PROPERTY = "/Property";
+    private static final String PAYMENT = "/payment";
     private static final String filterProperties = "/filter-hotels";
     private static final String PROPERTY_DESCRIPTION = "/propertydescription";
     private static final String WishList = "/WishListController";
-    
-    
-  ;
-    
+       
     private static final String BOOKING  = "/BookingController";
     
     // Admin pages (accessible only to admin)
@@ -177,6 +175,7 @@ public class AuthenticationFilter implements Filter {
                uri.equals(RESULT) ||
                uri.equals(PROFILE) ||
                uri.equals(PROPERTY) ||
+               uri.equals(PAYMENT) ||
                uri.equals(BOOKING)||
                uri.equals(PROPERTY_DESCRIPTION)||
                uri.equals(filterProperties)||

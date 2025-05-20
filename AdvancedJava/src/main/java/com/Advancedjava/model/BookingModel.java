@@ -7,13 +7,16 @@ import java.sql.Date;
 public class BookingModel {
 	    private int bookingId;
 	    private int propertyId;
-	    private Integer userId; 
+	    private int userId; 
 	    private BookingStatus bookingStatus;
 	    private Date checkInDate;
 	    private Date checkOutDate;
+	    private int discountPercent;
+	    private int numberOfGuests;
+	    private Timestamp bookingCreatedAt;
 	    private BigDecimal basePrice;
 	    private BigDecimal totalPrice;
-	    public BookingModel(int propertyId, Integer userId, Date checkInDate, Date checkOutDate, BigDecimal basePrice,
+	    public BookingModel(int propertyId, int userId, Date checkInDate, Date checkOutDate, BigDecimal basePrice,
 				BigDecimal totalPrice, int discountPercent, int numberOfGuests) {
 			
 			this.propertyId = propertyId;
@@ -26,7 +29,7 @@ public class BookingModel {
 			this.numberOfGuests = numberOfGuests;
 		}
 	    
-		public BookingModel(int bookingId, int propertyId, Integer userId, BookingStatus bookingStatus, Date checkInDate,
+		public BookingModel(int bookingId, int propertyId, int userId, BookingStatus bookingStatus, Date checkInDate,
 				Date checkOutDate, BigDecimal basePrice, BigDecimal totalPrice, int discountPercent, int numberOfGuests,
 				Timestamp bookingCreatedAt) {
 		
@@ -43,9 +46,7 @@ public class BookingModel {
 			this.bookingCreatedAt = bookingCreatedAt;
 		}
 
-		private int discountPercent;
-	    private int numberOfGuests;
-	    private Timestamp bookingCreatedAt;
+		
 		public int getBookingId() {
 			return this.bookingId;
 		}
@@ -58,7 +59,7 @@ public class BookingModel {
 		public void setPropertyId(int propertyId) {
 			this.propertyId = propertyId;
 		}
-		public Integer getUserId() {
+		public int getUserId() {
 			return this.userId;
 		}
 		public void setUserId(Integer userId) {
@@ -113,9 +114,9 @@ public class BookingModel {
 			this.bookingCreatedAt = bookingCreatedAt;
 		}
 		public enum BookingStatus {
-		    CANCELLED,
-		    PENDING,
-		    CONFIRMED
+		    cancelled,
+		    pending,
+		    confirmed
 		}
 		public void display() {
 		    System.out.println("Booking Details:");

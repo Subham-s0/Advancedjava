@@ -37,30 +37,70 @@ if (error != null && !error.isEmpty()) {
         <%= error %>
         <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
     </div>
+<%
+    String success = (String) Sessionutil.getAttribute(request, "success");
+    if (success != null && !success.isEmpty()) {
+%>
+    <div class="success-message" id="successMessage">
+        <%= success %>
+        <i data-lucide="x" class="close-icon" onclick="closeSuccessMessage()"></i>
+    </div>
+<%
+    }
+%>
     <script>
-        // Auto-hide error message after 5 seconds
-        setTimeout(function() {
-            document.getElementById('errorMessage').style.display = 'none';
-            // Clear the error from session
-            fetch('<%= request.getContextPath() %>/clearError', {
-                method: 'POST',
-                credentials: 'include'
-            });
-        }, 5000);
-        
-        function closeErrorMessage() {
-            document.getElementById('errorMessage').style.display = 'none';
-            // Clear the error from session
+    // Auto-hide error and success messages after 5 seconds
+    setTimeout(function() {
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+
+        if (errorElement) {
+            errorElement.style.display = 'none';
             fetch('<%= request.getContextPath() %>/clearError', {
                 method: 'POST',
                 credentials: 'include'
             });
         }
-    </script>
+
+        if (successElement) {
+            successElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearSuccess', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }, 10000);
+
+    function closeErrorMessage() {
+        const errorElement = document.getElementById('errorMessage');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }
+
+    function closeSuccessMessage() {
+        const successElement = document.getElementById('successMessage');
+        if (successElement) {
+            successElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearSuccess', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }
+</script>
 <%
     // Clear the error message from session immediately after displaying
     Sessionutil.removeAttribute(request, "error");
 }
+%>
+<%
+    // Clear the error message from session immediately after displaying
+    Sessionutil.removeAttribute(request, "success");
 %>
 	   <!-- Category Filter Bar -->
     <div class="category-bar">
