@@ -236,6 +236,7 @@
                                     <span class="per-night">/night</span>
                                     <form action="${pageContext.request.contextPath}/BookingController" method="get">
                                         <input type="hidden" name="propertyId" value="${property.propertyId}">
+                                      
                                         <button type="submit" class="book-button">Book Now</button>
                                     </form>
                                 </div>

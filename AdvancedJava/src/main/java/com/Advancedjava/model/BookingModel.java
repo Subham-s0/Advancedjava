@@ -1,10 +1,10 @@
 package com.Advancedjava.model;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.sql.Date;
 
-public class Booking {
+public class BookingModel {
 	    private int bookingId;
 	    private int propertyId;
 	    private Integer userId; 
@@ -13,7 +13,7 @@ public class Booking {
 	    private Date checkOutDate;
 	    private BigDecimal basePrice;
 	    private BigDecimal totalPrice;
-	    public Booking(int propertyId, Integer userId, Date checkInDate, Date checkOutDate, BigDecimal basePrice,
+	    public BookingModel(int propertyId, Integer userId, Date checkInDate, Date checkOutDate, BigDecimal basePrice,
 				BigDecimal totalPrice, int discountPercent, int numberOfGuests) {
 			
 			this.propertyId = propertyId;
@@ -26,7 +26,7 @@ public class Booking {
 			this.numberOfGuests = numberOfGuests;
 		}
 	    
-		public Booking(int bookingId, int propertyId, Integer userId, BookingStatus bookingStatus, Date checkInDate,
+		public BookingModel(int bookingId, int propertyId, Integer userId, BookingStatus bookingStatus, Date checkInDate,
 				Date checkOutDate, BigDecimal basePrice, BigDecimal totalPrice, int discountPercent, int numberOfGuests,
 				Timestamp bookingCreatedAt) {
 		
@@ -117,6 +117,21 @@ public class Booking {
 		    PENDING,
 		    CONFIRMED
 		}
+		public void display() {
+		    System.out.println("Booking Details:");
+		    System.out.println("Booking ID: " + this.bookingId);
+		    System.out.println("Property ID: " + this.propertyId);
+		    System.out.println("User ID: " + this.userId);
+		    System.out.println("Booking Status: " + (this.bookingStatus != null ? this.bookingStatus : "N/A"));
+		    System.out.println("Check-In Date: " + this.checkInDate);
+		    System.out.println("Check-Out Date: " + this.checkOutDate);
+		    System.out.println("Base Price (per night): " + this.basePrice);
+		    System.out.println("Total Price: " + this.totalPrice);
+		    System.out.println("Discount Percent: " + this.discountPercent + "%");
+		    System.out.println("Number of Guests: " + this.numberOfGuests);
+		    System.out.println("Booking Created At: " + (this.bookingCreatedAt != null ? this.bookingCreatedAt : "Not Set"));
+		}
+
 		
 		
 }

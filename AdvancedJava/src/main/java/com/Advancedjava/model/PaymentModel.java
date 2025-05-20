@@ -3,12 +3,12 @@ package com.Advancedjava.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-public class Payment {
+public class PaymentModel {
 	  private int transactionId;
 	    private BigDecimal paymentAmount;
 	    private PaymentMethod paymentMethod;
 	    private PaymentStatus paymentStatus;
-	    public Payment(BigDecimal paymentAmount, PaymentMethod paymentMethod, PaymentStatus paymentStatus,
+	    public PaymentModel(BigDecimal paymentAmount, PaymentMethod paymentMethod, PaymentStatus paymentStatus,
 				Date paymentDate, int bookingId) {
 			super();
 			this.paymentAmount = paymentAmount;
@@ -18,7 +18,7 @@ public class Payment {
 			this.bookingId = bookingId;
 		}
 		private Date paymentDate;
-	    public Payment(int transactionId, BigDecimal paymentAmount, PaymentMethod paymentMethod,
+	    public PaymentModel(int transactionId, BigDecimal paymentAmount, PaymentMethod paymentMethod,
 				PaymentStatus paymentStatus, Date paymentDate, int bookingId) {
 			super();
 			this.transactionId = transactionId;

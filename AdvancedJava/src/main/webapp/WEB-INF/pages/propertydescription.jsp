@@ -1,316 +1,464 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.Advancedjava.util.Sessionutil"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Nestaway</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/propertydescription.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/propertydescription.css" />
 </head>
+<script src="https://unpkg.com/lucide@latest"></script>
 <body>
-<header>
-<jsp:include page="header.jsp" />
-</header>
+	<header>
+		<jsp:include page="header.jsp" />
+	</header>
+<body>
 	<div class="top">
-        <div class="gallery">
-        <div class="big-image" id="main-image"><img src="${pageContext.request.contextPath}/resources/images/hotel/img3.jpg" alt="Big Image"alt="Big Image"></div>
-             <div class="small-images">
-                <img class="thumb" src="${pageContext.request.contextPath}/resources/images/hotel/img2.jpg" alt="Small Image">
-                <img class="thumb" src="${pageContext.request.contextPath}/resources/images/hotel/img.avif" alt="Small Image">
-                <img class="thumb" src="${pageContext.request.contextPath}/resources/images/hotel/img4.jpg" alt="Small Image">
-                <img class="thumb" src="${pageContext.request.contextPath}/resources/images/hotel/img5.jpg" alt="Small Image">
-                <img class="thumb" src="${pageContext.request.contextPath}/resources/images/hotel/img6.jpg" alt="Small Image">
-                <img class="thumb" src="${pageContext.request.contextPath}/resources/images/hotel/img2.jpg" alt="Small Image">
-            </div>
-            </div>
-            <div class="price-box">
-            <h2>$ ${selectedProperty.pricePerNight} \ Night</h2>
-            <div class="dates">
-                <div>
-                    <label>Check-in</label><br>
-                    <input type="date" id="checkin" placeholder="DD/MM/YYYY">
-                </div>
-                <div>
-                    <label>Check-out</label><br>
-                    <input type="date" id="checkout" placeholder="DD/MM/YYYY">
-                </div>
-            </div>
-             <div class="guests">
-                <label>Guests</label><br>
-                <select>
-                    <option>2 Adults</option>
-                    <option>1 Adult</option>
-                    <option>Family</option>
-                </select>
-            </div>
-            <div class="charges">
-                <div class="charge-line">
-                    <span>Charge per night</span>
-                    <span id="charge-per-night">$35</span>
-                </div>
-                <div class="charge-line">
-                    <span>Cleaning charge</span>
-                    <span id="cleaning-charge">$3</span>
-                </div>
-                <div class="charge-line">
-                    <span>Service charge</span>
-                    <span id="service-charge">$10</span>
-                </div>
-                <div class="charge-line">
-                    <span>Subtotal (Before Tax)</span>
-                    <span id="subtotal">$0</span>
-                </div>
-                <div class="charge-line">
-                    <span>Tax (10%)</span>
-                    <span id="tax">$0</span>
-                </div>
-                <div class="charge-line total">
-                    <span><strong>Total charges</strong></span>
-                    <span id="total-charges"><strong>$0</strong></span>
-                </div>
-            </div>
+		<div class="gallery">
+			<div class="gallery-flex">
+				<div class="big-image" id="main-image">
+					<c:choose>
+						<c:when test="${not empty selectedProperty.images}">
+							<img
+								src="${pageContext.request.contextPath}/resources/images/property/${selectedProperty.images[0].fileName}"
+								alt="${selectedProperty.propertyName}"
+								onerror="this.src='${pageContext.request.contextPath}/resources/images/property/default-img.jpg'">
+						</c:when>
+						<c:otherwise>
+							<img
+								src="${pageContext.request.contextPath}/resources/images/property/default-img.jpg"
+								alt="Default property image">
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<div class="small-images-vertical">
+					<c:forEach items="${selectedProperty.images}" var="image"
+						varStatus="loop">
+						<img class="thumb"
+							src="${pageContext.request.contextPath}/resources/images/property/${image.fileName}"
+							alt="Thumbnail ${loop.index + 1}"
+							onerror="this.src='${pageContext.request.contextPath}/resources/images/property/default-img.jpg'"
+							onclick="document.getElementById('main-image').querySelector('img').src = this.src">
+					</c:forEach>
+				</div>
+			</div>
+		</div>
+		<div class="price-box">
+			<%
+			String error = (String) session.getAttribute("error");
+			%>
+			<div
+				class="error-message <%=(error != null && !error.isEmpty()) ? "visible" : ""%>">
+				<c:if test="${not empty error}">
+					<p style="color: red;">
+						<c:out value="${error}" />
+					</p>
+				</c:if>
 
-            <div class="buttons">
-                <button class="add-to-cart">ADD TO CART</button>
-                <button class="book-now">BOOK NOW</button>
-            </div>
-        </div>
-    </div>
-          
-    <div class="tabs">
-        <button class="tab active" id="overviewBtn">Overview</button>
-        <button class="tab" id="facilityBtn">Facilities</button>
-        <button class="tab" id="reviewBtn">Review</button>
-    </div>
+			</div>
+			<%
+			String success = (String) session.getAttribute("success");
+			%>
+			<div
+				class="success-message <%=(success != null && !success.isEmpty()) ? "visible" : ""%>">
+				<%
+				if (success != null && !success.isEmpty()) {
+				%>
+				<p><%=success%></p>
+				<%
+				}
+				Sessionutil.removeAttribute(request, "success");
+				Sessionutil.removeAttribute(request, "error");
+				%>
+			</div>
+
+			<!-- Booking Form -->
+			<form id="bookingForm"
+				action="${pageContext.request.contextPath}/BookingController"
+				method="post" autocomplete="off">
+				<input type="hidden" name="propertyId"
+					value="${selectedProperty.propertyId}" />
+					
+				<h2>$ ${selectedProperty.pricePerNight} / Night</h2>
+
+				<!-- Check-in/Check-out -->
+				<div class="dates">
+					<div>
+						<label for="checkin">Check-in</label><br> <input type="date"
+							id="checkin" name="checkin" required>
+					</div>
+					<div>
+						<label for="checkout">Check-out</label><br> <input
+							type="date" id="checkout" name="checkout" required>
+					</div>
+				</div>
+
+				<!-- Guest Selection -->
+				<div class="guests">
+					<div class="guest-container">
+						<div class="search-input guest-selector">
+							<i data-lucide="users"></i> <input type="text" id="guestInput"
+								placeholder="Add guests" readonly> <input type="hidden"
+								id="totalGuests" name="totalGuests">
+						</div>
+						<div class="guest-dropdown">
+							<!-- Adult -->
+							<div class="guest-option" data-type="adults">
+								<div class="guest-type">
+									<h4>Adults</h4>
+									<p>Ages 13 or above</p>
+								</div>
+								<div class="stepper">
+									<button type="button" class="stepper-btn decrease disabled">-</button>
+									<span class="stepper-number">1</span>
+									<button type="button" class="stepper-btn increase">+</button>
+								</div>
+							</div>
+
+							<!-- Children -->
+							<div class="guest-option" data-type="children">
+								<div class="guest-type">
+									<h4>Children</h4>
+									<p>Ages 2-12</p>
+								</div>
+								<div class="stepper">
+									<button type="button" class="stepper-btn decrease disabled">-</button>
+									<span class="stepper-number">0</span>
+									<button type="button" class="stepper-btn increase">+</button>
+								</div>
+							</div>
+
+							<!-- Infants -->
+							<div class="guest-option" data-type="infants">
+								<div class="guest-type">
+									<h4>Infants</h4>
+									<p>Under 2</p>
+								</div>
+								<div class="stepper">
+									<button type="button" class="stepper-btn decrease disabled">-</button>
+									<span class="stepper-number">0</span>
+									<button type="button" class="stepper-btn increase">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Charges Section -->
+				<div class="charges">
+					<div class="charge-line">
+						<span>Charge per night</span> <span id="charge-per-night">$${selectedProperty.pricePerNight}</span>
+					</div>
+					<div class="charge-line">
+						<span>Cleaning charge</span> <span id="cleaning-charge">$${selectedProperty.cleaningFee}</span>
+					</div>
+					<div class="charge-line">
+						<span>Service charge</span> <span id="service-charge">$${selectedProperty.serviceFee}</span>
+					</div>
+					<div class="charge-line">
+						<span>Subtotal (Before Tax)</span> <span id="subtotal">$0</span>
+					</div>
+					<div class="charge-line">
+						<span>Tax (${selectedProperty.taxRate}%)</span> <span id="tax">$0</span>
+					</div>
+					<div class="charge-line total">
+						<span><strong>Total charges</strong></span> <span
+							id="total-charges"><strong>$0</strong></span>
+					</div>
+				</div>
+
+				<!-- Booking Button -->
+				<div class="buttons">
+					<button type="submit" class="book-now">BOOK NOW</button>
+				</div>
+
+				<!-- Pass propertyId to backend -->
+				<input type="hidden" name="propertyId"
+					value="${selectedProperty.propertyId}">
+			</form>
+			<form action="${pageContext.request.contextPath}/WishListController"
+				method="post">
+				<input type="hidden" name="propertyId"
+					value="${selectedProperty.propertyId}" />
+				<c:choose>
+					<c:when test="${wishlistIds.contains(selectedProperty.propertyId)}">
+						<button type="submit" class="add-to-cart">✔ Already in
+							Wishlist</button>
+					</c:when>
+					<c:otherwise>
+						<button type="submit" class="add-to-cart">♡ Add to
+							Wishlist</button>
+					</c:otherwise>
+				</c:choose>
+			</form>
+		</div>
+	</div>
+	<div class="tabs">
+		<button class="tab active" id="overviewBtn">Overview</button>
+		<button class="tab" id="facilityBtn">Facilities</button>
+		<button class="tab" id="reviewBtn">Review</button>
+	</div>
+	<div class="container">
+		<div class="hotel-info tab-content" id="overview">
+			<h2>${selectedProperty.propertyName}</h2>
+			<p class="location">${selectedProperty.propertyCity},
+				${selectedProperty.propertyCountry}</p>
+			<h3>Property Description</h3>
+			<p class="about">${selectedProperty.propertyDescription}</p>
+			<h3>✔ Hosted by: ${selectedProperty.hostName}</h3>
+
+			<div class="facilities">
+				<h3>Property Details</h3>
+				<div class="Cat-item">
+					<span class="category-tag"> <i class="meta-icon"
+						data-lucide="${category.categoryIcon}"></i>
+						${category.categoryName}
+					</span>
+				</div>
+				<div class="facility-item">
+					<i class="meta-icon" data-lucide="bed"></i> <span>Total
+						bedrooms: ${selectedProperty.totalBedrooms}</span>
+				</div>
+				<div class="facility-item">
+					<i class="meta-icon" data-lucide="bath"></i> <span>Total
+						bathrooms: ${selectedProperty.totalBath}</span>
+				</div>
+				<div class="facility-item">
+					<i class="meta-icon" data-lucide="users"></i> <span>Max
+						guests: ${selectedProperty.maximumGuests}</span>
+				</div>
+
+				<div class="facility-item">
+					<i class="meta-icon" data-lucide="layout"></i> <span>${selectedProperty.totalRooms}
+						Rooms</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Facilities Section -->
+		<div id="facility" class="tab-content" style="display: none;">
+			<h3>Facility</h3>
+			<div class="facility">
+
+				<c:forEach items="${propertyAmenities}" var="amenity">
+					<div class="amenity-item">
+						<span><i data-lucide="${amenity.amenityIcon}"
+							class="amenity-icon"></i></span> <span class="amenity-name">${amenity.amenityName}</span>
+						<div class="amenity-remove-btn">✔</div>
+
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+
+		<!-- Reviews Section -->
+		<div id="reviews" class="tab-content" style="display: none;">
+			<div class="reviews">
+				<h3>Guest Reviews</h3>
+				<div class="review-cards">
+					<!-- Reviews content goes here -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+    // Initialize Lucide icons
+    lucide.createIcons();
     
-    <div class="container">
-        <!-- Overview Section -->
-        <div class="hotel-info" id="overview">
-            <h2>${selectedProperty.propertyName}</h2>
-            <p class="location">${selectedProperty.propertyCity}, ${selectedProperty.propertyCountry}</p>
-            <h3>About hotel</h3>
-            <p class="about">
-                <strong>${selectedProperty.propertyDescription}</strong> 
-            </p>
+    // Thumbnail image gallery
+    const thumbnails = document.querySelectorAll('.thumb');
+    const mainImage = document.getElementById('main-image').querySelector('img');
+    
+    thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            mainImage.src = thumb.src;
+        });
+    });
 
- <!-- Facilities section is part of the Overview -->
-            <section id="facility-overview">
-                <div class="facilities">
-                    <h3>Facilities</h3>
-                    <ul>
-                        <li>✔ Free WIFI</li>
-                        <li>✔ Free Parking</li>
-                        <li>✔ Non-smoking room</li>
-                        <li>✔ Daily housekeeping</li>
-                        <li>✔ Taxi services</li>
-                        <li>✔ Balcony</li>
-                    </ul>
-                </div>
-            </section>
-            <!-- Review Section -->
-            <section id="reviews" class="reviews">
-                <h3>What Our Guests Say</h3>
-                <div class="review-cards">
-                    <div class="review-card">
-                        <h4>Subham S.</h4>
-                        <p class="role">Software Developer</p>
-                        <p class="review-text">
-                            "Landmark Hotel has been a game-changer for my business trips. The service is excellent, and
-                            the facilities are top-notch!"
-                        </p>
-                        <p class="rating">⭐ 4.9/5</p>
-                    </div>
-                    <div class="review-card">
-                        <h4>Nabin B.</h4>
-                        <p class="role">Freelance Artist</p>
-                        <p class="review-text">
-                            "The rooms are spacious, and the staff is very friendly. I loved the balcony view and the
-                            daily housekeeping service!"
-                        </p>
-                        <p class="rating">⭐ 4.8/5</p>
-                    </div>
-                    <div class="review-card">
-                        <h4>Megha A.</h4>
-                        <p class="role">Student</p>
-                        <p class="review-text">
-                            "Affordable and comfortable stay. The free Wi-Fi and parking were a huge plus for me. Highly
-                            recommend!"
-                        </p>
-                        <p class="rating">⭐ 4.7/5</p>
-                    </div>
-                </div>
-            </section>
-        </div>
+    // Tab Switching Logic
+    const overviewBtn = document.getElementById('overviewBtn');
+    const facilityBtn = document.getElementById('facilityBtn');
+    const reviewBtn = document.getElementById('reviewBtn');
+    
+    function switchTab(activeTab) {
+        // Remove active class from all buttons
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.style.display = 'none';
+        });
+        
+        // Show selected tab and mark button as active
+        document.getElementById(activeTab).style.display = 'block';
+        document.getElementById(activeTab + 'Btn').classList.add('active');
+    }
+    
+    // Event Listeners for tabs
+    overviewBtn.addEventListener('click', () => switchTab('overview'));
+    facilityBtn.addEventListener('click', () => switchTab('facility'));
+    reviewBtn.addEventListener('click', () => switchTab('reviews'));
+    
+    // Initialize with overview tab
+    // This is actually redundant because we already set it in the HTML, but keeping for clarity
+    switchTab('overview');
+    
+    
+</script>
 
-        <!-- Facilities Section (Standalone) -->
-        <section id="facility" style="display: none;">
-            <div class="facilities">
-                <h3>Facilities</h3>
-                <ul>
-                    <li>✔ Free WIFI</li>
-                    <li>✔ Free Parking</li>
-                    <li>✔ Non-smoking room</li>
-                    <li>✔ Daily housekeeping</li>
-                    <li>✔ Taxi services</li>
-                    <li>✔ Balcony</li>
-                </ul>
-            </div>
-        </section>
-    </div>
+	<script>
+    lucide.createIcons();
+
+    const chargePerNight = ${selectedProperty.pricePerNight};
+    const cleaningCharge = ${selectedProperty.cleaningFee};
+    const serviceCharge = ${selectedProperty.serviceFee};
+    const taxRate = ${selectedProperty.taxRate / 100};
+    const maxGuests = ${selectedProperty.maximumGuests};
+
+    const guestCounts = { adults: 1, children: 0, infants: 0 };
+
+    function calculateCharges() {
+        const checkin = new Date(document.getElementById("checkin").value);
+        const checkout = new Date(document.getElementById("checkout").value);
+
+        if (isNaN(checkin) || isNaN(checkout) || checkout <= checkin) {
+            document.getElementById("subtotal").textContent = '$0';
+            document.getElementById("tax").textContent = '$0';
+            document.getElementById("total-charges").textContent = '$0';
+            return;
+        }
+
+        const nights = Math.round((checkout - checkin) / (1000 * 60 * 60 * 24));
+        const subtotal = (chargePerNight * nights) + cleaningCharge + serviceCharge;
+        const tax = subtotal * taxRate;
+        const total = subtotal + tax;
+
+        document.getElementById("subtotal").textContent = '$' + subtotal.toFixed(2);
+        document.getElementById("tax").textContent = '$' + tax.toFixed(2);
+        document.getElementById("total-charges").textContent = '$' + total.toFixed(2);
+    }
+
+    document.getElementById("checkin").addEventListener("change", calculateCharges);
+    document.getElementById("checkout").addEventListener("change", calculateCharges);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const guestInput = document.getElementById("guestInput");
+        const totalGuestsField = document.getElementById("totalGuests");
+        const dropdown = document.querySelector(".guest-dropdown");
+        const selector = document.querySelector(".guest-selector");
+
+        selector.addEventListener("click", () => {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        document.addEventListener("click", (e) => {
+            // Don't close dropdown if clicking within the guest dropdown itself
+            if (!selector.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+                updateGuestDisplay();
+            }
+        });
+
+        function updateGuestDisplay() {
+            var totalGuests = guestCounts.adults + guestCounts.children;
+            var infants = guestCounts.infants;
+            
+            // Create detailed breakdown
+            var adultText = guestCounts.adults > 0 ? (guestCounts.adults + " adult" + (guestCounts.adults > 1 ? "s" : "")) : "";
+            var childText = guestCounts.children > 0 ? (guestCounts.children + " " + (guestCounts.children > 1 ? "children" : "child")) : "";
+            
+            // Combine adult and child text with commas if both exist
+            var details = "";
+            if (adultText && childText) {
+                details = adultText + ", " + childText;
+            } else {
+                details = adultText + childText;
+            }
+            
+            // Main display text
+            var display = totalGuests ? (totalGuests + " guest" + (totalGuests > 1 ? "s" : "") + (details ? " (" + details + ")" : "")) : "Add guests";
+            
+            // Add infants if any
+            if (infants > 0) {
+                display += ", " + infants + " infant" + (infants > 1 ? "s" : "");
+            }
+            
+            guestInput.value = display;
+            totalGuestsField.value = totalGuests;
+        }
+
+        document.querySelectorAll(".stepper-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                // Prevent event from bubbling up
+                e.stopPropagation();
+                
+                const parent = btn.closest(".guest-option");
+                const type = parent.dataset.type;
+                const number = parent.querySelector(".stepper-number");
+                const decreaseBtn = parent.querySelector(".decrease");
+
+                let totalGuests = guestCounts.adults + guestCounts.children;
+
+                if (btn.classList.contains("increase")) {
+                    if ((type === 'adults' || type === 'children') && totalGuests >= maxGuests) {
+                        alert(`Maximum ${maxGuests} guests allowed.`);
+                        return;
+                    }
+                    if (type === 'infants' && guestCounts.infants >= 5) {
+                        alert("You can add up to 5 infants only.");
+                        return;
+                    }
+                    guestCounts[type]++;
+                } else {
+                    if (guestCounts[type] > 0) {
+                        if (type === 'adults' && guestCounts.adults === 1) {
+                            alert("At least 1 adult is required.");
+                            return;
+                        }
+                        guestCounts[type]--;
+                    }
+                }
 
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        lucide.createIcons();
-        const thumbnails = document.querySelectorAll('.thumb');
-        const mainImage = document.getElementById('main-image').querySelector('img');  // Access the img inside main-image div
-
-        thumbnails.forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                mainImage.src = thumb.src;  // Update the src of the image inside main-image
+                number.textContent = guestCounts[type];
+                decreaseBtn.classList.toggle("disabled", guestCounts[type] === 0);
+                updateGuestDisplay();
+                calculateCharges();
             });
         });
+    });
+    document.getElementById("bookingForm").addEventListener("submit", function (e) {
+        const checkin = new Date(document.getElementById("checkin").value);
+        const checkout = new Date(document.getElementById("checkout").value);
+        const guests = parseInt(document.getElementById("totalGuests").value, 10);
+        const adults = guestCounts.adults;
 
-
-    </script>
-    <script>
-        // Example data from the database
-        const chargePerNight = 35; // Base charge per night
-        const cleaningCharge = 3; // Cleaning charge
-        const serviceCharge = 10; // Service charge
-        const taxRate = 0.10; // Tax rate (10%)
-
-        // Function to calculate total charges
-        function calculateCharges() {
-            const checkinDate = new Date(document.getElementById('checkin').value);
-            const checkoutDate = new Date(document.getElementById('checkout').value);
-            const guests = document.querySelector('.guests select').value;
-
-            // Check if both dates are valid
-            if (isNaN(checkinDate) || isNaN(checkoutDate)) {
-                // Do not proceed if either date is invalid
-                return;
-            }
-
-            // Validate that Check-out date is later than Check-in date
-            if (checkoutDate <= checkinDate) {
-                document.getElementById('subtotal').textContent = '$0';
-                document.getElementById('tax').textContent = '$0';
-                document.getElementById('total-charges').textContent = '$0';
-                alert("Check-out date must be later than Check-in date.");
-                return;
-            }
-
-            // Calculate total nights
-            const totalNights = (checkoutDate - checkinDate) / (1000 * 60 * 60 * 24);
-
-            // Adjust charge per night based on the number of guests
-            let adjustedChargePerNight = chargePerNight;
-            if (guests === "1 Adult") {
-                adjustedChargePerNight = chargePerNight; // No change for 1 Adult
-            } else if (guests === "2 Adults") {
-                adjustedChargePerNight = chargePerNight * 1.5; // 50% increase for 2 Adults
-            } else if (guests === "Family") {
-                adjustedChargePerNight = chargePerNight * 2; // Double the charge for Family
-            }
-
-            // Calculate subtotal
-            const subtotal = (adjustedChargePerNight * totalNights) + cleaningCharge + serviceCharge;
-
-            // Calculate tax
-            const tax = subtotal * taxRate;
-
-            // Calculate total charges
-            const totalCharges = subtotal + tax;
-
-            // Update the UI
-            document.getElementById('subtotal').textContent = $${subtotal.toFixed(2)};
-            document.getElementById('tax').textContent = $${tax.toFixed(2)};
-            document.getElementById('total-charges').textContent = $${totalCharges.toFixed(2)};
+        if (isNaN(checkin) || isNaN(checkout) || checkout <= checkin) {
+            alert("Please select valid Check-in and Check-out dates.");
+            e.preventDefault();
+            return;
         }
 
-        // Add event listeners to calculate charges when inputs are changed
-        document.getElementById('checkin').addEventListener('change', calculateCharges);
-        document.getElementById('checkout').addEventListener('change', calculateCharges);
-        document.querySelector('.guests select').addEventListener('change', calculateCharges);
-    </script>
-    <br>
-    <script>
-        // Get references to the buttons and sections
-        const overviewBtn = document.getElementById('overviewBtn');
-        const facilityBtn = document.getElementById('facilityBtn');
-        const reviewBtn = document.getElementById('reviewBtn');
-        const overviewSection = document.getElementById('overview');
-        const facilitySection = document.getElementById('facility');
-        const reviewSection = document.getElementById('reviews');
-
-        // Function to handle tab switching
-        function switchTab(activeBtn, inactiveBtns, showSection, hideSections) {
-            // Update active tab
-            activeBtn.classList.add('active');
-            inactiveBtns.forEach(btn => btn.classList.remove('active'));
-
-            // Show the selected section and hide others
-            showSection.style.display = 'block';
-            hideSections.forEach(section => section.style.display = 'none');
+        if (!guests || guests > maxGuests) {
+            alert(`Please select up to ${maxGuests} guests.`);
+            e.preventDefault();
+            return;
         }
 
-        // Add event listener for the "Overview" button
-        overviewBtn.addEventListener('click', function () {
-            switchTab(overviewBtn, [facilityBtn, reviewBtn], overviewSection, [facilitySection, reviewSection]);
-        });
-
-        // Add event listener for the "Facilities" button
-        facilityBtn.addEventListener('click', function () {
-            switchTab(facilityBtn, [overviewBtn, reviewBtn], facilitySection, [overviewSection, reviewSection]);
-        });
-
-        // Add event listener for the "Review" button
-        reviewBtn.addEventListener('click', function () {
-            switchTab(reviewBtn, [overviewBtn, facilityBtn], reviewSection, [overviewSection, facilitySection]);
-        });
-    </script>
-    <script>
-        // Get references to the buttons
-        const addToCartBtn = document.querySelector('.add-to-cart');
-        const bookNowBtn = document.querySelector('.book-now');
-
-        // Function to validate inputs
-        function validateInputs() {
-            const checkinDate = new Date(document.getElementById('checkin').value);
-            const checkoutDate = new Date(document.getElementById('checkout').value);
-            const guests = document.querySelector('.guests select').value;
-
-            // Validate dates
-            if (isNaN(checkinDate) || isNaN(checkoutDate) || checkoutDate <= checkinDate) {
-                alert('Please select valid Check-in and Check-out dates.');
-                return false;
-            }
-
-            // Validate guests
-            if (!guests) {
-                alert('Please select the number of guests.');
-                return false;
-            }
-
-            return true; // All inputs are valid
+        if (adults < 1) {
+            alert("At least 1 adult is required to make a booking.");
+            e.preventDefault();
+            return;
         }
+    });
 
-        // Add event listener for the "Add to Cart" button
-        addToCartBtn.addEventListener('click', function () {
-            if (validateInputs()) {
-                alert('Item has been added to your cart!');
-            }
-        });
+</script>
 
-        // Add event listener for the "Book Now" button
-        bookNowBtn.addEventListener('click', function () {
-            if (validateInputs()) {
-                alert('Thank you for booking! Your reservation is confirmed.');
-            }
-        });
-    </script>
-<jsp:include page="footer.jsp" />
+	<jsp:include page="footer.jsp" />
 </body>
 </html>

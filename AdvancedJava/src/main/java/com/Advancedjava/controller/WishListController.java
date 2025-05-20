@@ -86,8 +86,10 @@ public class WishListController extends HttpServlet {
             // Toggle logic: if it's in wishlist, remove it; otherwise, add it
             if (wishlistDao.isInWishlist(Current_user.getUserId(), productId)) {
                 wishlistDao.removeFromWishlist(Current_user.getUserId(), productId);
+                System.out.print("removed");
             } else {
                 wishlistDao.addToWishlist(Current_user.getUserId(), productId);
+                System.out.print("added");
             }
                  
             

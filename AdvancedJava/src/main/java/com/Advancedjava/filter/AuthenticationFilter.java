@@ -48,6 +48,7 @@ public class AuthenticationFilter implements Filter {
     private static final String UPDATE_PROPERTY = "/updatepropertycontroller";
     // Error pages
     private static final String ACCESS_DENIED = "/accessDenied";
+    private static final String ERROR = "/error";
     
     // Static resources
     private static final String[] PUBLIC_RESOURCES = {
@@ -122,7 +123,7 @@ public class AuthenticationFilter implements Filter {
                 res.sendRedirect(contextPath + DASHBOARD);
             }
             else {
-                res.sendRedirect(contextPath + ACCESS_DENIED);
+            	res.sendRedirect(contextPath +ERROR);
                 return;
         } }
         // Customer access control
@@ -140,7 +141,7 @@ public class AuthenticationFilter implements Filter {
                 res.sendRedirect(contextPath + HOME);
             } 
             else {
-                res.sendRedirect(contextPath + ACCESS_DENIED);
+            	res.sendRedirect(contextPath + ERROR);
                 return;
             }
         }

@@ -46,7 +46,7 @@ public class addpropertyimages extends HttpServlet {
 	    try { 
 		String propertyIdStr = request.getParameter("propertyId");
 		
-		  if (propertyIdStr != null) {
+		  if (propertyIdStr != null && propertyIdStr.matches("\\d+")) {
 			  int propertyId = Integer.parseInt(propertyIdStr);
 			  PropertyImageDaoImpl propertyImageDao = new PropertyImageDaoImpl();
 				List<PropertyImagemodel> existingImages = propertyImageDao.findByPropertyId(propertyId);
