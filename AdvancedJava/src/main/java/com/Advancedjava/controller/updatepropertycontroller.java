@@ -108,50 +108,12 @@ public class updatepropertycontroller extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/updatepropertycontroller?propertyId=" + propertyId);
                     return;
 
-                
-
                 case "deleteImage":
-                    String imageIdStr = request.getParameter("imageId");
-
-                    if (imageIdStr != null) {
-                        int imageId = Integer.parseInt(imageIdStr);
-
-                        try {
-                            PropertyImagemodel image = propertyImageDao.findByImageId(imageId);
-                            if (image != null) {
-                                // Construct the file path
-                                String folder = "property"; // or the appropriate folder name
-                                ImageUtil img =new ImageUtil();
-                                String imagePath = img.getSavePath(folder) + image.getFileName();
-
-                                File file = new File(imagePath);
-
-                                boolean fileDeleted = true;
-                                if (file.exists()) {
-                                    fileDeleted = file.delete();
-                                }
-
-                                boolean dbDeleted = propertyImageDao.delete(imageId);
-
-                                if (fileDeleted && dbDeleted) {
-                                    Sessionutil.setAttribute(request, "success", "Image deleted successfully.");
-                                } else {
-                                    Sessionutil.setAttribute(request, "error", "Failed to delete image file or database record.");
-                                }
-                            } else {
-                                Sessionutil.setAttribute(request, "error", "Image not found.");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Sessionutil.setAttribute(request, "error", "Error deleting image: " + e.getMessage());
-                        }
-                    } else {
-                        Sessionutil.setAttribute(request, "error", "Image ID not provided.");
-                    }
-
-                    response.sendRedirect(request.getContextPath() + "/updatepropertycontroller?propertyId=" + propertyId);
+                	doDelete(request, response); // Reuse the logic
                     return;
-
+                case "deleteAmenity":
+                    doDelete(request, response); // Reuse the logic
+                    return;
                 default:
                     Sessionutil.setAttribute(request, "error", "Invalid form submission.");
                     response.sendRedirect(request.getContextPath() + "/propertydashboard");
@@ -163,4 +125,88 @@ public class updatepropertycontroller extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/propertydashboard");
         }
     }
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String formType = request.getParameter("formType");
+            String propertyIdStr = request.getParameter("propertyId");
+
+             if (formType == null || propertyIdStr == null) {
+                Sessionutil.setAttribute(request, "error", "Missing formType or propertyId.");
+                response.sendRedirect(request.getContextPath() + "/propertydashboard");
+                return;
+            }
+
+             int propertyId = Integer.parseInt(propertyIdStr);
+             PropertyImageDaoImpl propertyImageDao = new PropertyImageDaoImpl();
+             AmenityDaoImpl amenityDao = new AmenityDaoImpl();
+
+             switch (formType) {
+                 case "deleteImage":
+                     String imageIdStr = request.getParameter("imageId");
+
+                     if (imageIdStr != null) {
+                         int imageId = Integer.parseInt(imageIdStr);
+                         try {
+                             PropertyImagemodel image = propertyImageDao.findByImageId(imageId);
+                             if (image != null) {
+                                 String folder = "property";
+                                 ImageUtil imgUtil = new ImageUtil();
+                                 String imagePath = imgUtil.getSavePath(folder) + image.getFileName();
+
+                                 File file = new File(imagePath);
+                                 boolean fileDeleted = !file.exists() || file.delete();
+                                 boolean dbDeleted = propertyImageDao.delete(imageId);
+
+                                 if (fileDeleted && dbDeleted) {
+                                     Sessionutil.setAttribute(request, "success", "Image deleted successfully.");
+                                 } else {
+                                     Sessionutil.setAttribute(request, "error", "Failed to delete image.");
+                                 }
+                             } else {
+                                 Sessionutil.setAttribute(request, "error", "Image not found.");
+                             }
+                         } catch (Exception e) {
+                             e.printStackTrace();
+                             Sessionutil.setAttribute(request, "error", "Error deleting image: " + e.getMessage());
+                         }
+                     } else {
+                         Sessionutil.setAttribute(request, "error", "Image ID not provided.");
+                     }
+
+                     response.sendRedirect(request.getContextPath() + "/updatepropertycontroller?propertyId=" + propertyId);
+                     return;
+
+                 case "deleteAmenity":
+                     String amenityIdStr = request.getParameter("amenityId");
+
+                     if (amenityIdStr != null) {
+                         int amenityId = Integer.parseInt(amenityIdStr);
+                         Property_Amenity propertyAmenity = new Property_Amenity(propertyId, amenityId);
+                         boolean removed = amenityDao.deletePropertyAmenity(propertyAmenity);
+
+                         if (removed) {
+                             Sessionutil.setAttribute(request, "success", "Amenity removed successfully.");
+                         } else {
+                             Sessionutil.setAttribute(request, "error", "Failed to remove amenity.");
+                         }
+                     } else {
+                         Sessionutil.setAttribute(request, "error", "Amenity ID not provided.");
+                     }
+
+                     response.sendRedirect(request.getContextPath() + "/updatepropertycontroller?propertyId=" + propertyId);
+                     return;
+
+                 default:
+                     Sessionutil.setAttribute(request, "error", "Invalid formType for delete request.");
+                     response.sendRedirect(request.getContextPath() + "/propertydashboard");
+             }
+
+         } catch (Exception e) {
+             e.printStackTrace();
+             Sessionutil.setAttribute(request, "error", "An error occurred: " + e.getMessage());
+             response.sendRedirect(request.getContextPath() + "/propertydashboard");
+         }
+     }
+
 }

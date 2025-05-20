@@ -12,7 +12,6 @@ public class usermodel {
 	    private gender gender;
 	    private String userPassword;
 		private String userRole;
-	    
 		private String userProfilePicture;
 	    private userStatus userStatus;
 	    
@@ -151,7 +150,7 @@ public class usermodel {
 			this.userProfilePicture = userProfilePicture;
 		}
 		public enum userStatus {
-	        active,
+	        active,inactive,
 	        blocked
 	    }
 		public enum gender{

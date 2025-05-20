@@ -16,6 +16,7 @@ import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.AmenityModel;
 import com.Advancedjava.model.Property_Amenity;
+import com.Advancedjava.util.Sessionutil;
 
 /**
  * Servlet implementation class addamenitiescontroller
@@ -58,6 +59,8 @@ public class addAmenitiesController extends HttpServlet {
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Sessionutil.setAttribute(request, "error", "An error occurred. Please try again. " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/propertydashboard");
 		}
 		
 	}
@@ -117,7 +120,7 @@ public class addAmenitiesController extends HttpServlet {
 		                amenityDao.savePropertyAmenity(pa);
 		            }
 		            
-		            response.sendRedirect(request.getContextPath() + "/propertysucess");
+		            response.sendRedirect(request.getContextPath() + "/propertysucess?propertyId="+propertyId);
 		            
 		        } catch (Exception e) {
 		            e.printStackTrace();

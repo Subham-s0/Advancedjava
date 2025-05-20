@@ -16,6 +16,7 @@ import com.Advancedjava.dao.PropertyImageDaoImpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.PropertyImagemodel;
 import com.Advancedjava.util.ImageUtil;
+import com.Advancedjava.util.Sessionutil;
 import com.Advancedjava.util.ValidationUtil;
 
 /**
@@ -44,7 +45,7 @@ public class addpropertyimages extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    try { 
 		String propertyIdStr = request.getParameter("propertyId");
-		System.out.print("The  do get "+propertyIdStr);
+		
 		  if (propertyIdStr != null) {
 			  int propertyId = Integer.parseInt(propertyIdStr);
 			  PropertyImageDaoImpl propertyImageDao = new PropertyImageDaoImpl();
@@ -54,9 +55,11 @@ public class addpropertyimages extends HttpServlet {
 			} 
 		  
 		  request.getRequestDispatcher("WEB-INF/pages/admin/addpropertyimages.jsp").forward(request, response);
-	    }catch (DataAccessException e) {
+	    }catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Sessionutil.setAttribute(request, "error", "An error occurred. Please try again. " + e.getMessage());
+	            response.sendRedirect(request.getContextPath() + "/propertydashboard");
 			}
 			  
 		
@@ -165,7 +168,7 @@ public class addpropertyimages extends HttpServlet {
                     request.setAttribute("propertyId", propertyId);
                     request.getRequestDispatcher("WEB-INF/pages/admin/addpropertyimages.jsp").forward(request, response);
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/addamenities?propertyId=" + propertyId);
+                    response.sendRedirect(request.getContextPath() + "/propertysucess?propertyId=" + propertyId);
                 }
 	}
 	}

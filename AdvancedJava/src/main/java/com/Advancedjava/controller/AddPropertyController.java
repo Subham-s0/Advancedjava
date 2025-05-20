@@ -306,7 +306,7 @@ public class AddPropertyController extends HttpServlet {
             int propertyId = propertyDao.save(property);
             
             Sessionutil.setAttribute(request, "success", "The property was created sucessfully");
-            response.sendRedirect(request.getContextPath() + "/addpropertyimages?propertyId=" + propertyId);
+            response.sendRedirect(request.getContextPath() + "/propertysucess?propertyId=" + propertyId);
         } catch (Exception e) {
             request.setAttribute("errors", "Error saving property: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/pages/admin/addproperty.jsp").forward(request, response);

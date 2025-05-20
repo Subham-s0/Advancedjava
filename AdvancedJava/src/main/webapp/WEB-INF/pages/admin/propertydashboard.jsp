@@ -24,8 +24,8 @@ String error = (String) Sessionutil.getAttribute(request, "error");
 if (error != null && !error.isEmpty()) { 
 %>
     <div class="error-catch-message" id="errorMessage">
-        <%= error %>
-        <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
+        <div><%= error %></div>
+       <div class="close-icon"><i data-lucide="x" class="" onclick="closeErrorMessage()"></i></div> 
     </div>
     <script>
         // Auto-hide error message after 5 seconds

@@ -20,12 +20,12 @@
 			<div class="add-property" style="margin-top: 50px;">
 				
 					<div class="success-content">
-						<div class="success-icon">✓</div>
+						<div class="success-circle"><div class="success-icon">✓</div></div>
 						<div class="added-msg">Successfully Added</div>
 						<p>Your task was executed sucessfully.</p>
 						<div class="success-actions">
 							   <a href="AddPropertyController" class="btn-new">List Another Property</a>
-                        <a href="admindashboard" class="btn-dashboard">View Dashboard</a>
+                        <a href="updatepropertycontroller?propertyId=<%= propertyId %>" class="btn-dashboard">View Details</a>
                         <a href="addpropertyimages?propertyId=<%= propertyId %>" class="btn-new">Add Images</a>
                         <a href="addamenities?propertyId=<%= propertyId %>" class="btn-new">Add Amenities</a>
 						</div>

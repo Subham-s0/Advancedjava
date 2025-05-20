@@ -514,14 +514,28 @@ display: none;
 
 .success-content {
   text-align: center;
-  padding: 2rem;
-}
 
-.success-icon {
-  font-size: 5rem; /* Increased icon size */
-  color: #4BB543;
-  margin-bottom: 1.5rem;
 }
+.success-circle {
+            background: #4BB543;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            position: relative;
+            box-shadow: 0 2px 12px rgba(75,181,67,0.15);
+        }
+        .success-icon {
+            font-size: 3.5rem;
+            color: #fff;
+            font-weight: bolder;
+            line-height: 1;
+            z-index: 2;
+            position: relative;
+        }
 
 .added-msg {
   font-size: 2.5rem; /* Increased message size */
@@ -533,6 +547,7 @@ display: none;
 
 .success-content p {
   color: #555;
+   font-weight: bold;
   margin-bottom: 2rem;
 }
 

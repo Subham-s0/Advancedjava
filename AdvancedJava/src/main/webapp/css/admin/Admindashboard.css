@@ -13,9 +13,8 @@ body {
 }
 .main-content {
   margin-left: 240px;
-  margin-top:80px;
-  padding-top: 60px;
-  
+  margin-top:70px;
+ 
    background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
 }
 .close-icon {
@@ -27,15 +26,27 @@ body {
     align-items: center;
 }
 
-.error-message {
+.close-icon {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    line-height: 1;
     display: flex;
+    align-items: center;
+}
+
+.error-catch-message {
+    display: flex;
+    width:100%;
     align-items: center;  /* Vertically center items */
     justify-content: center;
+    margin:0 auto;
     gap:20px;  /* Optional: pushes icon to the right */
     padding: 10px 15px;
-    background-color: #ef9a9a; /* Example error background */
-    color: #721c24;
+    background-color: #df3939; /* Example error background */
+    color: #f3f3f3;
     border: 1px solid #f5c6cb;
-    border-radius: 4px;
+  
     font-size: 16px;
 }
+

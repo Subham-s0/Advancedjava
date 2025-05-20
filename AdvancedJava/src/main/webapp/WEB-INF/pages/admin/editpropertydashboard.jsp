@@ -201,7 +201,7 @@ int current_propertyId = (propertyId != null) ? propertyId : -1;
 													<div class="img-name">${img.fileName}</div>
 													<button type="submit" class="remove-img-btn-horizontal"
 														onclick="return confirm('Do you want to Delete this  Image?')">
-														<i data-lucide="x"></i>
+														<i data-lucide="circle-minus"></i>
 													</button>
 
 												</div>
