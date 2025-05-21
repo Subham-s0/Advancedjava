@@ -80,13 +80,13 @@ public class PropertyImageDaoImpl implements PropertyImageDao {
 	@Override
 	public boolean deleteByPropertyId(int propertyId) throws DataAccessException {
 		// TODO Auto-generated method stub
-		String sql = "DELETE FROM property_images WHERE propertyId = ?";
+		String sql = "DELETE FROM property_images WHERE property_id= ?";
 		 try (Connection conn = DBconnection.getDbConnection();
 	             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	            
 	            pstmt.setInt(1, propertyId);
-	            return pstmt.executeUpdate() > 0;
-	            
+	           int afceted= pstmt.executeUpdate() ;
+	            return true;
 	        } catch (SQLException e) {
 	            throw new DataAccessException("Database error while deleting property image", e);
 	        }

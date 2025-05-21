@@ -17,6 +17,7 @@ public class PropertyDaoImpl implements PropertyDao {
 	public PropertyDaoImpl() {
 		this.propertyImageDao = new PropertyImageDaoImpl();
 	}
+	
 
 	@Override
 	public Propertymodel findById(int propertyId) throws DataAccessException {
@@ -189,10 +190,16 @@ public class PropertyDaoImpl implements PropertyDao {
 	@Override
 	public boolean delete(int propertyId) throws DataAccessException {
 		// First delete all images associated with the property
-		propertyImageDao.deleteByPropertyId(propertyId);
-
+		boolean imgok = propertyImageDao.deleteByPropertyId(propertyId);
+		AmenityDaoImpl amenityDao = new AmenityDaoImpl();
+		boolean faok= amenityDao.deletePropertyAmenity(propertyId);
 		String sql = "DELETE FROM properties WHERE property_id = ?";
-
+		if (!imgok ) {
+			throw new DataAccessException("Error deleting property images ");
+		}
+			if (!faok) {
+			throw new DataAccessException("Error deleting property  amenities");
+		}
 		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setInt(1, propertyId);

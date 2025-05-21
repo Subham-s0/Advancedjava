@@ -45,6 +45,7 @@ public class AuthenticationFilter implements Filter {
     private static final String ADD_PROPERTY_SUCESS = "/propertysucess";
     private static final String UPDATE_PROPERTY = "/updatepropertycontroller";
     private static final String USER_DASHBOARD = "/usersdashboard";
+    private static final String BOOKING_DASHBOARD  = "/bookingsdashboard";
     // Error pages
     private static final String ACCESS_DENIED = "/accessDenied";
     private static final String ERROR = "/error";
@@ -192,6 +193,7 @@ public class AuthenticationFilter implements Filter {
         		  uri.equals(PROPERTY_DASHBOARD)||
         		  uri.equals(USER_DASHBOARD)||
         		  uri.equals(ADD_PROPERTY)||
+        		  uri.equals(BOOKING_DASHBOARD)||
         		  uri.equals(ADD_IMAGES)||
         		  uri.equals(ADD_PROPERTY_AMENITIES)||
         		  uri.equals(ADD_PROPERTY_SUCESS)||

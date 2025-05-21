@@ -48,6 +48,7 @@ public class BookingDao {
 	            throw new DataAccessException("Database error while saving booking", e);
 	        }
 	    }
+	    
 
 	 
 	    public boolean isPropertyAvailable(int propertyId,Date checkIn, Date checkOut) throws DataAccessException {
@@ -149,6 +150,73 @@ public class BookingDao {
 
 	        } catch (SQLException e) {
 	            throw new DataAccessException("Error updating booking status", e);
+	        }
+	    }
+	    public List<BookingModel> findAllBookings() throws DataAccessException {
+	        String sql = "SELECT * FROM booking ORDER BY booking_created_at DESC"; // use ASC for oldest first
+
+	        List<BookingModel> bookings = new ArrayList<>();
+
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+
+	            while (rs.next()) {
+	                BookingModel booking = new BookingModel(
+	                    rs.getInt("booking_id"),
+	                    rs.getInt("property_id"),
+	                    rs.getInt("user_id"),
+	                    BookingStatus.valueOf(rs.getString("booking_status")),
+	                    rs.getDate("check_in_date"),
+	                    rs.getDate("check_out_date"),
+	                    rs.getBigDecimal("base_price"),
+	                    rs.getBigDecimal("total_price"),
+	                    rs.getInt("discount_percent"),
+	                    rs.getInt("number_of_guests"),
+	                    rs.getTimestamp("booking_created_at")
+	                );
+	                bookings.add(booking);
+	            }
+
+	            return bookings;
+
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Error fetching all bookings", e);
+	        }
+	    }
+	    public List<BookingModel> findBookingsByStatus(BookingStatus status) throws DataAccessException {
+	        String sql = "SELECT * FROM booking WHERE booking_status = ? ORDER BY booking_created_at DESC";
+	        
+	        List<BookingModel> bookings = new ArrayList<>();
+	        
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
+	            
+	            ps.setString(1, status.toString());
+	            
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                	 BookingModel booking = new BookingModel(
+	     	                    rs.getInt("booking_id"),
+	     	                    rs.getInt("property_id"),
+	     	                    rs.getInt("user_id"),
+	     	                    BookingStatus.valueOf(rs.getString("booking_status")),
+	     	                    rs.getDate("check_in_date"),
+	     	                    rs.getDate("check_out_date"),
+	     	                    rs.getBigDecimal("base_price"),
+	     	                    rs.getBigDecimal("total_price"),
+	     	                    rs.getInt("discount_percent"),
+	     	                    rs.getInt("number_of_guests"),
+	     	                    rs.getTimestamp("booking_created_at")
+	     	                );
+	     	                bookings.add(booking);
+	                }
+	            }
+	            
+	            return bookings;
+	            
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Error fetching bookings by status", e);
 	        }
 	    }
 	  

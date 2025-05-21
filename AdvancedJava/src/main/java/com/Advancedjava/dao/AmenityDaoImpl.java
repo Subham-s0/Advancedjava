@@ -179,5 +179,18 @@ public class AmenityDaoImpl implements AmenityDao {
 	            throw new DataAccessException("Error deleting property amenity", ex);
 	        }
 	    }
-	    
+	    public boolean deletePropertyAmenity(int propertyId) throws DataAccessException {
+	        String sql = "DELETE FROM property_amenity WHERE property_id = ?";
+	        
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	            
+	            pstmt.setInt(1, propertyId);
+	            int affectedRows = pstmt.executeUpdate();
+	          
+	         return true;
+	        } catch (SQLException ex) {
+	            throw new DataAccessException("Error deleting property amenities by property ID", ex);
+	        }
+	    }
 	  }

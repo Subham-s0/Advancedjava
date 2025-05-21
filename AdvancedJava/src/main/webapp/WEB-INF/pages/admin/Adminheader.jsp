@@ -58,7 +58,7 @@
             <span>Users</span>
         </a>
          </div>
-         <div class="sidebar-items  ${activeSection == 'users' ? 'active' : ''}">
+         <div class="sidebar-items  ${activeSection == 'report' ? 'active' : ''}">
         <a href="${pageContext.request.contextPath}/reportsdashboard">
             <i data-lucide="newspaper"></i>
             <span>Reports</span>

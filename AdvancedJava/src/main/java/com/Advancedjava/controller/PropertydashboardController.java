@@ -13,6 +13,7 @@ import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.Propertymodel;
+import com.Advancedjava.util.Sessionutil;
 
 /**
  * Servlet implementation class Propertydashboard
@@ -62,8 +63,31 @@ public class PropertydashboardController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		// Handle form submission or other POST reques
+		String action = request.getParameter("formType");
+		if (action.equals("deleteProperty")) {
+				doDelete(request, response);
+			}
+		else {
+			doGet(request, response);
+		}
+				
+		}
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		PropertyDaoImpl propertyDao = new PropertyDaoImpl();
+		String propertyIdstr = request.getParameter("propertyId");
+		try {
+			  if (propertyIdstr != null && propertyIdstr.matches("\\d+")) {
+					int propertyId = Integer.parseInt(propertyIdstr);
+					propertyDao.delete(propertyId);
+					Sessionutil.setAttribute(request, "success", "Property deleted successfully");
+			  }
+			 
+			response.sendRedirect(request.getContextPath() + "/propertydashboard");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
+	
 }
