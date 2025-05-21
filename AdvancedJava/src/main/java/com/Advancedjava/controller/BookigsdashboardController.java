@@ -68,57 +68,43 @@ public class BookigsdashboardController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String action = request.getParameter("formType");
-        UserDaoimpl userDao = new UserDaoimpl();
-        if ("updateStatus".equals(action)) {
-            String bookingId = request.getParameter("bookingId");
-            String newStatus = request.getParameter("currentStatus");
+	    String action = request.getParameter("formType");
 
-            if (bookingId != null && newStatus != null) {
-            	BookingStatus Status;
-                try {
-					Status = BookingStatus.valueOf(newStatus);
-				} catch (IllegalArgumentException e) {
-					Sessionutil.setAttribute(request, "error", "Invalid booking status.");
-					response.sendRedirect(request.getContextPath() + "/bookingsdashboard");
-					return;
-				}
-					Status = BookingStatus.valueOf(newStatus);
-					
-				} catch (IllegalArgumentException e) {
-					Sessionutil.setAttribute(request, "error", "Invalid booking status.");
-					response.sendRedirect(request.getContextPath() + "/admin/bookingsdashboard");
-					return;
-                }
+	    if ("updateStatus".equals(action)) {
+	        String bookingIdParam = request.getParameter("bookingId");
+	        String newStatusParam = request.getParameter("newStatus");
 
-                // Update the user's status in DB
-                boolean ok=userDao.updateUserStatusById(userId, newStatus);
-                if (!ok) {
-                    Sessionutil.setAttribute(request, "error", "Failed to update user status.");
-                    response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
-                    return;
-                }
-                // Optionally set a success message
-                Sessionutil.setAttribute(request, "success", "User status updated successfully.");
-            } else {
-                Sessionutil.setAttribute(request, "error", "Missing parameters.");
-            }
+	        if (bookingIdParam != null && newStatusParam != null) {
+	            try {
+	                int bookingId = Integer.parseInt(bookingIdParam);
+	                BookingStatus newStatus = BookingStatus.valueOf(newStatusParam.toLowerCase());
 
-            response.sendRedirect(request.getContextPath() + "/usersdashboard");
-            return;
-        }
+	                BookingDao bookingDao = new BookingDao();
+	                boolean success = bookingDao.updateBookingStatus(bookingId, newStatus);
+	                System.out.println("Succeess ID: " + success);
+	                if (success) {
+	                    Sessionutil.setAttribute(request, "success", "Booking status updated successfully.");
+	                } else {
+	                    Sessionutil.setAttribute(request, "error", "Failed to update booking status.");
+	                }
 
-        // Unknown action
-        Sessionutil.setAttribute(request, "error", "Unknown action.");
-        response.sendRedirect(request.getContextPath() + "/usersdashboard");
-        return;
-    } catch (Exception e) {
-        e.printStackTrace();
-        Sessionutil.setAttribute(request, "error", "An error occurred while processing the request.");
-        response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
-    }}
+	            } catch (Exception e) {
+	                Sessionutil.setAttribute(request, "error", "Exception Catched." +e.getMessage());
+	            } 
+	        } else {
+	            Sessionutil.setAttribute(request, "error", "Missing booking ID or status.");
+	        }
+
+	        // Redirect to prevent form resubmission
+	        
+	        response.sendRedirect(request.getContextPath() + "/bookingsdashboard");
+	    } else {
+	        // Other formType logic can go here if needed
+	        response.sendRedirect(request.getContextPath() + "/bookingsdashboard");
+	    }
 	}
+
 
 }
