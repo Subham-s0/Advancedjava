@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="com.Advancedjava.util.Sessionutil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +15,79 @@
 </header>
 <body>
 <div class="container">
+  <%
+String error = (String) Sessionutil.getAttribute(request, "error");
+if (error != null && !error.isEmpty()) {
+%>
+    <div class="error-message" id="errorMessage">
+        <%= error %>
+        <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
+    </div>
+<%
+    Sessionutil.removeAttribute(request, "error");
+}
+%>
+
+<%
+String success = (String) Sessionutil.getAttribute(request, "success");
+if (success != null && !success.isEmpty()) {
+%>
+    <div class="success-message" id="successMessage">
+        <%= success %>
+        <i data-lucide="x" class="close-icon" onclick="closeSuccessMessage()"></i>
+    </div>
+<%
+    Sessionutil.removeAttribute(request, "success");
+}
+%>
+
+    <script>
+    // Auto-hide error and success messages after 5 seconds
+    setTimeout(function() {
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+
+        if (errorElement) {
+            errorElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+
+        if (successElement) {
+            successElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearSuccess', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }, 10000);
+
+    function closeErrorMessage() {
+        const errorElement = document.getElementById('errorMessage');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }
+
+    function closeSuccessMessage() {
+        const successElement = document.getElementById('successMessage');
+        if (successElement) {
+            successElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearSuccess', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }
+</script>
+
+
     <div class="my-bookings">
         <h1 style="margin-bottom:20px">My Bookings</h1>
         
@@ -92,17 +166,36 @@
     <div class="booking-footer">
       <div class="booking-status ${booking.bookingStatus.toString().toLowerCase()}">${booking.bookingStatus}</div>
       <div class="booking-actions">
-        <form action="${pageContext.request.contextPath}/cancel-booking" method="post">
-          <input type="hidden" name="bookingId" value="${booking.bookingId}">
-          <button type="submit" class="btn btn-cancel">Cancel Booking</button>
-        </form>
-        
-        <c:if test="${booking.bookingStatus == 'pending'}">
-          <form action="${pageContext.request.contextPath}/process-payment" method="post">
-            <input type="hidden" name="bookingId" value="${booking.bookingId}">
-            <button type="submit" class="btn btn-pay">Pay Now</button>
-          </form>
-        </c:if>
+      <c:choose>
+  <c:when test="${booking.bookingStatus == 'pending'}"> 
+    <!-- Pay Now button for pending bookings -->
+    <form action="${pageContext.request.contextPath}/payment" method="post"> 
+      <input type="hidden" name="bookingId" value="${booking.bookingId}">
+      <button type="submit" class="btn btn-pay">Pay Now</button> 
+    </form>
+    
+    <!-- Cancel button specifically for pending bookings -->
+    <form action="${pageContext.request.contextPath}/Viewbooking" method="post">
+      <input type="hidden" name="formType" value="cancelbooking">
+      <input type="hidden" name="bookingId" value="${booking.bookingId}">
+      <button type="submit" class="btn btn-cancel">Cancel Booking</button>
+    </form>
+  </c:when>
+  
+  <c:when test="${booking.bookingStatus == 'confirmed'}">
+    
+    <form action="${pageContext.request.contextPath}/reviews" method="post">
+      <input type="hidden" name="formType" value="cancelbooking">
+      <input type="hidden" name="bookingId" value="${booking.bookingId}">
+      <button type="submit" class="btn btn-review">Review</button>
+    </form>
+  </c:when>
+  
+  <c:when test="${booking.bookingStatus == 'cancelled'}">
+   
+    <!-- No buttons shown for cancelled bookings -->
+  </c:when>
+</c:choose>
       </div>
     </div>
   </div>

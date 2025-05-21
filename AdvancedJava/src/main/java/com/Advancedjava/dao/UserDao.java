@@ -1,5 +1,7 @@
 package com.Advancedjava.dao;
 
+import java.util.List;
+
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.usermodel;
 
@@ -13,4 +15,5 @@ public interface UserDao {
 	    boolean existsByPhone(String phone) throws DataAccessException;
 	    int saveUser(usermodel user) throws DataAccessException;
 	    boolean updateUser(usermodel user) throws DataAccessException;
+	    List<usermodel> getAllUsers() throws DataAccessException;
 	}

@@ -1,6 +1,9 @@
 package com.Advancedjava.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.Advancedjava.model.usermodel;
 import com.Advancedjava.model.usermodel.gender;
 import com.Advancedjava.model.usermodel.userStatus;
@@ -198,5 +201,122 @@ public class UserDaoimpl implements UserDao {
             throw new DataAccessException("Database error while fetching user", e);}
         }
         
+    
+    @Override
+    public List<usermodel> getAllUsers() throws DataAccessException {
+        String sql = "SELECT * FROM users";
+        java.util.List<usermodel> userList = new java.util.ArrayList<>();
+        
+        try (Connection conn = DBconnection.getDbConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                String genderStr = rs.getString("gender");
+                gender genderEnum = null;
+                if (genderStr != null) {
+                    genderEnum = gender.valueOf(genderStr.toLowerCase());
+                }
+
+                usermodel user = new usermodel(
+                    rs.getString("user_id"),
+                    rs.getString("user_firstname"),
+                    rs.getString("user_lastname"),
+                    rs.getString("user_email"),
+                    rs.getString("user_name"),
+                    rs.getDate("user_dob").toString(),
+                    rs.getString("user_phnno"),
+                    genderEnum,
+                    rs.getString("user_password"),
+                    rs.getString("role_type"),
+                    rs.getString("user_profile"),
+                    userStatus.valueOf(rs.getString("user_status").toLowerCase())
+                );
+                
+                userList.add(user);
+            }
+            
+            return userList;
+        } catch (SQLException e) {
+            throw new DataAccessException("Database error while fetching all users", e);
+        }
+    }
+    public int countBookingsByUserId(String id) throws DataAccessException {
+        String sql = "SELECT COUNT(*) FROM booking WHERE user_id = ?";
+        
+        try (Connection conn = DBconnection.getDbConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setString(1, id);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // Get the count from the first column
+                } else {
+                    return 0; // No rows returned, so count is 0
+                }
+            }
+            
+        } catch (SQLException e) {
+            throw new DataAccessException("Error counting bookings by user ID", e);
+        }
+    }
+    public List<usermodel> getUsersByStatus(String status) throws DataAccessException {
+        List<usermodel> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE user_status = ?";
+
+        try (Connection conn = DBconnection.getDbConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, status); // : "active", "inactive", "blocked"
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String genderStr = rs.getString("gender");
+                    gender genderEnum = null;
+                    if (genderStr != null) {
+                        genderEnum = gender.valueOf(genderStr.toLowerCase());
+                    }
+
+                    usermodel user = new usermodel(
+                        rs.getString("user_id"),
+                        rs.getString("user_firstname"),
+                        rs.getString("user_lastname"),
+                        rs.getString("user_email"),
+                        rs.getString("user_name"),
+                        rs.getDate("user_dob").toString(),
+                        rs.getString("user_phnno"),
+                        genderEnum,
+                        rs.getString("user_password"),
+                        rs.getString("role_type"),
+                        rs.getString("user_profile"),
+                        userStatus.valueOf(rs.getString("user_status").toLowerCase())
+                    );
+
+                    users.add(user);
+                }
+            }
+
+            return users;
+        } catch (SQLException e) {
+            throw new DataAccessException("Database error while fetching users by status", e);
+        }
+    }
+    public boolean updateUserStatusById(String userId, userStatus newStatus) throws DataAccessException {
+        String sql = "UPDATE users SET user_status = ? WHERE user_id = ?";
+
+        try (Connection conn = DBconnection.getDbConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1,newStatus.name().toLowerCase());  // Ensure consistency with enum storage
+            pstmt.setString(2, userId);
+
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; // Return true if at least one row was updated
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error updating user status for ID: " + userId, e);
+        }
+    }
 
 }

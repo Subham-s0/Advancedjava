@@ -47,19 +47,19 @@
         </a>
     </div>
     <div class="sidebar-items  ${activeSection == 'bookings' ? 'active' : ''}">
-        <a href="${pageContext.request.contextPath}/dashboardbookings">
+        <a href="${pageContext.request.contextPath}/bookingsdashboard">
             <i data-lucide="calendar-check"></i>
             <span>Bookings</span>
         </a>
          </div>
-          <div class="sidebar-items  ${activeSection == 'users' ? 'active' : ''}">
-        <a href="${pageContext.request.contextPath}/dashboardusers">
+          <div class="sidebar-items  ${activeSection == 'user' ? 'active' : ''}">
+        <a href="${pageContext.request.contextPath}/usersdashboard">
             <i data-lucide="user"></i>
             <span>Users</span>
         </a>
          </div>
          <div class="sidebar-items  ${activeSection == 'users' ? 'active' : ''}">
-        <a href="${pageContext.request.contextPath}/dashboardreports">
+        <a href="${pageContext.request.contextPath}/reportsdashboard">
             <i data-lucide="newspaper"></i>
             <span>Reports</span>
         </a>

@@ -36,9 +36,9 @@
 			</div>
 			<nav class="sidebar-nav">
 				<a href="#personal-info" class="nav-item active">Personal
-					Information</a> <a href="#bookings" class="nav-item">My Bookings</a> <a
-					href="${pageContext.request.contextPath}/WishListController"
-					class="nav-item">My Wishlist</a> <a href="#change-password"
+					Information</a>   <a href="${pageContext.request.contextPath}/Viewbooking" class="nav-item">My Bookings</a>
+					 <a	href="${pageContext.request.contextPath}/WishListController"class="nav-item">My Wishlist</a> 
+					 <a href="#change-password"
 					class="nav-item">Change Password</a> <a
 					href="${pageContext.request.contextPath}/logout"
 					class="nav-item logout">Logout<i data-lucide="log-out"></i></a>
@@ -149,38 +149,7 @@
 			</section>
 
 			<section id="bookings" class="content-section">
-				<h2>My Bookings</h2>
-				<div class="bookings-list">
-					<div class="booking-card">
-						<img
-							src="https://images.pexels.com/photos/1488327/pexels-photo-1488327.jpeg?auto=compress&cs=tinysrgb&w=600"
-							alt="Property">
-						<div class="booking-details">
-							<h3>Luxury Beach Villa</h3>
-							<p class="location">Miami, Florida</p>
-							<div class="booking-dates">
-								<span>Check-in: Mar 15, 2024</span> <span>Check-out: Mar
-									20, 2024</span>
-							</div>
-							<div class="booking-status confirmed">Confirmed</div>
-						</div>
-					</div>
-
-					<div class="booking-card">
-						<img
-							src="https://images.pexels.com/photos/1428348/pexels-photo-1428348.jpeg?auto=compress&cs=tinysrgb&w=600"
-							alt="Property">
-						<div class="booking-details">
-							<h3>Mountain Cabin</h3>
-							<p class="location">Aspen, Colorado</p>
-							<div class="booking-dates">
-								<span>Check-in: Apr 10, 2024</span> <span>Check-out: Apr
-									15, 2024</span>
-							</div>
-							<div class="booking-status pending">Pending</div>
-						</div>
-					</div>
-				</div>
+				
 			</section>
 
 			<section id="wishlist" class="content-section">

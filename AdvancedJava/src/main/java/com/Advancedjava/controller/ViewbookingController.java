@@ -14,6 +14,7 @@ import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.exception.DataAccessException;
 import com.Advancedjava.model.BookingModel;
+import com.Advancedjava.model.BookingModel.BookingStatus;
 import com.Advancedjava.model.Propertymodel;
 import com.Advancedjava.model.usermodel;
 import com.Advancedjava.util.Sessionutil;
@@ -61,7 +62,38 @@ public class ViewbookingController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+String formType = request.getParameter("formType");
+        
+        if ("cancelbooking".equals(formType)) {
+            try {
+                // Get the booking ID from the request
+                int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+                BookingDao bookingDao = new BookingDao();
+                // Call the updateBookingStatus method to cancel the booking
+                boolean updated = bookingDao.updateBookingStatus(bookingId, BookingStatus.cancelled);
+                
+                if (updated) {
+                    // Booking was successfully cancelled
+                    request.setAttribute("message", "Booking cancelled successfully");
+                } else {
+                    // No booking was found with the given ID
+                    request.setAttribute("error", "Unable to cancel booking. Booking not found.");
+                }
+                
+            } catch (NumberFormatException e) {
+                Sessionutil.setAttribute(request, "error", "Invalid booking ID format");
+            } catch (DataAccessException e) {
+            	  Sessionutil.setAttribute(request,"error", "Database error: " + e.getMessage());
+            }
+            
+            // Redirect back to the booking view page
+            Sessionutil.setAttribute(request,"success", "The booking Status updated .  " );
+
+           response.sendRedirect(request.getContextPath() + "/Viewbooking");
+        } 
+        else {
+         return; // Handle other form types or do nothing
+        }
+    }
 
 }
