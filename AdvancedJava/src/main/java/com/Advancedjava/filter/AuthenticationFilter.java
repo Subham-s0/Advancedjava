@@ -19,7 +19,7 @@ public class AuthenticationFilter implements Filter {
     // Public pages (accessible without login)
     private static final String LOGIN = "/login";
     private static final String REGISTER = "/register";
-    private static final String INDEX = "/index";
+    
     private static final String ROOT = "/";
     private static final String LOGOUT = "/logout";
     
@@ -52,7 +52,7 @@ public class AuthenticationFilter implements Filter {
     // Static resources
     private static final String[] PUBLIC_RESOURCES = {
         ".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".ico", 
-        ".woff", ".woff2", ".ttf", ".svg"
+        ".woff", ".woff2", ".ttf", ".svg",".mp4"
     };
 
     @Override
@@ -110,7 +110,7 @@ public class AuthenticationFilter implements Filter {
         if ("admin".equals(userRole)) {
         	
         	 if(uri.equals(LOGIN) || uri.equals(REGISTER) || 
-                     uri.equals(INDEX) || uri.equals(ROOT)) {
+                    uri.equals(ROOT)) {
         		 res.sendRedirect(contextPath + DASHBOARD);
         		 return;
              }
@@ -128,7 +128,7 @@ public class AuthenticationFilter implements Filter {
         // Customer access control
         else if ("customer".equals(userRole)) {
         	 if(uri.equals(LOGIN) || uri.equals(REGISTER) || 
-                     uri.equals(INDEX) || uri.equals(ROOT)) {
+                    uri.equals(ROOT)) {
         		 res.sendRedirect(contextPath + HOME);
         		 return;
              }
@@ -165,7 +165,7 @@ public class AuthenticationFilter implements Filter {
     private boolean isPublicPage(String uri) {
         return uri.equals(LOGIN) || 
                uri.equals(REGISTER) || 
-               uri.equals(INDEX) || 
+              
                uri.equals(ROOT)||
              
                uri.equals(LOGOUT);

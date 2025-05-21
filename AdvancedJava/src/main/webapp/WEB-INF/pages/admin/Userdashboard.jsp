@@ -23,40 +23,78 @@
 				<h1>Users</h1>
 				
 			</div>
-	  <% 
+   <%
 String error = (String) Sessionutil.getAttribute(request, "error");
-if (error != null && !error.isEmpty()) { 
+if (error != null && !error.isEmpty()) {
 %>
-    <div class="error-catch-message" id="errorMessage">
-        <div><%= error %></div>
-       <div class="close-icon"><i data-lucide="x" class="" onclick="closeErrorMessage()"></i></div> 
+    <div class="error-message" id="errorMessage">
+        <%= error %>
+        <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
     </div>
+<%
+    Sessionutil.removeAttribute(request, "error");
+}
+%>
+
+<%
+String success = (String) Sessionutil.getAttribute(request, "success");
+if (success != null && !success.isEmpty()) {
+%>
+    <div class="success-message" id="successMessage">
+        <%= success %>
+        <i data-lucide="x" class="close-icon" onclick="closeSuccessMessage()"></i>
+    </div>
+<%
+    Sessionutil.removeAttribute(request, "success");
+}
+%>
+
     <script>
-        // Auto-hide error message after 5 seconds
-        setTimeout(function() {
-            document.getElementById('errorMessage').style.display = 'none';
-            // Clear the error from session
-            fetch('<%= request.getContextPath() %>/clearError', {
-                method: 'POST',
-                credentials: 'include'
-            });
-        }, 5000);
-        
-        function closeErrorMessage() {
-            document.getElementById('errorMessage').style.display = 'none';
-            // Clear the error from session
+    // Auto-hide error and success messages after 5 seconds
+    setTimeout(function() {
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+
+        if (errorElement) {
+            errorElement.style.display = 'none';
             fetch('<%= request.getContextPath() %>/clearError', {
                 method: 'POST',
                 credentials: 'include'
             });
         }
-    </script>
-<%
-    // Clear the error message from session immediately after displaying
-    Sessionutil.removeAttribute(request, "error");
-}
-%>
-	  
+
+        if (successElement) {
+            successElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearSuccess', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }, 10000);
+
+    function closeErrorMessage() {
+        const errorElement = document.getElementById('errorMessage');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearError', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }
+
+    function closeSuccessMessage() {
+        const successElement = document.getElementById('successMessage');
+        if (successElement) {
+            successElement.style.display = 'none';
+            fetch('<%= request.getContextPath() %>/clearSuccess', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        }
+    }
+</script>
+
 	<!-- Filters -->
 <div class="filter-section">
     <form id="filterForm" action="${pageContext.request.contextPath}/usersdashboard" method="get">
@@ -124,11 +162,11 @@ if (error != null && !error.isEmpty()) {
                       <c:if test="${user.userRole ne 'admin'}">
 					    <div class="action-buttons">
 					        <a href="${pageContext.request.contextPath}/usersdetails?userId=${user.userId}" class="details-btn">Details</a>
-					        <form id="toggleForm${user.userId}" action="${pageContext.request.contextPath}/usersdashboard" method="post" style="display: inline;">
+					        <form id="toggleForm${user.userId}" onsubmit="return(are you sure you want to block this user?)" action="${pageContext.request.contextPath}/usersdashboard" method="post" style="display: inline;">
 					            <input type="hidden" name="action" value="delete">
 					            <input type="hidden" name="userId" value="${user.userId}">
 					            <input type="hidden" name="currentStatus" value="${user.userStatus}">
-					            <button type="submit" onclick="retun(are you sure you want to block this user?)" class="block-btn">
+					            <button type="submit"  class="block-btn">
 					                ${user.userStatus == 'active' ? 'Block' : 'Unblock'}
 					            </button>
 					        </form>

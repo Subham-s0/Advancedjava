@@ -26,7 +26,7 @@ import com.Advancedjava.util.ValidationUtil;
 /**
  * Servlet implementation class login
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/login" })
+@WebServlet(asyncSupported = true, urlPatterns = { "/login","/" })
 public class Logincontroller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

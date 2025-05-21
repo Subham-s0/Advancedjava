@@ -7,6 +7,13 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/register.css" />
 </head>
 <body>
+
+ <video autoplay loop muted class="back-video">
+
+    <source src="${pageContext.request.contextPath}/resources/images/banner/loginbackground.mp4" type="video/mp4">
+
+</video>
+
     <div class="registration_form">
         <h1>Create Account</h1>
          <%String error = (String) request.getAttribute("error"); %>
