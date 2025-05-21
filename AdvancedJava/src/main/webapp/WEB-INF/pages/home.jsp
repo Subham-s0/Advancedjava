@@ -29,25 +29,32 @@
 			 
 	    </div>
 	    
-	    <% 
+	   <%
 String error = (String) Sessionutil.getAttribute(request, "error");
-if (error != null && !error.isEmpty()) { 
+if (error != null && !error.isEmpty()) {
 %>
     <div class="error-message" id="errorMessage">
         <%= error %>
         <i data-lucide="x" class="close-icon" onclick="closeErrorMessage()"></i>
     </div>
 <%
-    String success = (String) Sessionutil.getAttribute(request, "success");
-    if (success != null && !success.isEmpty()) {
+    Sessionutil.removeAttribute(request, "error");
+}
+%>
+
+<%
+String success = (String) Sessionutil.getAttribute(request, "success");
+if (success != null && !success.isEmpty()) {
 %>
     <div class="success-message" id="successMessage">
         <%= success %>
         <i data-lucide="x" class="close-icon" onclick="closeSuccessMessage()"></i>
     </div>
 <%
-    }
+    Sessionutil.removeAttribute(request, "success");
+}
 %>
+
     <script>
     // Auto-hide error and success messages after 5 seconds
     setTimeout(function() {
@@ -93,15 +100,7 @@ if (error != null && !error.isEmpty()) {
         }
     }
 </script>
-<%
-    // Clear the error message from session immediately after displaying
-    Sessionutil.removeAttribute(request, "error");
-}
-%>
-<%
-    // Clear the error message from session immediately after displaying
-    Sessionutil.removeAttribute(request, "success");
-%>
+
 	   <!-- Category Filter Bar -->
     <div class="category-bar">
         <!-- Add "All" category first -->

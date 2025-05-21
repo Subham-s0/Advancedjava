@@ -55,7 +55,7 @@ public class paymentController extends HttpServlet {
          
             if (booking == null) {
                 Sessionutil.setAttribute(request, "error", "Booking not found");
-                response.sendRedirect(request.getContextPath() + "/dashboard");
+                response.sendRedirect(request.getContextPath() + "/home");
                 return;
             }
             

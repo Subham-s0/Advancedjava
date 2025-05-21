@@ -182,7 +182,7 @@ public class BookingController extends HttpServlet {
 
 	        int bookingId = bookingdao.saveBooking(booking);
 	        booking.display();
-
+	        Sessionutil.setAttribute(request, "success", "Your booking has been successfully registered. Please complete the payment to confirm your booking: ");
 	        response.sendRedirect(request.getContextPath()+"/payment?bookingId=" + bookingId);
 
 	    } catch (Exception e) {

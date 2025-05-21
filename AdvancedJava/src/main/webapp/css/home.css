@@ -182,7 +182,7 @@ body {
 }
 
 .error-message {
-    display: block;
+    display: flex;;
     align-items: center;  /* Vertically center items */
     justify-content: center;
     gap:20px;  /* Optional: pushes icon to the right */
@@ -195,7 +195,7 @@ body {
 }
 
 .success-message {
-    display: block;
+    display: flex;
     align-items: center;  /* Vertically center items */
     justify-content: center;
     gap:20px;  /* Optional: pushes icon to the right */
