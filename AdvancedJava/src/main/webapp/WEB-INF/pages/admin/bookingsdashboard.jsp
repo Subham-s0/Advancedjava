@@ -101,12 +101,12 @@
 
 			<!-- Filters -->
 			<div class="filter-section">
-				<form id="filterForm" action="${pageContext.request.contextPath}/admin/bookingsdashboard" method="GET">
+				<form id="filterForm" action="${pageContext.request.contextPath}/bookingsdashboard" method="GET">
 					<select class="filter-control" name="status">
 						<option value="">All Statuses</option>
-						<option value="CONFIRMED">Confirmed</option>
-						<option value="PENDING">Pending</option>
-						<option value="CANCELLED">Cancelled</option>
+						<option value="confirmed">Confirmed</option>
+						<option value="pending">Pending</option>
+						<option value="cancelled">Cancelled</option>
 						
 					</select>
 
@@ -197,7 +197,8 @@
 									</div>
 								</td>
 								<td class="table-cell">
-									<form class="update-status-form" action="${pageContext.request.contextPath}/updatebookingstatus" method="POST">
+									<form class="update-status-form" action="${pageContext.request.contextPath}/bookingsdashboard" method="POST">
+										<input type="hidden" name="formType" value="updateStatus">
 										<input type="hidden" name="bookingId" value="${booking.bookingId}">
 										<select name="newStatus">
 											<option value="pending" ${booking.bookingStatus == 'pending' ? 'selected' : ''}>Pending</option>

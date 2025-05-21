@@ -82,6 +82,9 @@ public class Logincontroller extends HttpServlet {
 	                    errors.add("Invalid credentials");
 	                }
 	            }
+	            if(user.getUserStatus()== usermodel.userStatus.blocked) {
+	            	errors.add("Your account is blocked. Please contact support.");
+	            }
 
 	            if (!errors.isEmpty()) {
 	                request.setAttribute("error", String.join(" ", errors));
