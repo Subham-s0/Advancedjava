@@ -31,7 +31,7 @@
                         <div class="profile-dropdown">
                             <ul>
                                 <li><a href="Property" class="drop-down-list">Properties</a>
-                                <li><a href="#" class="drop-down-list">My Bookings</a>
+                                <li><a href="Viewbooking" class="drop-down-list">My Bookings</a>
                                 <li><a href="#" class="drop-down-list"> Favourites</a>
                                   <li><a href="${pageContext.request.contextPath}/logout" class="drop-down-list">Logout<i data-lucide="log-out"></i></a>
                                

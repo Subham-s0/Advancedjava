@@ -2,6 +2,7 @@ package com.Advancedjava.dao;
 
 import java.sql.*;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.Advancedjava.connection.DBconnection;
@@ -72,10 +73,40 @@ public class BookingDao {
 	        }
 	    }
 
-	   
-	    public List<BookingModel> getBookingsByUserId(int userId) throws DataAccessException {
-	        // Implement if needed
-	        return null;
+	    public List<BookingModel> getBookingsByUserId(String id) throws DataAccessException {
+	        String sql = "SELECT * FROM booking WHERE user_id = ?";
+	        List<BookingModel> bookings = new ArrayList<>();
+	        
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
+	             
+	            ps.setString(1, id);
+	            
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    BookingModel booking = new BookingModel(
+	                        rs.getInt("booking_id"),
+	                        rs.getInt("property_id"),
+	                        rs.getInt("user_id"),
+	                        BookingStatus.valueOf(rs.getString("booking_status")),
+	                        rs.getDate("check_in_date"),
+	                        rs.getDate("check_out_date"),
+	                        rs.getBigDecimal("base_price"),
+	                        rs.getBigDecimal("total_price"),
+	                        rs.getInt("discount_percent"),
+	                        rs.getInt("number_of_guests"),
+	                        rs.getTimestamp("booking_created_at")
+	                    );
+	                    
+	                    bookings.add(booking);
+	                }
+	            }
+	            
+	            return bookings;
+	            
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Error fetching bookings by user ID", e);
+	        }
 	    }
 	    public BookingModel findBookingById(int bookingId) throws DataAccessException {
 	        String sql = "SELECT * FROM booking WHERE booking_id = ?";
