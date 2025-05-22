@@ -20,36 +20,38 @@ import com.Advancedjava.util.Sessionutil;
 @WebServlet(asyncSupported = true, urlPatterns = { "/usersdashboard" })
 public class usersdashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public usersdashboard() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public usersdashboard() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		UserDaoimpl userDao = new UserDaoimpl();
-		
+
 		try {
-			 String statusParam = request.getParameter("status"); // e.g. "active", "inactive", "blocked"
+			String statusParam = request.getParameter("status"); // e.g. "active", "inactive", "blocked"
 
-		        List<usermodel> users;
+			List<usermodel> users;
 
-		        if (statusParam != null && !statusParam.isEmpty()) {
-		            // Filtered list
-		            users = userDao.getUsersByStatus(statusParam);  // You must implement this method
-		            
-		        } else {
-		            // Unfiltered list (all users)
-		            users = userDao.getAllUsers();
-		        }
-			 List<Integer> bookingCounts = new ArrayList<>();
+			if (statusParam != null && !statusParam.isEmpty()) {
+				// Filtered list
+				users = userDao.getUsersByStatus(statusParam); // You must implement this method
+
+			} else {
+				// Unfiltered list (all users)
+				users = userDao.getAllUsers();
+			}
+			List<Integer> bookingCounts = new ArrayList<>();
 			for (usermodel user : users) {
 				Integer count = Integer.valueOf(userDao.countBookingsByUserId(user.getUserId())); // Redundant
 
@@ -68,57 +70,60 @@ public class usersdashboard extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		    try {
-		        String action = request.getParameter("action");
-		        UserDaoimpl userDao = new UserDaoimpl();
-		        if ("delete".equals(action)) {
-		            String userId = request.getParameter("userId");
-		            String currentStatus = request.getParameter("currentStatus");
+		try {
+			String action = request.getParameter("action");
+			UserDaoimpl userDao = new UserDaoimpl();
+			if ("delete".equals(action)) {
+				String userId = request.getParameter("userId");
+				String currentStatus = request.getParameter("currentStatus");
 
-		            if (userId != null && currentStatus != null) {
-		                userStatus newStatus;
+				if (userId != null && currentStatus != null) {
+					userStatus newStatus;
 
-		                // Determine the new status based on current status
-		                if ("active".equalsIgnoreCase(currentStatus)|| "inactive".equalsIgnoreCase(currentStatus)) {
-		                    newStatus = userStatus.blocked;
-		                } else if ("blocked".equalsIgnoreCase(currentStatus)) {
-		                    newStatus = userStatus.active;
-		                } else {
-		                    // Handle unexpected status
-		                    Sessionutil.setAttribute(request, "error", "Invalid current status provided.");
-		                    response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
-		                    return;
-		                }
+					// Determine the new status based on current status
+					if ("active".equalsIgnoreCase(currentStatus) || "inactive".equalsIgnoreCase(currentStatus)) {
+						newStatus = userStatus.blocked;
+					} else if ("blocked".equalsIgnoreCase(currentStatus)) {
+						newStatus = userStatus.active;
+					} else {
+						// Handle unexpected status
+						Sessionutil.setAttribute(request, "error", "Invalid current status provided.");
+						response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
+						return;
+					}
 
-		                // Update the user's status in DB
-		                boolean ok=userDao.updateUserStatusById(userId, newStatus);
-		                if (!ok) {
-		                    Sessionutil.setAttribute(request, "error", "Failed to update user status.");
-		                    response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
-		                    return;
-		                }
-		                // Optionally set a success message
-		                Sessionutil.setAttribute(request, "success", "User status updated successfully.");
-		            } else {
-		                Sessionutil.setAttribute(request, "error", "Missing parameters.");
-		            }
+					// Update the user's status in DB
+					boolean ok = userDao.updateUserStatusById(userId, newStatus);
+					if (!ok) {
+						Sessionutil.setAttribute(request, "error", "Failed to update user status.");
+						response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
+						return;
+					}
+					// Optionally set a success message
+					Sessionutil.setAttribute(request, "success", "User status updated successfully.");
+				} else {
+					Sessionutil.setAttribute(request, "error", "Missing parameters.");
+				}
 
-		            response.sendRedirect(request.getContextPath() + "/usersdashboard");
-		            return;
-		        }
+				response.sendRedirect(request.getContextPath() + "/usersdashboard");
+				return;
+			}
 
-		        // Unknown action
-		        Sessionutil.setAttribute(request, "error", "Unknown action.");
-		        response.sendRedirect(request.getContextPath() + "/usersdashboard");
-	            return;
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		        Sessionutil.setAttribute(request, "error", "An error occurred while processing the request.");
-		        response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
-		    }}
+			// Unknown action
+			Sessionutil.setAttribute(request, "error", "Unknown action.");
+			response.sendRedirect(request.getContextPath() + "/usersdashboard");
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+			Sessionutil.setAttribute(request, "error", "An error occurred while processing the request.");
+			response.sendRedirect(request.getContextPath() + "/admin/usersdashboard");
+		}
+	}
 
 }

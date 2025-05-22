@@ -42,14 +42,12 @@ public class PropertydashboardController extends HttpServlet {
 		String categoryParam = request.getParameter("category");
 		String priceRange = request.getParameter("priceRange");
 
-	
 		List<Propertymodel> filteredProperties;
 
 		try {
 			List<Categorymodel> categories = categoryDao.findAllcategories();
 			// Convert category
-			Integer categoryId = (categoryParam != null && !categoryParam.isEmpty())
-					? Integer.parseInt(categoryParam)
+			Integer categoryId = (categoryParam != null && !categoryParam.isEmpty()) ? Integer.parseInt(categoryParam)
 					: null;
 
 			// Parse price range
@@ -85,28 +83,28 @@ public class PropertydashboardController extends HttpServlet {
 		// Handle form submission or other POST reques
 		String action = request.getParameter("formType");
 		if (action.equals("deleteProperty")) {
-				doDelete(request, response);
-			}
-		else {
+			doDelete(request, response);
+		} else {
 			doGet(request, response);
 		}
-				
-		}
+
+	}
+
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		PropertyDaoImpl propertyDao = new PropertyDaoImpl();
 		String propertyIdstr = request.getParameter("propertyId");
 		try {
-			  if (propertyIdstr != null && propertyIdstr.matches("\\d+")) {
-					int propertyId = Integer.parseInt(propertyIdstr);
-					propertyDao.delete(propertyId);
-					Sessionutil.setAttribute(request, "success", "Property deleted successfully");
-			  }
-			 
+			if (propertyIdstr != null && propertyIdstr.matches("\\d+")) {
+				int propertyId = Integer.parseInt(propertyIdstr);
+				propertyDao.delete(propertyId);
+				Sessionutil.setAttribute(request, "success", "Property deleted successfully");
+			}
+
 			response.sendRedirect(request.getContextPath() + "/propertydashboard");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

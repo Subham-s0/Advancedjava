@@ -17,7 +17,6 @@ public class PropertyDaoImpl implements PropertyDao {
 	public PropertyDaoImpl() {
 		this.propertyImageDao = new PropertyImageDaoImpl();
 	}
-	
 
 	@Override
 	public Propertymodel findById(int propertyId) throws DataAccessException {
@@ -34,10 +33,11 @@ public class PropertyDaoImpl implements PropertyDao {
 							rs.getString("property_address"), rs.getString("property_city"),
 							rs.getString("property_country"), rs.getString("property_description"),
 							PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
-							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"), rs.getInt("total_bedrooms"),
-							rs.getInt("total_bath"), rs.getInt("total_rooms"), rs.getInt("category_id"),
-							rs.getString("host_name"), propertyImageDao.findByPropertyId(propertyId),
-							rs.getInt("cleaning_fee"), rs.getInt("tax_rate"), rs.getInt("service_fee"));
+							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"),
+							rs.getInt("total_bedrooms"), rs.getInt("total_bath"), rs.getInt("total_rooms"),
+							rs.getInt("category_id"), rs.getString("host_name"),
+							propertyImageDao.findByPropertyId(propertyId), rs.getInt("cleaning_fee"),
+							rs.getInt("tax_rate"), rs.getInt("service_fee"));
 				}
 				return property;
 			}
@@ -62,9 +62,10 @@ public class PropertyDaoImpl implements PropertyDao {
 							rs.getString("property_address"), rs.getString("property_city"),
 							rs.getString("property_country"), rs.getString("property_description"),
 							PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
-							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"), rs.getInt("total_bedrooms"),
-							rs.getInt("total_bath"), rs.getInt("total_rooms"), rs.getInt("category_id"),
-							rs.getString("host_name"), propertyImageDao.findByPropertyId(propertyId));
+							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"),
+							rs.getInt("total_bedrooms"), rs.getInt("total_bath"), rs.getInt("total_rooms"),
+							rs.getInt("category_id"), rs.getString("host_name"),
+							propertyImageDao.findByPropertyId(propertyId));
 					properties.add(property);
 				}
 				return properties;
@@ -99,60 +100,60 @@ public class PropertyDaoImpl implements PropertyDao {
 			throw new DataAccessException("Database error while fetching all properties", e);
 		}
 	}
+
 	@Override
 	public int save(Propertymodel property) throws DataAccessException {
-	    String sql = "INSERT INTO properties (property_name, property_address, property_city, property_country, "
-	            + "property_description, property_status, price_per_night, maximum_guests, total_bedrooms, "
-	            + "total_bath, total_rooms, category_id, host_name, cleaning_fee, tax_rate, service_fee) "
-	            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO properties (property_name, property_address, property_city, property_country, "
+				+ "property_description, property_status, price_per_night, maximum_guests, total_bedrooms, "
+				+ "total_bath, total_rooms, category_id, host_name, cleaning_fee, tax_rate, service_fee) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-	    try (Connection conn = DBconnection.getDbConnection();
-	         PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		try (Connection conn = DBconnection.getDbConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-	        pstmt.setString(1, property.getPropertyName());
-	        pstmt.setString(2, property.getPropertyAddress());
-	        pstmt.setString(3, property.getPropertyCity());
-	        pstmt.setString(4, property.getPropertyCountry());
-	        pstmt.setString(5, property.getPropertyDescription());
-	        pstmt.setString(6, property.getPropertyStatus().toString());
-	        pstmt.setBigDecimal(7, property.getPricePerNight());
-	        pstmt.setInt(8, property.getMaximumGuests());
-	        pstmt.setInt(9, property.getTotalBedrooms());
-	        pstmt.setInt(10, property.getTotalBath());
-	        pstmt.setInt(11, property.getTotalRooms());
-	        pstmt.setInt(12, property.getCategoryId());
-	        pstmt.setString(13, property.getHostName());
-	        
-	        pstmt.setInt(14,property.getCleaningFee());
-	        pstmt.setInt(15, property.getTaxRate());
-	        pstmt.setInt(16, property.getServiceFee());
+			pstmt.setString(1, property.getPropertyName());
+			pstmt.setString(2, property.getPropertyAddress());
+			pstmt.setString(3, property.getPropertyCity());
+			pstmt.setString(4, property.getPropertyCountry());
+			pstmt.setString(5, property.getPropertyDescription());
+			pstmt.setString(6, property.getPropertyStatus().toString());
+			pstmt.setBigDecimal(7, property.getPricePerNight());
+			pstmt.setInt(8, property.getMaximumGuests());
+			pstmt.setInt(9, property.getTotalBedrooms());
+			pstmt.setInt(10, property.getTotalBath());
+			pstmt.setInt(11, property.getTotalRooms());
+			pstmt.setInt(12, property.getCategoryId());
+			pstmt.setString(13, property.getHostName());
 
-	        int affectedRows = pstmt.executeUpdate();
+			pstmt.setInt(14, property.getCleaningFee());
+			pstmt.setInt(15, property.getTaxRate());
+			pstmt.setInt(16, property.getServiceFee());
 
-	        if (affectedRows == 0) {
-	            throw new DataAccessException("Creating property failed, no rows affected.");
-	        }
+			int affectedRows = pstmt.executeUpdate();
 
-	        try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-	            if (generatedKeys.next()) {
-	                int propertyId = generatedKeys.getInt(1);
-	                // Save images if any
-	                if (property.getImages() != null && !property.getImages().isEmpty()) {
-	                    for (PropertyImagemodel image : property.getImages()) {
-	                        propertyImageDao.save(image, propertyId);
-	                    }
-	                }
-	                return propertyId;
-	            } else {
-	                throw new DataAccessException("Creating property failed, no ID obtained.");
-	            }
-	        }
-	    } catch (SQLException ex) {
-	        throw new DataAccessException("Error saving property", ex);
-	    }
+			if (affectedRows == 0) {
+				throw new DataAccessException("Creating property failed, no rows affected.");
+			}
+
+			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					int propertyId = generatedKeys.getInt(1);
+					// Save images if any
+					if (property.getImages() != null && !property.getImages().isEmpty()) {
+						for (PropertyImagemodel image : property.getImages()) {
+							propertyImageDao.save(image, propertyId);
+						}
+					}
+					return propertyId;
+				} else {
+					throw new DataAccessException("Creating property failed, no ID obtained.");
+				}
+			}
+		} catch (SQLException ex) {
+			throw new DataAccessException("Error saving property", ex);
+		}
 	}
-	
-	
+
 	@Override
 	public boolean update(Propertymodel property) throws DataAccessException {
 		String sql = "UPDATE properties SET property_name = ?, property_address = ?, property_city = ?, "
@@ -175,11 +176,10 @@ public class PropertyDaoImpl implements PropertyDao {
 			pstmt.setInt(11, property.getTotalRooms());
 			pstmt.setInt(12, property.getCategoryId());
 			pstmt.setString(13, property.getHostName());
-			 pstmt.setInt(14,property.getCleaningFee());
-		        pstmt.setInt(15, property.getTaxRate());
-		        pstmt.setInt(16, property.getServiceFee());
+			pstmt.setInt(14, property.getCleaningFee());
+			pstmt.setInt(15, property.getTaxRate());
+			pstmt.setInt(16, property.getServiceFee());
 			pstmt.setInt(17, property.getPropertyId());
-			
 
 			return pstmt.executeUpdate() > 0;
 		} catch (SQLException e) {
@@ -192,12 +192,12 @@ public class PropertyDaoImpl implements PropertyDao {
 		// First delete all images associated with the property
 		boolean imgok = propertyImageDao.deleteByPropertyId(propertyId);
 		AmenityDaoImpl amenityDao = new AmenityDaoImpl();
-		boolean faok= amenityDao.deletePropertyAmenity(propertyId);
+		boolean faok = amenityDao.deletePropertyAmenity(propertyId);
 		String sql = "DELETE FROM properties WHERE property_id = ?";
-		if (!imgok ) {
+		if (!imgok) {
 			throw new DataAccessException("Error deleting property images ");
 		}
-			if (!faok) {
+		if (!faok) {
 			throw new DataAccessException("Error deleting property  amenities");
 		}
 		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -226,9 +226,10 @@ public class PropertyDaoImpl implements PropertyDao {
 							rs.getString("property_address"), rs.getString("property_city"),
 							rs.getString("property_country"), rs.getString("property_description"),
 							PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
-							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"), rs.getInt("total_bedrooms"),
-							rs.getInt("total_bath"), rs.getInt("total_rooms"), rs.getInt("category_id"),
-							rs.getString("host_name"), propertyImageDao.findByPropertyId(propertyId));
+							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"),
+							rs.getInt("total_bedrooms"), rs.getInt("total_bath"), rs.getInt("total_rooms"),
+							rs.getInt("category_id"), rs.getString("host_name"),
+							propertyImageDao.findByPropertyId(propertyId));
 					properties.add(property);
 				}
 				return properties;
@@ -254,9 +255,10 @@ public class PropertyDaoImpl implements PropertyDao {
 							rs.getString("property_address"), rs.getString("property_city"),
 							rs.getString("property_country"), rs.getString("property_description"),
 							PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
-							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"), rs.getInt("total_bedrooms"),
-							rs.getInt("total_bath"), rs.getInt("total_rooms"), rs.getInt("category_id"),
-							rs.getString("host_name"), propertyImageDao.findByPropertyId(propertyId));
+							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"),
+							rs.getInt("total_bedrooms"), rs.getInt("total_bath"), rs.getInt("total_rooms"),
+							rs.getInt("category_id"), rs.getString("host_name"),
+							propertyImageDao.findByPropertyId(propertyId));
 					properties.add(property);
 				}
 				return properties;
@@ -268,111 +270,104 @@ public class PropertyDaoImpl implements PropertyDao {
 	}
 
 	@Override
-	public boolean Propertyexists(String propertyName, String address, String city, String country) 
-		    throws DataAccessException {
-		    
-		    String sql = "SELECT COUNT(*) FROM properties " +
-		                 "WHERE property_name = ? " +
-		                 "AND property_address = ? " +
-		                 "AND property_city = ? " +
-		                 "AND property_country = ?";
-		    
-		    try (Connection conn = DBconnection.getDbConnection();
-		         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-		        
-		        pstmt.setString(1, propertyName);
-		        pstmt.setString(2, address);
-		        pstmt.setString(3, city);
-		        pstmt.setString(4, country);
-		        
-		        try (ResultSet rs = pstmt.executeQuery()) {
-		            return rs.next() && rs.getInt(1) > 0;
-		        }
-		    } catch (SQLException e) {
-		        throw new DataAccessException("Error checking property existence by details", e);
-		    }
+	public boolean Propertyexists(String propertyName, String address, String city, String country)
+			throws DataAccessException {
+
+		String sql = "SELECT COUNT(*) FROM properties " + "WHERE property_name = ? " + "AND property_address = ? "
+				+ "AND property_city = ? " + "AND property_country = ?";
+
+		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, propertyName);
+			pstmt.setString(2, address);
+			pstmt.setString(3, city);
+			pstmt.setString(4, country);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return rs.next() && rs.getInt(1) > 0;
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Error checking property existence by details", e);
 		}
-	public List<Integer> findAmenityIdsByPropertyId(int propertyId) throws DataAccessException {
-	    String sql = "SELECT amenity_id FROM property_amenity WHERE property_id = ?";
-	    List<Integer> amenityIds = new ArrayList<>();
-
-	    try (Connection conn = DBconnection.getDbConnection();
-	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-	        
-	        pstmt.setInt(1, propertyId);
-	        
-	        try (ResultSet rs = pstmt.executeQuery()) {
-	            while (rs.next()) {
-	                int amenityId = rs.getInt("amenity_id");
-	                amenityIds.add(amenityId);
-	            }
-	        }
-	        return amenityIds;
-	        
-	    } catch (SQLException e) {
-	        throw new DataAccessException("Error fetching amenity IDs for property ID: " + propertyId, e);
-	    }
 	}
-	public boolean propertyExistsExcludingId(String propertyName, String address, 
-            String city, String country, int excludeId) 
-            throws DataAccessException {
 
-String sql = "SELECT COUNT(*) FROM properties " +
-"WHERE property_name = ? " +
-"AND property_address = ? " +
-"AND property_city = ? " +
-"AND property_country = ? " +
-"AND property_id != ?";  // Exclusion clause
+	public List<Integer> findAmenityIdsByPropertyId(int propertyId) throws DataAccessException {
+		String sql = "SELECT amenity_id FROM property_amenity WHERE property_id = ?";
+		List<Integer> amenityIds = new ArrayList<>();
 
-try (Connection conn = DBconnection.getDbConnection();
-PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-pstmt.setString(1, propertyName);
-pstmt.setString(2, address);
-pstmt.setString(3, city);
-pstmt.setString(4, country);
-pstmt.setInt(5, excludeId);  // New parameter
+			pstmt.setInt(1, propertyId);
 
-try (ResultSet rs = pstmt.executeQuery()) {
-return rs.next() && rs.getInt(1) > 0;
-}
-} catch (SQLException e) {
-throw new DataAccessException("Error checking property existence with exclusion", e);
-}
-}
-	public List<Propertymodel> findPropertiesByFilters(Integer categoryId, Double minPrice, Double maxPrice) throws DataAccessException {
-	    List<Propertymodel> properties = new ArrayList<>();
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					int amenityId = rs.getInt("amenity_id");
+					amenityIds.add(amenityId);
+				}
+			}
+			return amenityIds;
 
-	    StringBuilder sql = new StringBuilder("SELECT * FROM properties WHERE 1=1");
-	    if (categoryId != null) {
-	        sql.append(" AND category_id = ?");
-	    }
-	    if (minPrice != null) {
-	        sql.append(" AND price_per_night >= ?");
-	    }
-	    if (maxPrice != null) {
-	        sql.append(" AND price_per_night <= ?");
-	    }
+		} catch (SQLException e) {
+			throw new DataAccessException("Error fetching amenity IDs for property ID: " + propertyId, e);
+		}
+	}
 
-	    try (Connection conn = DBconnection.getDbConnection();
-	         PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+	public boolean propertyExistsExcludingId(String propertyName, String address, String city, String country,
+			int excludeId) throws DataAccessException {
 
-	        int index = 1;
+		String sql = "SELECT COUNT(*) FROM properties " + "WHERE property_name = ? " + "AND property_address = ? "
+				+ "AND property_city = ? " + "AND property_country = ? " + "AND property_id != ?"; // Exclusion clause
 
-	        if (categoryId != null) {
-	            pstmt.setInt(index++, categoryId);
-	        }
-	        if (minPrice != null) {
-	            pstmt.setDouble(index++, minPrice);
-	        }
-	        if (maxPrice != null) {
-	            pstmt.setDouble(index++, maxPrice);
-	        }
+		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-	        ResultSet rs = pstmt.executeQuery();
+			pstmt.setString(1, propertyName);
+			pstmt.setString(2, address);
+			pstmt.setString(3, city);
+			pstmt.setString(4, country);
+			pstmt.setInt(5, excludeId); // New parameter
 
-	        while (rs.next()) {
-	        	Propertymodel property = new Propertymodel(rs.getInt("property_id"), rs.getString("property_name"),
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return rs.next() && rs.getInt(1) > 0;
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Error checking property existence with exclusion", e);
+		}
+	}
+
+	public List<Propertymodel> findPropertiesByFilters(Integer categoryId, Double minPrice, Double maxPrice)
+			throws DataAccessException {
+		List<Propertymodel> properties = new ArrayList<>();
+
+		StringBuilder sql = new StringBuilder("SELECT * FROM properties WHERE 1=1");
+		if (categoryId != null) {
+			sql.append(" AND category_id = ?");
+		}
+		if (minPrice != null) {
+			sql.append(" AND price_per_night >= ?");
+		}
+		if (maxPrice != null) {
+			sql.append(" AND price_per_night <= ?");
+		}
+
+		try (Connection conn = DBconnection.getDbConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+
+			int index = 1;
+
+			if (categoryId != null) {
+				pstmt.setInt(index++, categoryId);
+			}
+			if (minPrice != null) {
+				pstmt.setDouble(index++, minPrice);
+			}
+			if (maxPrice != null) {
+				pstmt.setDouble(index++, maxPrice);
+			}
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Propertymodel property = new Propertymodel(rs.getInt("property_id"), rs.getString("property_name"),
 						rs.getString("property_address"), rs.getString("property_city"),
 						rs.getString("property_country"), rs.getString("property_description"),
 						PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
@@ -380,13 +375,65 @@ throw new DataAccessException("Error checking property existence with exclusion"
 						rs.getInt("total_bath"), rs.getInt("total_rooms"), rs.getInt("category_id"),
 						rs.getString("host_name"), propertyImageDao.findByPropertyId(rs.getInt("property_id")));
 				properties.add(property);
-	        }
+			}
 
-	    } catch (SQLException e) {
-	        throw new DataAccessException("Error fetching properties with filters", e);
-	    }
+		} catch (SQLException e) {
+			throw new DataAccessException("Error fetching properties with filters", e);
+		}
 
-	    return properties;
+		return properties;
+	}
+
+	public int getTotalProperties() throws DataAccessException {
+		String sql = "SELECT COUNT(*) FROM properties";
+
+		try (Connection conn = DBconnection.getDbConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+
+			if (rs.next()) {
+				return rs.getInt(1); // Returns the total count
+			} else {
+				return 0; // Should not happen unless the table is empty or query fails
+			}
+		} catch (SQLException e) {
+			throw new DataAccessException("Database error while counting properties", e);
+		}
+	}
+
+	public List<Propertymodel> getTop5PropertiesByMostBookings() throws DataAccessException {
+		String sql = """
+				SELECT p.*, COUNT(b.booking_id) AS booking_count
+				FROM properties p
+				LEFT JOIN booking b ON p.property_id = b.property_id
+				GROUP BY p.property_id
+				ORDER BY booking_count DESC
+				LIMIT 5
+				""";
+
+		List<Propertymodel> topProperties = new ArrayList<>();
+		PropertyImageDaoImpl propertyImageDao = new PropertyImageDaoImpl();
+		try (Connection conn = DBconnection.getDbConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					int propertyId = rs.getInt("property_id");
+					Propertymodel property = new Propertymodel(propertyId, rs.getString("property_name"),
+							rs.getString("property_address"), rs.getString("property_city"),
+							rs.getString("property_country"), rs.getString("property_description"),
+							PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
+							rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"),
+							rs.getInt("total_bedrooms"), rs.getInt("total_bath"), rs.getInt("total_rooms"),
+							rs.getInt("category_id"), rs.getString("host_name"),
+							propertyImageDao.findByPropertyId(propertyId));
+					topProperties.add(property);
+				}
+			}
+			return topProperties;
+
+		} catch (SQLException e) {
+			throw new DataAccessException("Database error while fetching top 5 properties by bookings", e);
+		}
 	}
 
 }

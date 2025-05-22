@@ -22,7 +22,7 @@
         <li><a href="home" class="nav-link">HOME</a></li>
         <li><a href="${pageContext.request.contextPath}/Profile" class="nav-link">PROFILE</a></li>
         
-        <li><a href="#" class="nav-link">ABOUT US</a></li>
+        <li><a href="${pageContext.request.contextPath}/aboutus" class="nav-link">ABOUT US</a></li>
         
          <li>
                     <div class="profile-section nav-link"> 

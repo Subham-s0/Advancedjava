@@ -17,8 +17,9 @@ import jakarta.servlet.http.Part;
  */
 public class ImageUtil {
 	private static final long MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif");
-    private static final List<String> ALLOWED_MIME_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
+	private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif");
+	private static final List<String> ALLOWED_MIME_TYPES = Arrays.asList("image/jpeg", "image/png", "image/gif");
+
 	/**
 	 * Extracts the file name from the given {@link Part} object based on the
 	 * "content-disposition" header.
@@ -77,59 +78,59 @@ public class ImageUtil {
 	 *         otherwise.
 	 */
 	public boolean uploadImage(Part part, String rootPath, String saveFolder, String customFileName) {
-	    String savePath = getSavePath(saveFolder);
-	    File fileSaveDir = new File(savePath);
+		String savePath = getSavePath(saveFolder);
+		File fileSaveDir = new File(savePath);
 
-	    // Ensure the directory exists
-	    if (!fileSaveDir.exists()) {
-	        if (!fileSaveDir.mkdirs()) { // Changed to mkdirs() to support nested folders
-	            return false;
-	        }
-	    }
+		// Ensure the directory exists
+		if (!fileSaveDir.exists()) {
+			if (!fileSaveDir.mkdirs()) { // Changed to mkdirs() to support nested folders
+				return false;
+			}
+		}
 
-	    try {
-	        // Get the original file extension
-	        String originalFileName = getImageNameFromPart(part);
-	        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-	        if (customFileName.contains(".")) {
-	            customFileName = customFileName.substring(0, customFileName.lastIndexOf("."));
-	        }
+		try {
+			// Get the original file extension
+			String originalFileName = getImageNameFromPart(part);
+			String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+			if (customFileName.contains(".")) {
+				customFileName = customFileName.substring(0, customFileName.lastIndexOf("."));
+			}
 
-	        // Compose full file path with custom filename + original extension
-	        String fullFilePath = savePath + File.separator + customFileName + fileExtension;
+			// Compose full file path with custom filename + original extension
+			String fullFilePath = savePath + File.separator + customFileName + fileExtension;
 
-	        // Save the file
-	        part.write(fullFilePath);
-	        return true;
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+			// Save the file
+			part.write(fullFilePath);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
-	
 	public String getSavePath(String saveFolder) {
-		return "C:/Users/Acer/git/Advancedjava/AdvancedJava/src/main/webapp/resources/images/"+saveFolder+"/";
+		return "C:/Users/Acer/git/Advancedjava/AdvancedJava/src/main/webapp/resources/images/" + saveFolder + "/";
 	}
+
 	public void validateImage(Part imagePart) throws ServletException {
-        if (imagePart == null || imagePart.getSize() == 0) {
-            throw new ServletException("No image uploaded.");
-        }
+		if (imagePart == null || imagePart.getSize() == 0) {
+			throw new ServletException("No image uploaded.");
+		}
 
-        String fileName = getImageNameFromPart(imagePart).toLowerCase();
+		String fileName = getImageNameFromPart(imagePart).toLowerCase();
 
-        boolean hasValidExtension = ALLOWED_EXTENSIONS.stream().anyMatch(fileName::endsWith);
-        if (!hasValidExtension) {
-            throw new ServletException("Invalid file extension. Allowed: .jpg, .jpeg, .png, .gif");
-        }
+		boolean hasValidExtension = ALLOWED_EXTENSIONS.stream().anyMatch(fileName::endsWith);
+		if (!hasValidExtension) {
+			throw new ServletException("Invalid file extension. Allowed: .jpg, .jpeg, .png, .gif");
+		}
 
-        String contentType = imagePart.getContentType();
-        if (!ALLOWED_MIME_TYPES.contains(contentType)) {
-            throw new ServletException("Invalid MIME type: " + contentType);
-        }
+		String contentType = imagePart.getContentType();
+		if (!ALLOWED_MIME_TYPES.contains(contentType)) {
+			throw new ServletException("Invalid MIME type: " + contentType);
+		}
 
-        if (imagePart.getSize() > MAX_FILE_SIZE) {
-            throw new ServletException("Image file too large. Max size is 2MB.");
-        }
-    }
+		if (imagePart.getSize() > MAX_FILE_SIZE) {
+			throw new ServletException("Image file too large. Max size is 2MB.");
+		}
+	}
 }

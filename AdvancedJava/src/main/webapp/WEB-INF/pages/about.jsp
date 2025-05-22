@@ -1,48 +1,15 @@
-package com.Advancedjava.dao;
-
-import java.util.List;
-import com.Advancedjava.model.Propertymodel;
-import com.Advancedjava.model.Propertymodel.PropertyStatus;
-import com.Advancedjava.exception.DataAccessException;
-
-public interface PropertyDao {
-	Propertymodel findById(int propertyId) throws DataAccessException;
-
-	List<Propertymodel> findallproperties() throws DataAccessException;
-
-	int save(Propertymodel property) throws DataAccessException;
-
-	boolean update(Propertymodel property) throws DataAccessException;
-
-	boolean delete(int propertyId) throws DataAccessException;
-
-	List<Propertymodel> findByStatus(PropertyStatus status) throws DataAccessException;
-
-	List<Propertymodel> findByCity(String city) throws DataAccessException;
-
-	boolean Propertyexists(String name, String address, String city, String country) throws DataAccessException;
-
-	List<Propertymodel> listAllPropertiesByCategory(int categoryId) throws DataAccessException;
-
-}<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NestAway - About Us</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/about.css">
 </head>
 <body>
     <header>
-        <div class="logo">NestAway</div>
-        <nav>
-            <ul>
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="properties.html">PROPERTIES</a></li>
-                <li><a href="about.html">ABOUT US</a></li>
-                <li><a href="#">asd123</a></li>
-            </ul>
-        </nav>
+       <jsp:include page="header.jsp" />
     </header>
     
     <div class="container">
@@ -143,15 +110,41 @@ public interface PropertyDao {
         </section>
     </div>
     
-    <footer>
-        <div class="footer-links">
-            <a href="#">Explore</a>
-            <a href="#">Join Us</a>
-            <a href="#">Connect With Us</a>
-        </div>
-        <p class="copyright">© 2023 NestAway. All rights reserved.</p>
-    </footer>
-    
-    <script src="script.js"></script>
+<jsp:include page="footer.jsp" />
+            
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effects to team members
+        const teamMembers = document.querySelectorAll('.team-member');
+        
+        teamMembers.forEach(member => {
+            member.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            });
+            
+            member.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });</script>
 </body>
 </html>

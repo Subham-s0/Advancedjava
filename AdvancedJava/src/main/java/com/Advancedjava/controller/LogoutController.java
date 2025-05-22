@@ -33,7 +33,6 @@ public class LogoutController extends HttpServlet {
 		response.sendRedirect(request.getContextPath() + "/login");
 		System.out.println("The session is "+(String) Sessionutil.getAttribute(request, "username"));
 		
-    }
-	
-	
+	}
+
 }

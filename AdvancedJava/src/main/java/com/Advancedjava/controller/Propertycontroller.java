@@ -22,42 +22,46 @@ import com.Advancedjava.util.Sessionutil;
 @WebServlet(asyncSupported = true, urlPatterns = { "/Property" })
 public class Propertycontroller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Propertycontroller() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		   PropertyDaoImpl propertyDao = new PropertyDaoImpl();
-		   List<Propertymodel> properties=null;
-		   
+	public Propertycontroller() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		PropertyDaoImpl propertyDao = new PropertyDaoImpl();
+		List<Propertymodel> properties = null;
+
 		try {
 			properties = propertyDao.findallproperties();
 			String userId = (String) Sessionutil.getAttribute(request, "userId");
-			
-            WishlistImpl wishlistDao =new WishlistImpl();
-            List<Integer> wishlist = wishlistDao.getWishlistByUserId(userId);
-            request.setAttribute("wishlistIds", wishlist);
+
+			WishlistImpl wishlistDao = new WishlistImpl();
+			List<Integer> wishlist = wishlistDao.getWishlistByUserId(userId);
+			request.setAttribute("wishlistIds", wishlist);
 		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
-           request.setAttribute("properties", properties);
+
+		request.setAttribute("properties", properties);
 		request.getRequestDispatcher("/WEB-INF/pages/Property.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

@@ -10,8 +10,7 @@
 <meta charset="UTF-8">
 <title>NESTAWAY</title>
 </head>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/admin/editpropertydetails.css">
+<link rel="stylesheet"href="${pageContext.request.contextPath}/css/admin/editpropertydetails.css">
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <body>

@@ -11,7 +11,7 @@
 <body>
 <div class="topbar">
          
-           <form action="${pageContext.request.contextPath}/Searchrouter" method="get" class="search-bar-container">
+           <form action="${pageContext.request.contextPath}/Searchrouter" method="get" class="search-bar-container" style="border: none;">
     <select name="query" class="search-bar" required>
         <option value="" disabled selected>Select a page...</option>
         <option value="dashboard">Dashboard</option>

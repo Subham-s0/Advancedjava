@@ -10,14 +10,16 @@
 	href="${pageContext.request.contextPath}/css/Errorpage.css" />
 </head>
 <body>
+ <video autoplay loop muted class="back-video">
+    <source src="${pageContext.request.contextPath}/resources/images/banner/eror.mp4" type= "video/mp4">
+    </video>
   <div class="text-content">
-    <h1>404-error</h1>
+    <div class="image-content">
+    <img src="${pageContext.request.contextPath}/resources/images/banner/error.svg" alt="error-image">
+  </div>
     <h2>PAGE NOT FOUND</h2>
     <p>Your search has ventured beyond the known universe.</p>
     <a href="${pageContext.request.contextPath}/">Back To Home</a>
-  </div>
-  <div class="image-content">
-    <img src="${pageContext.request.contextPath}/resources/images/banner/astronaut.jpg" alt="Astronaut Floating in Space">
-  </div>
+  </div> 
 </body>
 </html>
