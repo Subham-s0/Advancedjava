@@ -34,6 +34,7 @@ public class AuthenticationFilter implements Filter {
     private static final String WishList = "/WishListController";
     private static final String VIEW_BOOKINGS = "/Viewbooking";
     private static final String BOOKING  = "/BookingController";
+    private static final String REVIEW  = "/review";
     
     // Admin pages (accessible only to admin)
     private static final String DASHBOARD = "/admindashboard";
@@ -46,8 +47,11 @@ public class AuthenticationFilter implements Filter {
     private static final String UPDATE_PROPERTY = "/updatepropertycontroller";
     private static final String USER_DASHBOARD = "/usersdashboard";
     private static final String BOOKING_DASHBOARD  = "/bookingsdashboard";
+    private static final String USER_DETAILS = "/usersdetails";
+    private static final String USER_PROFILE = "/adminprofile";
+    private static final String DASHBOARD_SEARCH = "/Searchrouter";
     // Error pages
-    private static final String ACCESS_DENIED = "/accessDenied";
+   
     private static final String ERROR = "/error";
     
     // Static resources
@@ -179,6 +183,7 @@ public class AuthenticationFilter implements Filter {
                uri.equals(PROPERTY) ||
                uri.equals(PAYMENT) ||
                uri.equals(BOOKING)||
+               uri.equals(REVIEW) ||
                uri.equals(PROPERTY_DESCRIPTION)||
                uri.equals(filterProperties)||
                uri.equals(PROFILE_IMAGE)||
@@ -191,12 +196,15 @@ public class AuthenticationFilter implements Filter {
         return uri.equals(DASHBOARD)||
         		  uri.equals(PROFILE_IMAGE)||
         		  uri.equals(PROPERTY_DASHBOARD)||
+        		  uri.equals(USER_DETAILS)||
         		  uri.equals(USER_DASHBOARD)||
         		  uri.equals(ADD_PROPERTY)||
         		  uri.equals(BOOKING_DASHBOARD)||
+        		  uri.equals(USER_PROFILE)||
         		  uri.equals(ADD_IMAGES)||
         		  uri.equals(ADD_PROPERTY_AMENITIES)||
         		  uri.equals(ADD_PROPERTY_SUCESS)||
+        		  uri.equals(DASHBOARD_SEARCH)||
         		  uri.equals(UPDATE_PROPERTY)||
         		uri.equals(LOGOUT);
         

@@ -11,22 +11,31 @@
 <body>
 <div class="topbar">
          
-            <form action="#" method="get" class="search-bar-container">
-           
-            <input type="text" 
-                   name="query" 
-                   placeholder="Search for something" 
-                   class="search-bar"
-                   required>
-                    <button type="submit" class="search-button">
-                <i data-lucide="search"></i>
-            </button>
-        </form>
-     
-        <div class="user-profile">
-          <div class="profile-picture"><img src="${pageContext.request.contextPath}/Profile_pictureservlet" alt="Profile"></div>
-      
+           <form action="${pageContext.request.contextPath}/Searchrouter" method="get" class="search-bar-container">
+    <select name="query" class="search-bar" required>
+        <option value="" disabled selected>Select a page...</option>
+        <option value="dashboard">Dashboard</option>
+        <option value="property dashboard">Property Dashboard</option>
+        <option value="add property">Add Property</option>
+        <option value="add images">Add Images</option>
+        <option value="add amenities">Add Amenities</option>
+        <option value="update property">Update Property</option>
+        <option value="users dashboard">Users Dashboard</option>
+        <option value="bookings dashboard">Bookings Dashboard</option>
+        <option value="admin profile">Admin Profile</option>
+    </select>
+    <button type="submit" class="search-button">
+        <i data-lucide="search"></i>
+    </button>
+</form>
+
+<div class="user-profile">
+    <div class="profile-picture">
+        <a href="${pageContext.request.contextPath}/adminprofile">
+            <img src="${pageContext.request.contextPath}/Profile_pictureservlet" alt="Profile">
+        </a>
     </div>
+</div>
 </div>
 
 <!-- Sidebar -->
@@ -58,12 +67,7 @@
             <span>Users</span>
         </a>
          </div>
-         <div class="sidebar-items  ${activeSection == 'report' ? 'active' : ''}">
-        <a href="${pageContext.request.contextPath}/reportsdashboard">
-            <i data-lucide="newspaper"></i>
-            <span>Reports</span>
-        </a>
-         </div>
+         
         </div>
         <div class="logout">
         <div class="sidebar-items">

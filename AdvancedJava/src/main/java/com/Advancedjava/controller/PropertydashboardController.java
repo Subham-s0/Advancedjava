@@ -38,23 +38,42 @@ public class PropertydashboardController extends HttpServlet {
 			throws ServletException, IOException {
 		CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 		PropertyDaoImpl propertyDao = new PropertyDaoImpl();
-		List<Categorymodel> categories;
+
+		String categoryParam = request.getParameter("category");
+		String priceRange = request.getParameter("priceRange");
+
+	
+		List<Propertymodel> filteredProperties;
+
 		try {
-			categories = categoryDao.findAllcategories();
-			List<Propertymodel> properties = propertyDao.findallproperties();
+			List<Categorymodel> categories = categoryDao.findAllcategories();
+			// Convert category
+			Integer categoryId = (categoryParam != null && !categoryParam.isEmpty())
+					? Integer.parseInt(categoryParam)
+					: null;
+
+			// Parse price range
+			Double minPrice = null, maxPrice = null;
+			if (priceRange != null && !priceRange.isEmpty()) {
+				if (priceRange.equals("500+")) {
+					minPrice = 500.0;
+				} else {
+					String[] parts = priceRange.split("-");
+					minPrice = Double.parseDouble(parts[0]);
+					maxPrice = Double.parseDouble(parts[1]);
+				}
+			}
+
+			filteredProperties = propertyDao.findPropertiesByFilters(categoryId, minPrice, maxPrice);
+
 			request.setAttribute("categories", categories);
-
-			// Fetch all properties (for "All" category)
-
-			request.setAttribute("properties", properties);
+			request.setAttribute("properties", filteredProperties);
 			request.setAttribute("activeSection", "property");
 			request.getRequestDispatcher("WEB-INF/pages/admin/propertydashboard.jsp").forward(request, response);
 
-		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

@@ -184,11 +184,9 @@ if (success != null && !success.isEmpty()) {
   
   <c:when test="${booking.bookingStatus == 'confirmed'}">
     
-    <form action="${pageContext.request.contextPath}/reviews" method="post">
-      <input type="hidden" name="formType" value="cancelbooking">
-      <input type="hidden" name="bookingId" value="${booking.bookingId}">
-      <button type="submit" class="btn btn-review">Review</button>
-    </form>
+    
+      <a href="${pageContext.request.contextPath}/review?bookingId=${booking.bookingId}" class="btn btn-review">Review</a>
+   
   </c:when>
   
   <c:when test="${booking.bookingStatus == 'cancelled'}">

@@ -102,14 +102,17 @@
 
 			<!-- Filters -->
 			<div class="filter-section">
-				<form id="filterForm">
-					<select class="filter-control" name="status">
-						<option value="">All Statuses</option>
-						<c:forEach items="${statuses}" var="status">
-							<option value="${status}"
-								${param.status == status ? 'selected' : ''}>${status}</option>
-						</c:forEach>
-					</select> <select class="filter-control" name="category">
+				<form id="filterForm" action="${pageContext.request.contextPath}/propertydashboard">
+					<select class="filter-control" name="priceRange">
+			<option value="">All Prices</option>
+			<option value="0-100" ${param.priceRange == '0-100' ? 'selected' : ''}>$0 - $100</option>
+			<option value="100-150" ${param.priceRange == '100-150' ? 'selected' : ''}>$100 - $150</option>
+			<option value="150-200" ${param.priceRange == '150-200' ? 'selected' : ''}>$150 - $200</option>
+			<option value="200-300" ${param.priceRange == '200-300' ? 'selected' : ''}>$200 - $300</option>
+			<option value="300-500" ${param.priceRange == '300-500' ? 'selected' : ''}>$300 - $500</option>
+			<option value="500+" ${param.priceRange == '500+' ? 'selected' : ''}>Above $500</option>
+		</select> 
+		<select class="filter-control" name="category">
 
 						<c:forEach items="${categories}" var="category">
 							<option value="${category.categoryId}"

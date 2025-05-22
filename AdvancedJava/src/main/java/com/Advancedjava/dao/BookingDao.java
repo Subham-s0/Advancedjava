@@ -219,6 +219,41 @@ public class BookingDao {
 	            throw new DataAccessException("Error fetching bookings by status", e);
 	        }
 	    }
+	    public List<BookingModel> getBookingsBypropertyId(int id) throws DataAccessException {
+	        String sql = "SELECT * FROM booking WHERE property_id = ?";
+	        List<BookingModel> bookings = new ArrayList<>();
+	        
+	        try (Connection conn = DBconnection.getDbConnection();
+	             PreparedStatement ps = conn.prepareStatement(sql)) {
+	             
+	            ps.setInt(1, id);
+	            
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    BookingModel booking = new BookingModel(
+	                        rs.getInt("booking_id"),
+	                        rs.getInt("property_id"),
+	                        rs.getInt("user_id"),
+	                        BookingStatus.valueOf(rs.getString("booking_status")),
+	                        rs.getDate("check_in_date"),
+	                        rs.getDate("check_out_date"),
+	                        rs.getBigDecimal("base_price"),
+	                        rs.getBigDecimal("total_price"),
+	                        rs.getInt("discount_percent"),
+	                        rs.getInt("number_of_guests"),
+	                        rs.getTimestamp("booking_created_at")
+	                    );
+	                    
+	                    bookings.add(booking);
+	                }
+	            }
+	            
+	            return bookings;
+	            
+	        } catch (SQLException e) {
+	            throw new DataAccessException("Error fetching bookings by user ID", e);
+	        }
+	    }
 	  
 	}
 

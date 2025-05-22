@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.Advancedjava.util.Sessionutil"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -256,13 +257,28 @@
 
 		<!-- Reviews Section -->
 		<div id="reviews" class="tab-content" style="display: none;">
-			<div class="reviews">
-				<h3>Guest Reviews</h3>
-				<div class="review-cards">
-					<!-- Reviews content goes here -->
-				</div>
-			</div>
-		</div>
+			
+    <h3>Guest Reviews</h3>
+    <div class="review-cards">
+        <c:forEach var="ru" items="${reviewsWithUsers}">
+            <div class="review-card">
+                <div class="review-user">
+                  <div class ="review-img" style="display:flex; gap:20px; justify-content:flex-start; align-items:center; "> <img src="${pageContext.request.contextPath}/resources/images/profile/${ru.user.userProfilePicture}" 
+                  alt="${ru.user.userName}" class="user-img" style="width:50px; height:50px; border-radius:50%;"/>
+					
+					<span>${ru.user.userName}</span></div>
+                </div>
+                <div class="review-rating">
+                    <c:forEach begin="1" end="5" var="i">
+                        <span style="color: ${i <= ru.review.rating ? '#ffc107' : '#e0e0e0'}">&#9733;</span>
+                    </c:forEach>
+                </div>
+                <p>${ru.review.comment}</p>
+                <small><fmt:formatDate value="${ru.review.reviewDate}" pattern="MMM dd, yyyy" /></small>
+            </div>
+        </c:forEach>
+    </div>
+</div>
 	</div>
 	<script>
     // Initialize Lucide icons

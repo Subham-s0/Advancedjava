@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
  <%@ page import="com.Advancedjava.util.Sessionutil" %>
+ <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -257,8 +259,238 @@ int current_propertyId = (propertyId != null) ? propertyId : -1;
 				</div>
 			</div>
 		</div>
+		
+		
+			<div class="header-section">
+				<h1>Bookings</h1>
+			</div>
+
+			<!-- Filters -->
+			<div class="filter-section">
+				<form id="filterForm" action="${pageContext.request.contextPath}/bookingsdashboard" method="GET">
+					<select class="filter-control" name="status">
+						<option value="">All Statuses</option>
+						<option value="confirmed">Confirmed</option>
+						<option value="pending">Pending</option>
+						<option value="cancelled">Cancelled</option>
+						
+					</select>
+
+					<button type="submit" class="filter-button">Filter</button>
+				</form>
+			</div>
+
+			<!-- Bookings Table -->
+			<div class="table-container">
+				<table class="property-table">
+					<thead>
+						<tr>
+							<th class="table-header">Profile</th>
+							<th class="table-header">Username</th>
+							<th class="table-header" colspan="2">Booking Details</th>
+							<th class="table-header">Guest</th>
+							<th class="table-header">Status</th>
+							<th class="table-header">Total Amount</th>
+							<th class="table-header">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${bookingList}" var="booking" varStatus="loop">
+							<tr class="booking-row" data-page="${loop.index / 5 + 1}">
+								<td class="table-cell">
+								
+								
+								
+									<c:choose>
+                            <c:when test="${not empty user.userProfilePicture}">
+                               <div class="img-profile">
+                                <img src="${pageContext.request.contextPath}/resources/images/profile/${user.userProfilePicture}" alt="User Photo" class="user-photo">
+                               </div>
+                            </c:when>
+                            <c:otherwise>
+                             <div class="img-profile">
+                                <img src="${pageContext.request.contextPath}/resources/images/profile/default.png" alt="Default User Photo" class="user-photo">
+                                 </div>
+                            </c:otherwise>
+                        </c:choose>
+							
+								</td>
+								<td class="table-cell">
+									
+									<div class="booking-user">
+										${users[loop.index].userFirstName} ${users[loop.index].userLastName}
+									</div>
+								</td>
+								<td class="table-cell" colspan="2">
+									<div class="booking-dates">
+						
+										
+											<div class="booking-datesinside">
+  <span class="date-label">
+    <i class="fas fa-calendar-alt"></i>
+  </span>
+  <span class="date-value">
+    <fmt:formatDate value="${booking.checkInDate}" pattern="MMM dd, yyyy" />
+  </span>
+
+  <div><i class="fas fa-arrow-right"></i></div>
+
+  <div>
+    <span class="date-label">
+      <i class="fas fa-calendar-check"></i> 
+    </span>
+    <span class="date-value">
+      <fmt:formatDate value="${booking.checkOutDate}" pattern="MMM dd, yyyy" />
+    </span>
+  </div>
+</div>
+									
+									
+									</div>
+								</td>
+								<td class="table-cell">
+									
+									<div class="booking-guests">
+										<i data-lucide="users" class="meta-icon"></i> ${booking.numberOfGuests} <p>Guests</p>
+									</div>
+								</td>
+								
+								<td class="table-cell">
+									<span class="status-badge status-${booking.bookingStatus}">
+										${booking.bookingStatus}
+									</span>
+								</td>
+								<td class="table-cell">
+									<div class="booking-amount">
+										<fmt:formatNumber value="${booking.totalPrice}" type="currency" currencySymbol="$" />
+									</div>
+								</td>
+								<td class="table-cell">
+									<form class="update-status-form" action="${pageContext.request.contextPath}/bookingsdashboard" method="POST">
+										<input type="hidden" name="formType" value="updateStatus">
+										<input type="hidden" name="bookingId" value="${booking.bookingId}">
+										<select name="newStatus">
+											<option value="pending" ${booking.bookingStatus == 'pending' ? 'selected' : ''}>Pending</option>
+											<option value="confirmed" ${booking.bookingStatus == 'confirmed' ? 'selected' : ''}>Confirmed</option>
+											<option value="cancelled" ${booking.bookingStatus == 'cancelled' ? 'selected' : ''}>Cancelled</option>
+										
+										</select>
+										<button type="submit" class="update-btn">Update</button>
+									</form>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Pagination -->
+			<div class="pagination-container">
+				<div class="pagination-info">
+					Showing <span id="showingCount">5</span> of ${fn:length(bookingList)} bookings
+				</div>
+				<div class="pagination-controls" id="paginationControls"></div>
+			</div>
+		</div>
 		<jsp:include page="/WEB-INF/pages/admin/Adminfooter.jsp" />
-	</div>
+	
+	<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+    });
+</script>
+	<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all booking rows and elements
+    const allRows = document.querySelectorAll('.property-row');
+    const paginationControls = document.getElementById('paginationControls');
+    const showingCount = document.getElementById('showingCount');
+    
+    // Pagination configuration
+    const itemsPerPage = 5;
+    let currentPage = 1;
+    const totalItems = allRows.length;
+    const pageCount = Math.ceil(totalItems / itemsPerPage);
+
+    // Initialize pagination
+    function initPagination() {
+        // Clear existing controls
+        paginationControls.innerHTML = '';
+
+        // Create Previous button
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-btn';
+        prevButton.innerHTML = '&laquo; Previous';
+        prevButton.addEventListener('click', () => changePage(currentPage - 1));
+        paginationControls.appendChild(prevButton);
+
+        // Create page number buttons
+        for(let i = 1; i <= pageCount; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-btn ${i == 1 ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => changePage(i));
+            paginationControls.appendChild(pageButton);
+        }
+
+        // Create Next button
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-btn';
+        nextButton.innerHTML = 'Next &raquo;';
+        nextButton.addEventListener('click', () => changePage(currentPage + 1));
+        paginationControls.appendChild(nextButton);
+
+        // Show initial page
+        updateVisibleItems();
+        updatePaginationButtons();
+    }
+
+    // Change current page
+    function changePage(newPage) {
+        currentPage = Math.max(1, Math.min(newPage, pageCount));
+        updateVisibleItems();
+        updatePaginationButtons();
+        updateShowingCount();
+    }
+
+    // Update visible items
+    function updateVisibleItems() {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        allRows.forEach((row, index) => {
+            row.style.display = (index >= startIndex && index < endIndex) ? '' : 'none';
+        });
+    }
+
+    // Update pagination buttons state
+    function updatePaginationButtons() {
+        const buttons = paginationControls.querySelectorAll('.pagination-btn');
+        
+        buttons.forEach(button => {
+            const pageNumber = parseInt(button.textContent);
+            button.classList.toggle('active', pageNumber == currentPage);
+            button.disabled = isNaN(pageNumber) ? 
+                (currentPage == 1 && button.textContent.includes('Previous')) ||
+                (currentPage == pageCount && button.textContent.includes('Next')) : 
+                false;
+        });
+    }
+
+    // Update showing count
+    function updateShowingCount() {
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(currentPage * itemsPerPage, totalItems);
+        showingCount.textContent = `${start}-${end}`;
+    }
+
+    // Initial setup
+    if (pageCount > 0) {
+        initPagination();
+    }
+});
+</script>
+		
 	<script>
 		lucide.createIcons();
 	</script>

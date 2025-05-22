@@ -16,6 +16,7 @@ import com.Advancedjava.dao.AmenityDaoImpl;
 import com.Advancedjava.dao.BookingDao;
 import com.Advancedjava.dao.CategoryDaoImpl;
 import com.Advancedjava.dao.PropertyDaoImpl;
+import com.Advancedjava.dao.Reviewdao;
 import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.dao.WishlistImpl;
 import com.Advancedjava.exception.DataAccessException;
@@ -24,6 +25,8 @@ import com.Advancedjava.model.BookingModel;
 import com.Advancedjava.model.BookingModel.BookingStatus;
 import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.Propertymodel;
+import com.Advancedjava.model.Review;
+import com.Advancedjava.model.Reviewithuser;
 import com.Advancedjava.model.usermodel;
 import com.Advancedjava.util.Sessionutil;
 
@@ -55,7 +58,8 @@ public class BookingController extends HttpServlet {
 				        CategoryDaoImpl categoryDao = new CategoryDaoImpl();
 			            PropertyDaoImpl propertyDao = new PropertyDaoImpl();
 			            AmenityDaoImpl amenityDao = new AmenityDaoImpl();
-				        
+			            Reviewdao reviewDao = new Reviewdao(); 
+				        BookingDao bookingDao = new BookingDao();
 				        Propertymodel property;
 					
 					property = propertyDao.findById(propertyId);
@@ -80,6 +84,24 @@ public class BookingController extends HttpServlet {
 		 
 			        List<Integer> wishlistIds = wishlistDao.getWishlistByUserId(current_user.getUserId());
 			        request.setAttribute("wishlistIds", wishlistIds);
+			        
+			        List<Review> reviews = reviewDao.getReviewsByPropertyId(propertyId);
+		            List<Reviewithuser> reviewsWithUsers = new ArrayList<>();
+
+		            for (Review review : reviews) {
+		                int bookingId = review.getBookingId();
+		                // Use bookingDao to get Booking object by bookingId
+		                BookingModel booking = bookingDao.findBookingById(bookingId);
+		                if (booking != null) {
+		                	int userId = booking.getUserId();
+		                	String userIdStr = String.valueOf(userId);
+		                	usermodel user = userDao.findByUserId(userIdStr);
+		                    if (user != null) {
+		                        reviewsWithUsers.add(new Reviewithuser(review, user));
+		                    }
+		                }
+		            }
+		            request.setAttribute("reviewsWithUsers", reviewsWithUsers);
 					 request.getRequestDispatcher("/WEB-INF/pages/propertydescription.jsp").forward(request, response);
 					 
 				}

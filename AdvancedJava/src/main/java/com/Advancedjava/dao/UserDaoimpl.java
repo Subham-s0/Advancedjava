@@ -141,7 +141,11 @@ public class UserDaoimpl implements UserDao {
             pstmt.setString(8, user.getuserRole());
             pstmt.setString(9, user.getUserProfilePicture());
             pstmt.setString(10, user.getUserStatus().name());  // enum to string
-            pstmt.setString(11, user.getGender().name());     // enum to string
+            if (user.getGender() != null) {
+                pstmt.setString(11, user.getGender().name());
+            } else {
+                pstmt.setNull(11, java.sql.Types.VARCHAR);
+            }    // enum to string
             pstmt.setString(12, user.getUserId());          // userID for WHERE
 
             int rowsAffected = pstmt.executeUpdate();

@@ -12,14 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.Advancedjava.dao.AmenityDaoImpl;
+import com.Advancedjava.dao.BookingDao;
 import com.Advancedjava.dao.CategoryDaoImpl;
 import com.Advancedjava.dao.PropertyDaoImpl;
 import com.Advancedjava.dao.PropertyImageDaoImpl;
+import com.Advancedjava.dao.UserDaoimpl;
 import com.Advancedjava.model.AmenityModel;
+import com.Advancedjava.model.BookingModel;
 import com.Advancedjava.model.Categorymodel;
 import com.Advancedjava.model.PropertyImagemodel;
 import com.Advancedjava.model.Property_Amenity;
 import com.Advancedjava.model.Propertymodel;
+import com.Advancedjava.model.usermodel;
 import com.Advancedjava.util.ImageUtil;
 import com.Advancedjava.util.Sessionutil;
 import com.Advanedjava.service.UpdatePropertyService;
@@ -35,7 +39,7 @@ public class updatepropertycontroller extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String propertyIdStr = request.getParameter("propertyId");
-
+            
             if (propertyIdStr == null && request.getAttribute("propertyId") == null) {
                 response.sendRedirect(request.getContextPath() + "/propertydashboard");
                 return;
@@ -48,22 +52,32 @@ public class updatepropertycontroller extends HttpServlet {
             CategoryDaoImpl categoryDao = new CategoryDaoImpl();
             PropertyDaoImpl propertyDao = new PropertyDaoImpl();
             AmenityDaoImpl amenityDao = new AmenityDaoImpl();
+        	List<usermodel> users = new ArrayList<>();
+        	UserDaoimpl userdao=new UserDaoimpl();
 
             List<Categorymodel> categories = categoryDao.findAllcategories();
             request.setAttribute("categories", categories);
 
             Propertymodel property = propertyDao.findById(propertyId);
             request.setAttribute("property", property);
-
+            
             List<Integer> amenityIds = propertyDao.findAmenityIdsByPropertyId(propertyId);
             List<AmenityModel> property_amenities = new ArrayList<>();
-
+            BookingDao bookingDao = new BookingDao();
+            List<BookingModel> bookingList = bookingDao.getBookingsBypropertyId(propertyId);
             for (Integer amenityId : amenityIds) {
                 AmenityModel amenity = amenityDao.findById(amenityId);
                 if (amenity != null) {
                     property_amenities.add(amenity);
                 }
             }
+            for (BookingModel booking : bookingList) {
+            	String userIdStr = String.valueOf(booking.getUserId());
+				users.add(userdao.findByUserId(userIdStr));
+				
+			}
+            request.setAttribute("users", users);
+            request.setAttribute("bookingList", bookingList);
             request.setAttribute("propertyAmenities", property_amenities);
 
             request.getRequestDispatcher("WEB-INF/pages/admin/editpropertydashboard.jsp").forward(request, response);

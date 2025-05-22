@@ -46,6 +46,13 @@ public class Review {
 			this.reviewDate = reviewDate;
 			this.bookingId = bookingId;
 		}
+		public Review(int rating, String comment, Date reviewDate, int bookingId) {
+			super();
+			this.rating = rating;
+			this.comment = comment;
+			this.reviewDate = reviewDate;
+			this.bookingId = bookingId;
+		}
 		public Review(int rating, String comment, int bookingId) {
 			super();
 			this.rating = rating;

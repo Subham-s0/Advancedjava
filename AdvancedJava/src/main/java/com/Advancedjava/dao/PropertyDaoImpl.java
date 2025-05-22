@@ -340,4 +340,53 @@ return rs.next() && rs.getInt(1) > 0;
 throw new DataAccessException("Error checking property existence with exclusion", e);
 }
 }
+	public List<Propertymodel> findPropertiesByFilters(Integer categoryId, Double minPrice, Double maxPrice) throws DataAccessException {
+	    List<Propertymodel> properties = new ArrayList<>();
+
+	    StringBuilder sql = new StringBuilder("SELECT * FROM properties WHERE 1=1");
+	    if (categoryId != null) {
+	        sql.append(" AND category_id = ?");
+	    }
+	    if (minPrice != null) {
+	        sql.append(" AND price_per_night >= ?");
+	    }
+	    if (maxPrice != null) {
+	        sql.append(" AND price_per_night <= ?");
+	    }
+
+	    try (Connection conn = DBconnection.getDbConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+
+	        int index = 1;
+
+	        if (categoryId != null) {
+	            pstmt.setInt(index++, categoryId);
+	        }
+	        if (minPrice != null) {
+	            pstmt.setDouble(index++, minPrice);
+	        }
+	        if (maxPrice != null) {
+	            pstmt.setDouble(index++, maxPrice);
+	        }
+
+	        ResultSet rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	        	Propertymodel property = new Propertymodel(rs.getInt("property_id"), rs.getString("property_name"),
+						rs.getString("property_address"), rs.getString("property_city"),
+						rs.getString("property_country"), rs.getString("property_description"),
+						PropertyStatus.valueOf(rs.getString("property_status").toUpperCase()),
+						rs.getBigDecimal("price_per_night"), rs.getInt("maximum_guests"), rs.getInt("total_bedrooms"),
+						rs.getInt("total_bath"), rs.getInt("total_rooms"), rs.getInt("category_id"),
+						rs.getString("host_name"), propertyImageDao.findByPropertyId(rs.getInt("property_id")));
+				properties.add(property);
+	        }
+
+	    } catch (SQLException e) {
+	        throw new DataAccessException("Error fetching properties with filters", e);
+	    }
+
+	    return properties;
+	}
+
 }
